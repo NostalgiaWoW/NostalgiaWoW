@@ -1,0 +1,8 @@
+database:
+  host: localhost
+  port: 3306
+  username: root
+  password: ascent
+  lp_database: elysium_realmd
+  lp_real_table: elysium_lp_demo_table
+  lp_logs_table: elysium_lp_log_demo_table

@@ -1,0 +1,121 @@
+#!/bin/bash
+
+mysql_world_infos=$(cat /usr/local/etc/mangosd.conf | sed -nr "s/WorldDatabase\.Info.*\"(.*)\"/\1/p;")
+mysql_world_host=$(echo ${mysql_world_infos} | cut -d';' -f1)
+mysql_world_port=$(echo ${mysql_world_infos} | cut -d';' -f2)
+mysql_world_user=$(echo ${mysql_world_infos} | cut -d';' -f3)
+mysql_world_passwd=$(echo ${mysql_world_infos} | cut -d';' -f4)
+mysql_world_db=$(echo ${mysql_world_infos} | cut -d';' -f5)
+
+mysql_characters_infos=$(cat /usr/local/etc/mangosd.conf | sed -nr "s/CharacterDatabase\.Info.*\"(.*)\"/\1/p;")
+mysql_characters_host=$(echo ${mysql_characters_infos} | cut -d';' -f1)
+mysql_characters_port=$(echo ${mysql_characters_infos} | cut -d';' -f2)
+mysql_characters_user=$(echo ${mysql_characters_infos} | cut -d';' -f3)
+mysql_characters_passwd=$(echo ${mysql_characters_infos} | cut -d';' -f4)
+mysql_characters_db=$(echo ${mysql_characters_infos} | cut -d';' -f5)
+
+function applyUpdates {
+    local sql_folder=/usr/local/share/sql
+
+    for sql_file in $(ls $sql_folder/*_world.sql); do
+        echo ">> Applying migration \"${sql_file##*/}\""
+        mysql \
+            -h ${mysql_world_host} \
+            -P ${mysql_world_port} \
+            -u ${mysql_world_user} \
+            -D ${mysql_world_db} \
+            -p${mysql_world_passwd} < ${sql_file}
+    done
+
+    for sql_file in $(ls $sql_folder/*_characters.sql); do
+        echo ">> Applying migration \"${sql_file##*/}\""
+        mysql \
+            -h ${mysql_characters_host} \
+            -P ${mysql_characters_port} \
+            -u ${mysql_characters_user} \
+            -D ${mysql_characters_db} \
+            -p${mysql_characters_passwd} < ${sql_file}
+    done
+}
+
+function sendNotification {
+    curl \
+        -X POST \
+        -H "Content-type: application/json" \
+        --data "$(printf '{ "content": "%s" , "embeds": [ {"title": "%s", "url": "%s" } ] }' \
+            "$1" \
+            "$2" \
+            "$3" \
+        )" \
+        ${DISCORD_WEBHOOK:-http://localhost}
+}
+
+function runWorldserver {
+    ulimit -n 16384
+
+    case ${MODE^^} in
+        GDB)
+            ulimit -c unlimited
+
+            # no neeed to run gdb here, core file will be analysed at crash
+            mangosd 2> /tmp/backtrace.log
+
+            ;;
+        ASAN)
+            # for options see https://github.com/google/sanitizers/wiki/AddressSanitizerFlags#run-time-flags
+            export ASAN_OPTIONS=${ASAN_OPTIONS:-abort_on_error=true:detect_leaks=true:symbolize=true:detect_stack_use_after_return=true:print_stats=true:print_full_thread_history=true}
+
+            mangosd 2> /tmp/backtrace.log
+            ;;
+        MUTRACE)
+            export MUTRACE_MAX=1000 # show 1000 mutex instead 10
+            export MUTRACE_HASH_SIZE=99991 # mutrace warning that we should increase it (default 3371) and we should user a prime number so here we are
+
+            mutrace mangosd 2> /tmp/backtrace.log
+            ;;
+        NORMAL|*)
+            mangosd 2> /tmp/backtrace.log
+            ;;
+    esac
+}
+
+function analyseCrash {
+    local crashlog_filename="crashdump_$(date +\%Y-\%m-\%d-\%H-\%M-\%S).log"
+    local crashlog_link="https://${REALM_NAME}-logs.elysium-tools.io/crashlogs/${crashlog_filename}"
+
+    if [ ${MODE^^} == "ASAN" ]; then
+        # cleanup backtrace.log to get only asan output
+        csplit --prefix=/tmp/backtrace-split.log --quiet /tmp/backtrace.log "/================/+1"; mv -f /tmp/backtrace-split.log01 /tmp/backtrace.log
+    elif [ ${MODE^^} == "GDB" ]; then
+        gdb -batch -x=/usr/local/bin/commands.gdb /usr/local/bin/mangosd core
+        rm -rf core
+    fi
+
+    cp /tmp/backtrace.log /usr/local/var/log/crashlogs/$crashlog_filename
+
+    local crash_in=$(grep -m 1 -oP '#0 .* in \K([^ ]+)' /tmp/backtrace.log)
+
+    sendNotification "_${REALM_NAME}_ (${GIT_COMMIT:0:7}) crashed in \`${crash_in}\`" ${crashlog_filename} ${crashlog_link}
+}
+
+function isCrash {
+    # not a shutdown and not a reboot
+    if [ ! $1 -eq 0 -a ! $1 -eq 2 ]; then
+        echo 1
+    else
+        echo 0
+    fi
+}
+
+
+###### MAIN ######
+
+applyUpdates
+runWorldserver
+worldserver_exit_code=$?
+
+echo "worldserver_exit_code: ${worldserver_exit_code}"
+
+if [ "$(isCrash $worldserver_exit_code)" -eq 1 ]; then
+    analyseCrash
+fi

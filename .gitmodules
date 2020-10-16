@@ -1,0 +1,3 @@
+[submodule "src/game/Anticheat/module"]
+	path = src/game/Anticheat/module
+	url = https://github.com/twink/anticheat

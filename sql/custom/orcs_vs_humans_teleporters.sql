@@ -1,0 +1,14 @@
+DELETE FROM `creature_template` WHERE `entry` IN ('1000020', '1000021');
+INSERT INTO `creature_template` (`entry`, `patch`, `KillCredit1`, `KillCredit2`, `modelid_1`, `modelid_2`, `modelid_3`, `modelid_4`, `name`, `subname`, `gossip_menu_id`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Civilian`, `RacialLeader`, `RegenHealth`, `equipment_id`, `trainer_id`, `vendor_id`, `MechanicImmuneMask`, `SchoolImmuneMask`, `flags_extra`, `ScriptName`) VALUES
+-- ENTRY_ARATHIBATTLE_TELEPORTER
+('1000021', '0', '0', '0', '108', '0', '0', '0', 'Nozdormu', 'The Timeless One', '0', '60', '60', '12298', '12298', '0', '0', '4391', '777', '777', '1', '1', '1.14286', '1', '1', '249', '280', '0', '284', '1', '1460', '1606', '0', '36864', '0', '0', '0', '0', '0', '0', '549', '680', '250', '7', '8', '0', '0', '0', '0', '10', '10', '10', '10', '10', '0', '0', '0', '0', '0', '0', '0', '', '0', '3', '0', '0', '1', '0', '0', '0', '0', '0', '0', 'npc_arathibattle_teleporter'),
+-- ENTRY_ARATHIBATTLE_BACK_TELEPORTER
+('1000020', '0', '0', '0', '108', '0', '0', '0', 'Nozdormu', 'The Timeless One', '0', '60', '60', '12298', '12298', '0', '0', '4391', '777', '777', '1', '1', '1.14286', '1', '1', '249', '280', '0', '284', '1', '1460', '1606', '0', '36864', '0', '0', '0', '0', '0', '0', '549', '680', '250', '7', '8', '0', '0', '0', '0', '10', '10', '10', '10', '10', '0', '0', '0', '0', '0', '0', '0', '', '0', '3', '0', '0', '1', '0', '0', '0', '0', '0', '0', 'npc_arathibattle_teleporter');
+
+DELETE FROM `npc_text` WHERE `ID` IN ('50012', '50013', '50014');
+
+INSERT INTO `npc_text` (`ID`, `text0_0`) VALUES
+('50012', 'Medivh\'s dark magic has opened a portal from the time of the First War to the present.  Llane Wrynn, ruler of Azeroth, has siezed upon this moment to summon young humans to return to his time and fight against the Orc invasion. Will you answer his call to fight?'),
+('50014', 'The Shadow Council\'s work to open the Dark Portal has created a momentary connection to the present. Blackhand the Destroyer is summoning young orcs to return to him and join his invasion of Azeroth. Will you answer the call to fight?'),
+('50013', 'Thank for your heroism and commitment. You have helped to ensure that the enemy could not rewrite history. We are in your debt.');
+

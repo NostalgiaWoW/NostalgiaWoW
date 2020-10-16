@@ -1,0 +1,9 @@
+database:
+  host: localhost
+  port: 3306
+  username: root
+  password: ascent
+  agentdb: elysium_realmd
+agent:
+  id: 100
+  delay: 3

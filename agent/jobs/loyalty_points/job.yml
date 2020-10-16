@@ -1,0 +1,6 @@
+job:
+  name: Loyalty Points
+  opcode: loyalty_points
+  exec: loyalty_points.rb
+  description: Updates the account's loyalty points.
+  status: active
