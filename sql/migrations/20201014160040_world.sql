@@ -15,7 +15,7 @@ INSERT INTO `migrations` VALUES ('20201014160040');
 -- 1000109
 
 -- Custom Gobs
--- Spiderweb Templates!
+-- Spiderweb Templates!!
 DELETE FROM `gameobject_template` WHERE `entry`=3100029;
 INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `ScriptName`) VALUES (3100029, 0, 6688, 'Spiderweb Medium', 0, 48, 0.5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 DELETE FROM `gameobject_template` WHERE `entry`=3100030;
