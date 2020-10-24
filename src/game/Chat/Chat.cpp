@@ -1172,7 +1172,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "damage",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleDamageCommand,              "", nullptr },
         { NODE, "combatlist",     SEC_GAMEMASTER,     false, &ChatHandler::HandleCombatListCommand,          "", nullptr },
         { NODE, "combatstop",     SEC_GAMEMASTER,     false, &ChatHandler::HandleCombatStopCommand,          "", nullptr },
-        { NODE, "repairitems",    SEC_GAMEMASTER,     true,  &ChatHandler::HandleRepairitemsCommand,         "", nullptr },
+        { NODE, "repairitems",    SEC_PLAYER,         false, &ChatHandler::HandleRepairitemsCommand,         "", nullptr },
         { NODE, "stable",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleStableCommand,              "", nullptr },
         { NODE, "waterwalk",      SEC_GAMEMASTER,     false, &ChatHandler::HandleWaterwalkCommand,           "", nullptr },
         { NODE, "quit",           SEC_CONSOLE,        true,  &ChatHandler::HandleQuitCommand,                "", nullptr },

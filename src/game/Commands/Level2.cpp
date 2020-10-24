@@ -5377,9 +5377,12 @@ bool ChatHandler::HandleRepairitemsCommand(char* args)
     if (!ExtractPlayerTarget(&args, &target))
         return false;
 
-    // check online security
-    if (HasLowerSecurity(target))
+    Player* pPlayer = m_session->GetPlayer();
+    if (!pPlayer)
         return false;
+
+    if (m_session->GetSecurity() == SEC_PLAYER)
+        target = pPlayer;
 
     // Repair items
     target->DurabilityRepairAll(false, 0);
