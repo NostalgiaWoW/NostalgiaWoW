@@ -22027,3 +22027,28 @@ uint32 Player::GetSkillModifier(uint16 skillID) const
 
     return 0;
 }
+
+enum ExcludedCooldownResetSpells
+{
+    LAY_ON_HANDS_1 = 633,
+    LAY_ON_HANDS_2 = 2800,
+    LAY_ON_HANDS_3 = 10310,
+    DIVINE_INTERVENTION = 19752
+};
+
+void Player::LegitCooldownReset()
+{
+    for (auto m_spell : m_spells)
+    {
+        switch (m_spell.first)
+        {
+            case LAY_ON_HANDS_1:
+            case LAY_ON_HANDS_2:
+            case LAY_ON_HANDS_3:
+            case DIVINE_INTERVENTION:
+                continue;
+            default:
+                SendClearCooldown(m_spell.first, this);
+        }
+    }
+}
