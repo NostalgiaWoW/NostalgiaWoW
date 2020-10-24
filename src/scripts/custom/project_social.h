@@ -1,5 +1,8 @@
 
 
+#include <Errors.h>
+#include <Objects/Player.h>
+
 enum
 {
     SPELL_CLOUDAURA = 28362,

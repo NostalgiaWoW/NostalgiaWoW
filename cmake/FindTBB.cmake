@@ -74,7 +74,7 @@
 #                           tbbmalloc, tbbmalloc_debug, tbb_preview, or
 #                           tbb_preview_debug.
 #
-# The following varibles should be used to build and link with TBB:
+# The following variables should be used to build and link with TBB:
 #
 # * TBB_INCLUDE_DIRS        - The include directory for TBB.
 # * TBB_LIBRARIES           - The libraries to link against to use TBB.
@@ -115,12 +115,12 @@ if(NOT TBB_FOUND)
   ##################################
 
   # Define search paths based on user input and environment variables
-  set(TBB_SEARCH_DIR ${TBB_ROOT_DIR} $ENV{TBB_INSTALL_DIR} $ENV{TBBROOT})
+  set(TBB_SEARCH_DIR ${TBB_ROOT_DIR} $ENV{TBB_INSTALL_DIR} $ENV{TBBROOT} $ENV{TBB_ROOT})
 
   # Define the search directories based on the current platform
   if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(TBB_DEFAULT_SEARCH_DIR "C:/Program Files/Intel/TBB"
-                               "C:/Program Files (x86)/Intel/TBB")
+            "C:/Program Files (x86)/Intel/TBB")
 
     # Set the target architecture
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -175,9 +175,9 @@ if(NOT TBB_FOUND)
   ##################################
 
   find_path(TBB_INCLUDE_DIRS tbb/tbb.h
-      HINTS ${TBB_INCLUDE_DIR} ${TBB_SEARCH_DIR}
-      PATHS ${TBB_DEFAULT_SEARCH_DIR}
-      PATH_SUFFIXES include)
+          HINTS ${TBB_INCLUDE_DIR} ${TBB_SEARCH_DIR}
+          PATHS ${TBB_DEFAULT_SEARCH_DIR}
+          PATH_SUFFIXES include)
 
   ##################################
   # Set version strings
@@ -186,11 +186,11 @@ if(NOT TBB_FOUND)
   if(TBB_INCLUDE_DIRS)
     file(READ "${TBB_INCLUDE_DIRS}/tbb/tbb_stddef.h" _tbb_version_file)
     string(REGEX REPLACE ".*#define TBB_VERSION_MAJOR ([0-9]+).*" "\\1"
-        TBB_VERSION_MAJOR "${_tbb_version_file}")
+            TBB_VERSION_MAJOR "${_tbb_version_file}")
     string(REGEX REPLACE ".*#define TBB_VERSION_MINOR ([0-9]+).*" "\\1"
-        TBB_VERSION_MINOR "${_tbb_version_file}")
+            TBB_VERSION_MINOR "${_tbb_version_file}")
     string(REGEX REPLACE ".*#define TBB_INTERFACE_VERSION ([0-9]+).*" "\\1"
-        TBB_INTERFACE_VERSION "${_tbb_version_file}")
+            TBB_INTERFACE_VERSION "${_tbb_version_file}")
     set(TBB_VERSION "${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR}")
   endif()
 
@@ -210,14 +210,14 @@ if(NOT TBB_FOUND)
 
       # Search for the libraries
       find_library(TBB_${_comp}_LIBRARY_RELEASE ${_comp}
-          HINTS ${TBB_LIBRARY} ${TBB_SEARCH_DIR}
-          PATHS ${TBB_DEFAULT_SEARCH_DIR} ENV LIBRARY_PATH
-          PATH_SUFFIXES ${TBB_LIB_PATH_SUFFIX})
+              HINTS ${TBB_LIBRARY} ${TBB_SEARCH_DIR}
+              PATHS ${TBB_DEFAULT_SEARCH_DIR} ENV LIBRARY_PATH
+              PATH_SUFFIXES ${TBB_LIB_PATH_SUFFIX})
 
       find_library(TBB_${_comp}_LIBRARY_DEBUG ${_comp}_debug
-          HINTS ${TBB_LIBRARY} ${TBB_SEARCH_DIR}
-          PATHS ${TBB_DEFAULT_SEARCH_DIR} ENV LIBRARY_PATH
-          PATH_SUFFIXES ${TBB_LIB_PATH_SUFFIX})
+              HINTS ${TBB_LIBRARY} ${TBB_SEARCH_DIR}
+              PATHS ${TBB_DEFAULT_SEARCH_DIR} ENV LIBRARY_PATH
+              PATH_SUFFIXES ${TBB_LIB_PATH_SUFFIX})
 
       if(TBB_${_comp}_LIBRARY_DEBUG)
         list(APPEND TBB_LIBRARIES_DEBUG "${TBB_${_comp}_LIBRARY_DEBUG}")
@@ -243,28 +243,20 @@ if(NOT TBB_FOUND)
     endif()
   endforeach()
 
+  set(TBB_LIBRARIES "${TBB_LIBRARIES_${TBB_BUILD_TYPE}}")
+
   ##################################
-  # Set compile flags and libraries
+  # Set compile flags
   ##################################
 
   set(TBB_DEFINITIONS_RELEASE "")
   set(TBB_DEFINITIONS_DEBUG "-DTBB_USE_DEBUG=1")
-
-  if(TBB_LIBRARIES_${TBB_BUILD_TYPE})
-    set(TBB_DEFINITIONS "${TBB_DEFINITIONS_${TBB_BUILD_TYPE}}")
-    set(TBB_LIBRARIES "${TBB_LIBRARIES_${TBB_BUILD_TYPE}}")
-  elseif(TBB_LIBRARIES_RELEASE)
-    set(TBB_DEFINITIONS "${TBB_DEFINITIONS_RELEASE}")
-    set(TBB_LIBRARIES "${TBB_LIBRARIES_RELEASE}")
-  elseif(TBB_LIBRARIES_DEBUG)
-    set(TBB_DEFINITIONS "${TBB_DEFINITIONS_DEBUG}")
-    set(TBB_LIBRARIES "${TBB_LIBRARIES_DEBUG}")
-  endif()
+  set(TBB_DEFINITIONS "${TBB_DEFINITIONS_${TBB_BUILD_TYPE}}")
 
   find_package_handle_standard_args(TBB
-      REQUIRED_VARS TBB_INCLUDE_DIRS TBB_LIBRARIES
-      HANDLE_COMPONENTS
-      VERSION_VAR TBB_VERSION)
+          REQUIRED_VARS TBB_INCLUDE_DIRS TBB_LIBRARIES
+          HANDLE_COMPONENTS
+          VERSION_VAR TBB_VERSION)
 
   ##################################
   # Create targets
@@ -273,23 +265,23 @@ if(NOT TBB_FOUND)
   if(NOT CMAKE_VERSION VERSION_LESS 3.0 AND TBB_FOUND)
     add_library(tbb SHARED IMPORTED)
     set_target_properties(tbb PROPERTIES
-          INTERFACE_INCLUDE_DIRECTORIES  "${TBB_INCLUDE_DIRS}"
-          IMPORTED_LOCATION              "${TBB_LIBRARIES}")
+            INTERFACE_INCLUDE_DIRECTORIES  "${TBB_INCLUDE_DIRS}"
+            IMPORTED_LOCATION              "${TBB_LIBRARIES}")
     if(TBB_LIBRARIES_RELEASE AND TBB_LIBRARIES_DEBUG)
       set_target_properties(tbb PROPERTIES
-          INTERFACE_COMPILE_DEFINITIONS "$<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:TBB_USE_DEBUG=1>"
-          IMPORTED_LOCATION_DEBUG          "${TBB_LIBRARIES_DEBUG}"
-          IMPORTED_LOCATION_RELWITHDEBINFO "${TBB_LIBRARIES_DEBUG}"
-          IMPORTED_LOCATION_RELEASE        "${TBB_LIBRARIES_RELEASE}"
-          IMPORTED_LOCATION_MINSIZEREL     "${TBB_LIBRARIES_RELEASE}"
-          )
+              INTERFACE_COMPILE_DEFINITIONS "$<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:TBB_USE_DEBUG=1>"
+              IMPORTED_LOCATION_DEBUG          "${TBB_LIBRARIES_DEBUG}"
+              IMPORTED_LOCATION_RELWITHDEBINFO "${TBB_LIBRARIES_DEBUG}"
+              IMPORTED_LOCATION_RELEASE        "${TBB_LIBRARIES_RELEASE}"
+              IMPORTED_LOCATION_MINSIZEREL     "${TBB_LIBRARIES_RELEASE}"
+              )
     elseif(TBB_LIBRARIES_RELEASE)
-      set_target_properties(tbb PROPERTIES IMPORTED_LOCATION ${TBB_LIBRARIES_RELEASE})
+      set_target_properties(tbb PROPERTIES IMPORTED_LOCATION "${TBB_LIBRARIES_RELEASE}")
     else()
       set_target_properties(tbb PROPERTIES
-          INTERFACE_COMPILE_DEFINITIONS  "${TBB_DEFINITIONS_DEBUG}"
-          IMPORTED_LOCATION              "${TBB_LIBRARIES_DEBUG}"
-          )
+              INTERFACE_COMPILE_DEFINITIONS "${TBB_DEFINITIONS_DEBUG}"
+              IMPORTED_LOCATION              "${TBB_LIBRARIES_DEBUG}"
+              )
     endif()
   endif()
 

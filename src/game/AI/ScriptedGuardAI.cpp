@@ -21,6 +21,7 @@ SDComment:
 SDCategory: Guards
 EndScriptData */
 
+#include <pchdef.h>
 #include "ScriptMgr.h"
 #include "ScriptedGuardAI.h"
 #include "MotionMaster.h"
