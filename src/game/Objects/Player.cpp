@@ -22033,22 +22033,30 @@ enum ExcludedCooldownResetSpells
     LAY_ON_HANDS_1 = 633,
     LAY_ON_HANDS_2 = 2800,
     LAY_ON_HANDS_3 = 10310,
-    DIVINE_INTERVENTION = 19752
+    DIVINE_INTERVENTION = 19752,
+    REINCARNATION = 20608,
+    INFERNO = 1122
 };
 
 void Player::LegitCooldownReset()
 {
-    for (auto m_spell : m_spells)
+    if (!m_spellCooldowns.empty())
     {
-        switch (m_spell.first)
+        for (SpellCooldowns::const_iterator itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end(); ++itr)
         {
-            case LAY_ON_HANDS_1:
-            case LAY_ON_HANDS_2:
-            case LAY_ON_HANDS_3:
-            case DIVINE_INTERVENTION:
-                continue;
-            default:
-                SendClearCooldown(m_spell.first, this);
+            switch (itr->first)
+            {
+                case LAY_ON_HANDS_1:
+                case LAY_ON_HANDS_2:
+                case LAY_ON_HANDS_3:
+                case DIVINE_INTERVENTION:
+                case REINCARNATION:
+                case INFERNO:
+                    continue;
+                default:
+                    SendClearCooldown(itr->first, this);
+                    m_spellCooldowns.erase(itr);
+            }
         }
     }
 }
