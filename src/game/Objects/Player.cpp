@@ -22035,7 +22035,10 @@ enum ExcludedCooldownResetSpells
     LAY_ON_HANDS_3 = 10310,
     DIVINE_INTERVENTION = 19752,
     REINCARNATION = 20608,
-    INFERNO = 1122
+    INFERNO = 1122,
+    RETALIATION = 20230,
+    SHIELD_WALL = 871,
+    RECKLESSNESS = 1719
 };
 
 void Player::LegitCooldownReset()
@@ -22052,6 +22055,9 @@ void Player::LegitCooldownReset()
                 case DIVINE_INTERVENTION:
                 case REINCARNATION:
                 case INFERNO:
+                case RETALIATION:
+                case SHIELD_WALL:
+                case RECKLESSNESS:
                     continue;
                 default:
                     SendClearCooldown(itr->first, this);
