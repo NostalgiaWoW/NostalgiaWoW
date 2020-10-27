@@ -45,8 +45,8 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
     DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "Player 1 is: %u (%s)", pl->GetGUIDLow(), pl->GetName());
     DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "Player 2 is: %u (%s)", plTarget->GetGUIDLow(), plTarget->GetName());
 
-    pl->ApplyLegitReplenishment(true);
-    plTarget->ApplyLegitReplenishment(true);
+    pl->ApplyLegitReplenishment();
+    plTarget->ApplyLegitReplenishment();
 
     time_t now = time(NULL);
     pl->duel->startTimer = now;
