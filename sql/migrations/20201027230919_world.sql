@@ -8,7 +8,7 @@ IF v=0 THEN
 INSERT INTO `migrations` VALUES ('20201027230919');
 -- Add your query below.
 
-REPLACE INTO `item_template` (entry, class, subclass, displayid, name, quality, bonding, inventorytype, stackable) values (80000, 15, 0, 32277, 'PvP Token', 2, 1, 0, 200);
+REPLACE INTO `item_template` (entry, class, subclass, displayid, name, quality, bonding, inventorytype, stackable) values (80000, 15, 0, 32277, 'PvP Token', 2, 0, 0, 200);
 
 -- End of migration.
 END IF;
