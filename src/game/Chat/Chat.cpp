@@ -1192,7 +1192,9 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "arathi",         SEC_PLAYER,         false, &ChatHandler::HandleGoArathiCommand,            "", nullptr },
         { NODE, "alterac",        SEC_PLAYER,         false, &ChatHandler::HandleGoAlteracCommand,           "", nullptr },     
         { NODE, "xp",             SEC_PLAYER,         false, &ChatHandler::HandleXpCommand,                  "", nullptr },
-        { NODE, "vip",            SEC_PLAYER,         false, nullptr,                                        "", vipCommandTable },
+        { NODE, "vip",            SEC_PLAYER,         false, nullptr,                                "", vipCommandTable },
+
+        { NODE, "duelmod",        SEC_PLAYER,         false, &ChatHandler::HandleDuelModCommand,                  "", nullptr },
 
         { MSTR, nullptr,       0,                  false, nullptr,                                           "", nullptr }
     };

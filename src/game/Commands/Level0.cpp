@@ -114,6 +114,7 @@ bool ChatHandler::HandleXpCommand(char* args)
 
     return true;
 }
+
 bool ChatHandler::HandleHelpCommand(char* args)
 {
     if (!*args)
@@ -447,5 +448,24 @@ bool ChatHandler::HandleVIPUnAura(char * args)
 
     for (uint32 aura : sWorld.GetVIPVisuals())
         player->RemoveAurasDueToSpell(aura);
+    return true;
+}
+
+bool ChatHandler::HandleDuelModCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    GetSession()->GetPlayer()->SetDuelReplenishState(value);
+    PSendSysMessage("Duel replenishment is %s.", value ? "enabled" : "disabled");
+
     return true;
 }

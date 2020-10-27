@@ -506,6 +506,9 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleVIPAura(char* args);
         bool HandleVIPUnAura(char* args);
 
+        // Nostalgia WoW
+        bool HandleDuelModCommand(char* args);
+
         bool HandleGameObjectAddCommand(char* args);
         bool HandleGameObjectDeleteCommand(char* args);
         bool HandleGameObjectMoveCommand(char* args);
