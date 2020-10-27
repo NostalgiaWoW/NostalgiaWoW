@@ -911,6 +911,13 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         // Nostalgia WoW Custom
         void LegitCooldownReset();
+        bool IsBlockingInspect();
+        void SetInspectState(bool block);
+        bool ShouldReplenish();
+        void SetDuelReplenishState(bool enable);
+        void Replenish();
+        void ApplyLegitReplenishment(bool force = false);
+        bool RemoveItemCurrency(uint32 itemId, uint32 count);
 
         /* Switch from instanceId of same map.
          * Assumes that you can enter the map.
@@ -1804,11 +1811,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void SetDrunkValue(uint16 newDrunkValue, uint32 itemid=0);
         uint16 GetDrunkValue() const { return m_drunk; }
         static DrunkenState GetDrunkenstateByValue(uint16 value);
-
-        bool IsBlockingInspect();
-        void SetInspectState(bool block);
-        bool ShouldReplenish();
-        void SetDuelReplenishState(bool enable);
 
         uint32 GetDeathTimer() const { return m_deathTimer; }
         uint32 GetCorpseReclaimDelay(bool pvp) const;

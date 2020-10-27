@@ -22102,3 +22102,79 @@ void Player::LegitCooldownReset()
         }
     }
 }
+
+void Player::Replenish()
+{
+    if (isAlive())
+    {
+        SetHealth(GetMaxHealth());
+
+        if (getPowerType() == POWER_MANA)
+            SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
+    }
+}
+
+bool Player::RemoveItemCurrency(uint32 itemId, uint32 count)
+{
+    uint32 LastCount = count;
+
+    auto RemoveCompletelyOrPartialFunc = [&LastCount](Player* player, Item* pItem)
+    {
+        if (pItem->GetCount() > LastCount)
+        {
+            pItem->SetCount(pItem->GetCount() - LastCount);
+            LastCount = 0;
+            if (player->IsInWorld())
+            {
+                pItem->SendCreateUpdateToPlayer(player);
+            }
+            pItem->SetState(ITEM_CHANGED, player);
+        }
+        else
+        {
+            LastCount -= pItem->GetCount();
+            player->RemoveItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
+        }
+    };
+
+    for (int i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    {
+        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (pItem != nullptr && pItem->GetEntry() == itemId)
+        {
+            RemoveCompletelyOrPartialFunc(this, pItem);
+            if (LastCount == 0) return true;
+        }
+    }
+    for (int i = KEYRING_SLOT_START; i < KEYRING_SLOT_END; ++i)
+    {
+        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (pItem != nullptr && pItem->GetEntry() == itemId)
+        {
+            RemoveCompletelyOrPartialFunc(this, pItem);
+            if (LastCount == 0) return true;
+        }
+    }
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (pBag != nullptr)
+        {
+            LastCount -= pBag->RemoveItems(itemId, LastCount);
+            if (LastCount == 0) return true;
+        }
+    }
+
+    return false;
+}
+
+void Player::ApplyLegitReplenishment(bool force)
+{
+    if (ShouldReplenish() || force)
+    {
+        LegitCooldownReset();
+        Replenish();
+        if (!force)
+            RemoveItemCurrency(PVP_TOKEN, 1);
+    }
+}
