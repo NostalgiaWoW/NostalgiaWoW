@@ -19430,6 +19430,7 @@ bool Player::isHonorOrXPTarget(Unit* pVictim) const
     return true;
 }
 
+#define PVP_TOKEN 80000
 void Player::RewardSinglePlayerAtKill(Unit* pVictim)
 {
     bool PvP = pVictim->isCharmedOwnedByPlayerOrPlayer();
@@ -19493,6 +19494,14 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         // normal creature (not pet/etc) can be only in !PvP case
         if (pVictim->GetTypeId() == TYPEID_UNIT)
             KilledMonster(((Creature*)pVictim)->GetCreatureInfo(), pVictim->GetObjectGuid());
+    }
+    else
+    {
+        // Add PvP tokens on honorable kill
+        if (isHonorOrXPTarget(pVictim))
+        {
+            AddItem(PVP_TOKEN, 1);
+        }
     }
 }
 
