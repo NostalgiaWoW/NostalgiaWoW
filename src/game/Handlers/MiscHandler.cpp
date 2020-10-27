@@ -1041,6 +1041,12 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recv_data)
     if (!plr)                                               // wrong player
         return;
 
+    // TODO: NOT WORKING, INSPECT IS HANDLED CLIENT SIDE TOO. FIND ANOTHER WAY OF BLOCKING INSPECT (if possible)
+    if (plr->IsBlockingInspect())
+    {
+        return;
+    }
+
     WorldPacket data(SMSG_INSPECT, 8);
     data << ObjectGuid(guid);
     SendPacket(&data);

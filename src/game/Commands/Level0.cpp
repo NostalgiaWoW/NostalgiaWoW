@@ -469,3 +469,22 @@ bool ChatHandler::HandleDuelModCommand(char* args)
 
     return true;
 }
+
+bool ChatHandler::HandleInspectModCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    GetSession()->GetPlayer()->SetInspectState(!value);
+    PSendSysMessage("Inspect is currently being %s.", value ? "allowed" : "blocked");
+
+    return true;
+}

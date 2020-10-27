@@ -508,6 +508,7 @@ class MANGOS_DLL_SPEC ChatHandler
 
         // Nostalgia WoW
         bool HandleDuelModCommand(char* args);
+        bool HandleInspectModCommand(char* args);
 
         bool HandleGameObjectAddCommand(char* args);
         bool HandleGameObjectDeleteCommand(char* args);
