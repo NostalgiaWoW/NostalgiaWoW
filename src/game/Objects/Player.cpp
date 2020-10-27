@@ -1166,7 +1166,7 @@ void Player::SetInspectState(bool block)
         m_ExtraFlags &= ~PLAYER_EXTRA_INSPECT_ENABLED;
 }
 
-#define PVP_TOKEN 50000
+#define PVP_TOKEN 80000
 bool Player::ShouldReplenish()
 {
     return m_ExtraFlags & PLAYER_EXTRA_DUEL_REPLENISH && HasItemCount(PVP_TOKEN);
