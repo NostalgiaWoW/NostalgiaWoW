@@ -1805,6 +1805,11 @@ class MANGOS_DLL_SPEC Player final: public Unit
         uint16 GetDrunkValue() const { return m_drunk; }
         static DrunkenState GetDrunkenstateByValue(uint16 value);
 
+        bool IsBlockingInspect();
+        void SetInspectState(bool block);
+        bool ShouldReplenish();
+        void SetDuelReplenishState(bool enable);
+
         uint32 GetDeathTimer() const { return m_deathTimer; }
         uint32 GetCorpseReclaimDelay(bool pvp) const;
         void UpdateCorpseReclaimDelay();

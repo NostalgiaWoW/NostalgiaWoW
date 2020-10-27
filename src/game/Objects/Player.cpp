@@ -1153,6 +1153,33 @@ void Player::SetDrunkValue(uint16 newDrunkenValue, uint32 itemId)
         m_detectInvisibilityMask &= ~(1 << 6);
 }
 
+bool Player::IsBlockingInspect()
+{
+    return m_ExtraFlags & PLAYER_EXTRA_INSPECT_ENABLED;
+}
+
+void Player::SetInspectState(bool block)
+{
+    if (block)
+        m_ExtraFlags |= PLAYER_EXTRA_INSPECT_ENABLED;
+    else
+        m_ExtraFlags &= ~PLAYER_EXTRA_INSPECT_ENABLED;
+}
+
+#define PVP_TOKEN 50000
+bool Player::ShouldReplenish()
+{
+    return m_ExtraFlags & PLAYER_EXTRA_DUEL_REPLENISH && HasItemCount(PVP_TOKEN);
+}
+
+void Player::SetDuelReplenishState(bool enable)
+{
+    if (enable)
+        m_ExtraFlags |= PLAYER_EXTRA_DUEL_REPLENISH;
+    else
+        m_ExtraFlags &= ~PLAYER_EXTRA_DUEL_REPLENISH;
+}
+
 class ShopHandler
 {
     public:
