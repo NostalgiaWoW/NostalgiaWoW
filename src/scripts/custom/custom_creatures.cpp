@@ -54,6 +54,7 @@ bool GossipHello_TeleportNPC(Player *player, Creature *_Creature)
     if (player->GetTeam() == HORDE)
     {
         // player->ADD_GOSSIP_ITEM(5, "PreTBC Mall"          , GOSSIP_SENDER_MAIN, 74);
+		player->ADD_GOSSIP_ITEM(5, "Nostalgia WoW Mall",		GOSSIP_SENDER_MAIN, 90);
         player->ADD_GOSSIP_ITEM(5, "Major Cities"               , GOSSIP_SENDER_MAIN, 1);
         player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 3);
         player->ADD_GOSSIP_ITEM(5, "Instances"            , GOSSIP_SENDER_MAIN, 5);
@@ -68,6 +69,7 @@ bool GossipHello_TeleportNPC(Player *player, Creature *_Creature)
     else
     {
         //player->ADD_GOSSIP_ITEM(5, "PreTBC Mall"          , GOSSIP_SENDER_MAIN, 74);
+		player->ADD_GOSSIP_ITEM(5, "Nostalgia WoW Mall",		GOSSIP_SENDER_MAIN, 90);
         player->ADD_GOSSIP_ITEM(5, "Major Cities"               , GOSSIP_SENDER_MAIN, 2);
         player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 4);
         player->ADD_GOSSIP_ITEM(5, "Instances"            , GOSSIP_SENDER_MAIN, 5);
@@ -223,6 +225,12 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->TeleportTo(1, -3754.29f, 1061.04f, 132.19f, 1.62f);
             player->AddAura(22356);
             break;
+
+// ----### NOSTALGIA WOW ###----
+		case 90: // Mall
+			player->CLOSE_GOSSIP_MENU();
+			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			break;
 
 // ----### CITIES ###----
 
