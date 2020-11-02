@@ -282,6 +282,7 @@ void AddSC_npc_j_eevee();                            // J'Eevee, the Imp in a Ja
 void AddSC_npc_demon_spawner();
 void AddSC_boss_bc_event_dreadlord();
 void AddSC_boss_halloween_zombie();
+void AddSC_shop();
 
 void AddScripts()
 {
@@ -559,4 +560,6 @@ void AddScripts()
     AddSC_npc_demon_spawner();
     AddSC_boss_bc_event_dreadlord();
 	AddSC_boss_halloween_zombie();
+
+    AddSC_shop();
 }

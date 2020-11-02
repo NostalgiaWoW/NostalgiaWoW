@@ -1187,6 +1187,9 @@ void World::SetInitialWorldSettings()
         exit(1);                                            // Error message displayed in function already
     }
 
+    sLog.outString("Loading Donation Shop...");
+    sObjectMgr.LoadShop();
+
     sLog.outString("Loading Instance Statistics...");
     sInstanceStatistics.LoadFromDB();
 
