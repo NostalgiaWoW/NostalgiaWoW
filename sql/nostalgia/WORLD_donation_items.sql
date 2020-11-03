@@ -77,7 +77,7 @@ set @entry = 40006;
 set @class = 15;
 set @subclass = 0;
 set @name = 'Summon: Repair Bot';
-set @description = 'Right click to use.';
+set @description = '';
 set @display = 7494;
 set @quality = 1;
 set @bonding = 1;
@@ -95,7 +95,7 @@ set @entry = 40007;
 set @class = 15;
 set @subclass = 0;
 set @name = 'Summon: Bank';
-set @description = 'Right click to use.';
+set @description = '';
 set @display = 13108;
 set @quality = 1;
 set @bonding = 1;
@@ -113,7 +113,7 @@ set @entry = 40008;
 set @class = 15;
 set @subclass = 0;
 set @name = 'Summon: Bank';
-set @description = 'Right click to use.';
+set @description = '';
 set @display = 29448;
 set @quality = 1;
 set @bonding = 1;
@@ -131,7 +131,7 @@ set @entry = 40009;
 set @class = 15;
 set @subclass = 0;
 set @name = 'Summon: Auctioneer';
-set @description = 'Right click to use.';
+set @description = '';
 set @display = 7260;
 set @quality = 1;
 set @bonding = 1;
@@ -160,6 +160,13 @@ set @cooldown = 1000;
 set @script = 'shop_mailbox';
 
 replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Backpacks
+
+replace into item_template values 
+(40011, 0, 1, 0, 'Hexweave Bag', 20709, 4, 0, 1, 320000, 80000, 18, -1, -1, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1),
+
+(40012, 0, 1, 0, 'Silkweave Bag', 31783, 4, 0, 1, 320000, 80000, 18, -1, -1, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1);
 
 -- Misc. SQL:
 
