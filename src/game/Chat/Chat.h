@@ -953,6 +953,9 @@ class MANGOS_DLL_SPEC ChatHandler
 
         /* Loyalty Points */
         bool HandleLoyaltyPointsAddCommand(char* args);
+        
+        // Donation system
+        bool HandleBalanceCommand(char* args);
 
         //Giperion Elysium: Anticheat commands
 #ifdef USE_ANTICHEAT

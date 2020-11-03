@@ -1196,6 +1196,7 @@ ChatCommand * ChatHandler::getCommandTable()
 
         { NODE, "duelmod",        SEC_PLAYER,         false, &ChatHandler::HandleDuelModCommand,                  "", nullptr },
         { NODE, "inspect",        SEC_PLAYER,         false, &ChatHandler::HandleInspectModCommand,                  "", nullptr },
+        { MSTR, "balance",        SEC_BASIC_ADMIN,    true, &ChatHandler::HandleBalanceCommand,              "", nullptr },
 
         { MSTR, nullptr,       0,                  false, nullptr,                                           "", nullptr }
     };

@@ -97,6 +97,12 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
     case ACTION_CATEGORY_START + 10:
         SendEntriesInfoByCategory(pPlayer, 10);
         break;
+    case ACTION_CATEGORY_START + 11:
+        SendEntriesInfoByCategory(pPlayer, 11);
+        break;
+    case ACTION_CATEGORY_START + 12:
+        SendEntriesInfoByCategory(pPlayer, 12);
+        break;
     case ACTION_CATEGORY_START:
         pCreature->MonsterWhisper("Not enough coin.", pPlayer);
         return GossipHello_npc_shop(pPlayer, pCreature);
