@@ -89,6 +89,42 @@ set @script = '';
 
 replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
+-- Summon: Bank (Alliance)
+
+set @entry = 40007;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Summon: Bank';
+set @description = 'Right click to use.';
+set @display = 13108;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 28505;
+set @charges = 0;
+set @cooldown = 1000;
+set @script = '';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Summon: Bank (Horde)
+
+set @entry = 40008;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Summon: Bank';
+set @description = 'Right click to use.';
+set @display = 29448;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 28505;
+set @charges = 0;
+set @cooldown = 1000;
+set @script = '';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
 -- Summon: Mailbox
 
 set @entry = 40010;
@@ -113,9 +149,20 @@ replace into gameobject_template values (1000333, 2, 6424, 'Goblin Brainwashing 
 
 replace into npc_text (id, text0_0) values('90350', 'Use this to forget your talents.');
 
-replace into creature_template values (60000, 0, 0, 0, 14379, 0, 0, 0, 'Servo', NULL, 0, 50, 50, 3517, 3517, 0, 0, 0, 35, 35, 16389, 0.6, 1.14286, 0, 0, 85, 109, 0, 226, 1, 1510, 1661, 0, 0, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 1, 0, 0, 0, 8405008, 0, 0, 0, '');
+replace into creature_template values 
 
-replace into custom_pet_entry_relation (item_entry, creature_entry) VALUES (40006, 60000);
+(60000, 0, 0, 0, 14379, 0, 0, 0, 'Servo', NULL, 0, 50, 50, 3517, 3517, 0, 0, 0, 35, 35, 16389, 0.6, 1.14286, 0, 0, 85, 109, 0, 226, 1, 1510, 1661, 0, 0, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 1, 0, 0, 0, 8405008, 0, 0, 0, ''),
+
+(60001, 0, 0, 0, 16075, 0, 0, 0, 'Caravan Mule', NULL, 0, 55, 55, 4108, 4108, 0, 0, 4500, 120, 120, 256, 1.1, 1.14286, 0, 0, 96, 125, 0, 248, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, ''),
+
+(60002, 0, 0, 0, 7933, 0, 0, 0, 'Caravan Kodo', NULL, 0, 55, 55, 4108, 4108, 0, 0, 4500, 120, 120, 256, 1.1, 1.14286, 0, 0, 96, 125, 0, 248, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, '');
+
+update creature_template set scale = 0.45 where entry = 60001;
+update creature_template set scale = 0.5 where entry = 60002;
+
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (40006, 60000);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (40007, 60001);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (40008, 60002);
 
 replace into npc_vendor values 
 (60000, 5565, 0, 0, 0),
@@ -137,4 +184,5 @@ replace into npc_vendor values
 (60000, 17038, 0, 0, 0),
 (60000, 21177, 0, 0, 0);
 
-
+update item_template set allowablerace = 77 where entry = 40007;
+update item_template set allowablerace = 178 where entry = 40008;
