@@ -53,6 +53,42 @@ set @script = '';
 
 replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
+-- Summon: Barber
+
+set @entry = 40003;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Summon: Barber';
+set @description = '';
+set @display = 9825;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 28505;
+set @charges = 0;
+set @cooldown = 1000;
+set @script = '';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Summon: Surgeon
+
+set @entry = 40004;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Summon: Surgeon';
+set @description = '';
+set @display = 22464;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 28505;
+set @charges = 0;
+set @cooldown = 1000;
+set @script = '';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
 -- Summon: Brainwashing Device
 
 set @entry = 40005;
@@ -173,6 +209,7 @@ replace into item_template values
 replace into gameobject_template values (1000333, 2, 6424, 'Goblin Brainwashing Device', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_brainwashing_device');
 
 replace into npc_text (id, text0_0) values('90350', 'Use this to forget your talents.');
+replace into npc_text (id, text0_0) values('90370', 'Where did the sheep get a hair cut?\n\nAt the baa-baa shop.');
 
 replace into creature_template values 
 
@@ -182,7 +219,12 @@ replace into creature_template values
 
 (60002, 0, 0, 0, 7933, 0, 0, 0, 'Caravan Kodo', NULL, 0, 55, 55, 4108, 4108, 0, 0, 4500, 120, 120, 256, 1.1, 1.14286, 0, 0, 96, 125, 0, 248, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, ''),
 
-(60003, 0, 0, 0, 7993, 0, 0, 0, 'Drezbit', NULL, 0, 50, 50, 3517, 3517, 2103, 2103, 2999, 855, 855, 4096, 1.1, 1.14286, 0, 0, 72, 93, 0, 226, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, '');
+(60003, 0, 0, 0, 7993, 0, 0, 0, 'Drezbit', NULL, 0, 50, 50, 3517, 3517, 2103, 2103, 2999, 855, 855, 4096, 1.1, 1.14286, 0, 0, 72, 93, 0, 226, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, ''),
+
+(60004, 0, 0, 0, 7909, 0, 0, 0, 'Sniptip', NULL, 0, 1, 1, 300, 400, 0, 0, 20, 35, 35, 1, 1, 1.14286, 1, 0, 2, 2, 0, 44, 1, 1400, 1900, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 'npc_barber'),
+
+(60005, 0, 0, 0, 7212, 0, 0, 0, 'Sharpshear', NULL, 0, 1, 1, 300, 400, 0, 0, 20, 35, 35, 1, 1, 1.14286, 1, 0, 2, 2, 0, 44, 1, 1400, 1900, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 'npc_surgeon');
+
 
 update creature_template set scale = 0.45 where entry = 60001;
 update creature_template set scale = 0.5 where entry = 60002;
@@ -191,6 +233,8 @@ replace into custom_pet_entry_relation (item_entry, creature_entry) values (4000
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (40007, 60001);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (40008, 60002);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (40009, 60003);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (40003, 60004);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (40004, 60005);
 
 replace into npc_vendor values 
 (60000, 5565, 0, 0, 0),
