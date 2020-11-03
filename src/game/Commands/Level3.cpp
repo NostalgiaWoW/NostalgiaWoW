@@ -9337,3 +9337,9 @@ bool ChatHandler::HandleChangeRaceCommand(char* args)
     }
     return false;
 }
+
+bool ChatHandler::HandleReloadCustomPetEntries(char* args)
+{
+    sObjectMgr.LoadCustomPetCreatureEntries();
+    return true;
+}

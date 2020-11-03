@@ -1189,6 +1189,7 @@ void World::SetInitialWorldSettings()
 
     sLog.outString("Loading Donation Shop...");
     sObjectMgr.LoadShop();
+    sObjectMgr.LoadCustomPetCreatureEntries();
 
     sLog.outString("Loading Instance Statistics...");
     sInstanceStatistics.LoadFromDB();

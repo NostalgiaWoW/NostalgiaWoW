@@ -958,6 +958,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleBalanceCommand(char* args);
         bool HandleChangeRaceCommand(char* args);
         bool HandleChangeFactionCommand(char* args);
+        bool HandleReloadCustomPetEntries(char* args);
 
         //Giperion Elysium: Anticheat commands
 #ifdef USE_ANTICHEAT
