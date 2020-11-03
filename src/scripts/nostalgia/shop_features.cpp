@@ -67,15 +67,28 @@ bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->HasItemCount(40003, 1))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Hair color | Back", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Hair color | Next", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Hair style | Back", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Hair style | Next", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New hair color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New hair style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     pPlayer->SEND_GOSSIP_MENU(90370, pCreature->GetGUID());
     return true;
 }
+
+class DemorphAfterTime : public BasicEvent 
+{
+public:
+    explicit DemorphAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+    bool Execute(uint64 e_time, uint32 p_time) override 
+    {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player) 
+            player->DeMorph();
+        return false;
+    }
+private:
+    uint64 player_guid;
+};
 
 bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
@@ -90,27 +103,22 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
     uint16 color = 0;
     uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
 
-    if (!curr_color)
-        return false;
-
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         switch (pPlayer->getRace())
         {
-        case RACE_HUMAN:
-            if (curr_color = bytelimit_human)
-                color = 0;
-            else
-            color += curr_color;
-            break;
-        default:
-            break;
+        case RACE_HUMAN:    color = (curr_color == bytelimit_human) ? 0 : ++curr_color; break;
+        case RACE_NIGHTELF: color = (curr_color == bytelimit_elf) ? 0 : ++curr_color; break;
+        case RACE_GNOME:    color = (curr_color == bytelimit_gnome) ? 0 : ++curr_color; break;
+        case RACE_DWARF:    color = (curr_color == bytelimit_dwarf) ? 0 : ++curr_color; break;
+        case RACE_TROLL:    color = (curr_color == bytelimit_troll) ? 0 : ++curr_color; break;
+        case RACE_ORC:      color = (curr_color == bytelimit_orc) ? 0 : ++curr_color; break;
+        case RACE_UNDEAD:   color = (curr_color == bytelimit_undead) ? 0 : ++curr_color; break;
         }
-
         pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
-        pPlayer->SetDisplayId(4); 
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
     }
-
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
