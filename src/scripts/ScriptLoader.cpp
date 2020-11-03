@@ -283,6 +283,7 @@ void AddSC_npc_demon_spawner();
 void AddSC_boss_bc_event_dreadlord();
 void AddSC_boss_halloween_zombie();
 void AddSC_shop();
+void AddSC_shop_features();
 
 void AddScripts()
 {
@@ -562,4 +563,5 @@ void AddScripts()
 	AddSC_boss_halloween_zombie();
 
     AddSC_shop();
+    AddSC_shop_features();
 }
