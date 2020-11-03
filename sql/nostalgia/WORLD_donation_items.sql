@@ -60,7 +60,7 @@ set @class = 15;
 set @subclass = 0;
 set @name = 'Summon: Brainwashing Device';
 set @description = 'Right click to use.';
-set @display = 3020;
+set @display = 7840;
 set @quality = 1;
 set @bonding = 1;
 set @stackable = 20;
@@ -91,5 +91,7 @@ replace into item_template (entry, class, subclass, name, description, displayid
 
 -- Misc. SQL:
 
--- replace into gameobject_template values (1000333, 0, 2, 6424, 'Brainwashing Device', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_brainwashing_device');
+replace into gameobject_template values (1000333, 2, 6424, 'Goblin Brainwashing Device', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_brainwashing_device');
+
+replace into npc_text (id, text0_0) values ('90350', 'Use this to forget your talents.');
 

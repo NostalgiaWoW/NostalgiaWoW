@@ -43,7 +43,7 @@ bool ItemUseSpell_shop_brainwashing_device(Player* pPlayer, Item* pItem, const S
 
 bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->getLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
+    if (pPlayer->getLevel() >= 10 && pPlayer->HasItemCount(40005, 1))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Click here to reset your talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
