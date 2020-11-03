@@ -9343,3 +9343,11 @@ bool ChatHandler::HandleReloadCustomPetEntries(char* args)
     sObjectMgr.LoadCustomPetCreatureEntries();
     return true;
 }
+
+bool ChatHandler::HandleReloadShopCommand(char* args)
+{
+    sObjectMgr.LoadShop();
+    SendSysMessage("DB table `shop_categories` reloaded.");
+    SendSysMessage("DB table `shop_entries` reloaded.");
+    return true;
+}
