@@ -9173,8 +9173,8 @@ bool ChatHandler::HandleBalanceCommand(char* args)
     return false;
 }
 
-#define CHARACTER_MANAGEMENT_RACE     90002
-#define CHARACTER_MANAGEMENT_FACTION  90003
+#define CHARACTER_MANAGEMENT_RACE     40001
+#define CHARACTER_MANAGEMENT_FACTION  40002
 
 bool ChatHandler::HandleChangeFactionCommand(char* args)
 {
@@ -9189,7 +9189,7 @@ bool ChatHandler::HandleChangeFactionCommand(char* args)
     {
         if (!target->HasItemCount(CHARACTER_MANAGEMENT_FACTION))
         {
-            PSendSysMessage("You must purchase [Character: Faction Change] first.");
+            PSendSysMessage("You must purchase [Faction Change Token] first.");
             SetSentErrorMessage(true);
             return false;
         }
@@ -9260,7 +9260,7 @@ bool ChatHandler::HandleChangeRaceCommand(char* args)
     {
         if (!target->HasItemCount(CHARACTER_MANAGEMENT_RACE))
         {
-            PSendSysMessage("You must purchase [Character: Race Change] first!");
+            PSendSysMessage("You must purchase [Race Change Token] first!");
             SetSentErrorMessage(true);
             return false;
         }
