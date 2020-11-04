@@ -118,3 +118,8 @@ sql/migrations/characters_db_updates\.sql
 sql/migrations/logon_db_updates\.sql
 sql/migrations/logs_db_updates\.sql
 sql/migrations/world_db_updates\.sql
+
+#CLion
+cmake-build-debug
+cmake-build-release
+cmake-build-relwithdebinfo

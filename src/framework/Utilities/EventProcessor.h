@@ -24,23 +24,6 @@
 #include "Platform/Define.h"
 #include <map>
 
-template<typename T>
-class LambdaBasicEvent : public BasicEvent
-{
-public:
-    LambdaBasicEvent(T&& callback) : BasicEvent(), _callback(std::move(callback)) { }
-
-    bool Execute(uint64, uint32) override
-    {
-        _callback();
-        return true;
-    }
-
-private:
-
-    T _callback;
-};
-
 class EventProcessor;
 
 // Note. All times are in milliseconds here.
@@ -85,6 +68,23 @@ class BasicEvent
         // these can be used for time offset control
         uint64 m_addTime;                                   // time when the event was added to queue, filled by event handler
         uint64 m_execTime;                                  // planned time of next execution, filled by event handler
+};
+
+template<typename T>
+class LambdaBasicEvent : public BasicEvent
+{
+public:
+    LambdaBasicEvent(T&& callback) : BasicEvent(), _callback(std::move(callback)) { }
+
+    bool Execute(uint64, uint32) override
+    {
+        _callback();
+        return true;
+    }
+
+private:
+
+    T _callback;
 };
 
 typedef std::multimap<uint64, BasicEvent*> EventList;
