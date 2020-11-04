@@ -921,8 +921,8 @@ bool ChatHandler::HandleAccountSetGmLevelCommand(char* args)
         targetPlayer->GetSession()->SetSecurity(AccountTypes(gm));
     }
 
-    PSendSysMessage(LANG_YOU_CHANGE_SECURITY, targetAccountName.c_str(), gm, realmID);
-    LoginDatabase.PExecute("REPLACE INTO account_access SET gmlevel = '%i', id = '%u', RealmID = %i", gm, targetAccountId, realmID);
+    PSendSysMessage(LANG_YOU_CHANGE_SECURITY, targetAccountName.c_str(), gm);
+    LoginDatabase.PExecute("REPLACE INTO account_access SET gmlevel = '%i', id = '%u'", gm, targetAccountId);
 
     return true;
 }
