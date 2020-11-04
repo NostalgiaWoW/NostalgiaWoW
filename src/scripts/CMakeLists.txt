@@ -310,7 +310,7 @@ set (SCRIPTS_SRCS
 	world/dragons_of_nightmare/boss_ysondre.cpp
 	nostalgia/shop.cpp
 	nostalgia/shop_features.cpp
-
+	nostalgia/inspect_gossip.cpp
 )
 
 

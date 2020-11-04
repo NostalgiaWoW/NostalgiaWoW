@@ -87,7 +87,6 @@ void AddSC_boss_chromaggus();
 void AddSC_boss_nefarian();
 void AddSC_boss_victor_nefarius();
 void AddSC_instance_blackwing_lair();
-void AddSC_inspect_gossip();
 
 void AddSC_deadmines();                              //deadmines
 void AddSC_instance_deadmines();
@@ -285,6 +284,7 @@ void AddSC_boss_bc_event_dreadlord();
 void AddSC_boss_halloween_zombie();
 void AddSC_shop();
 void AddSC_shop_features();
+void AddSC_inspect_gossip();
 
 void AddScripts()
 {
