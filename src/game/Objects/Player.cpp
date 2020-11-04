@@ -6716,7 +6716,7 @@ void Player::UpdateArea(uint32 newArea)
         
             if (areaEntry->Id == 2401)
                 setFaction(35);
-            else if (areaEntry->Id != 2401 && getFaction() == 35)
+            else if (getFaction() == 35)
                 setFactionForRace(getRace());
             
     }
