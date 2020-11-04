@@ -92,19 +92,19 @@ private:
 
 bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    uint16 bytelimit_human  = 9;
-    uint16 bytelimit_elf    = 7;
-    uint16 bytelimit_gnome  = 8;
-    uint16 bytelimit_dwarf  = 8;
-    uint16 bytelimit_troll  = 9;
-    uint16 bytelimit_orc    = 7;
-    uint16 bytelimit_undead = 9;
-
-    uint16 color = 0;
-    uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
-
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+        uint16 bytelimit_human = 9;
+        uint16 bytelimit_elf = 7;
+        uint16 bytelimit_gnome = 8;
+        uint16 bytelimit_dwarf = 8;
+        uint16 bytelimit_troll = 9;
+        uint16 bytelimit_orc = 7;
+        uint16 bytelimit_undead = 9;
+
+        uint16 color = 0;
+        uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
+
         switch (pPlayer->getRace())
         {
         case RACE_HUMAN:    color = (curr_color == bytelimit_human) ? 0 : ++curr_color; break;
@@ -116,6 +116,34 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         case RACE_UNDEAD:   color = (curr_color == bytelimit_undead) ? 0 : ++curr_color; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        uint16 bytelimit_human = 18;
+        uint16 bytelimit_elf = 6;
+        uint16 bytelimit_gnome = 6;
+        uint16 bytelimit_dwarf = 13;
+        uint16 bytelimit_troll = 9;
+        uint16 bytelimit_orc = 7;
+        uint16 bytelimit_undead = 9;
+
+        uint16 style = 0;
+        uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
+
+        switch (pPlayer->getRace())
+        {
+        case RACE_HUMAN:    style = (curr_style == bytelimit_human) ? 0 : ++curr_style; break;
+        case RACE_NIGHTELF: style = (curr_style == bytelimit_elf) ? 0 : ++curr_style; break;
+        case RACE_GNOME:    style = (curr_style == bytelimit_gnome) ? 0 : ++curr_style; break;
+        case RACE_DWARF:    style = (curr_style == bytelimit_dwarf) ? 0 : ++curr_style; break;
+        case RACE_TROLL:    style = (curr_style == bytelimit_troll) ? 0 : ++curr_style; break;
+        case RACE_ORC:      style = (curr_style == bytelimit_orc) ? 0 : ++curr_style; break;
+        case RACE_UNDEAD:   style = (curr_style == bytelimit_undead) ? 0 : ++curr_style; break;
+        }
+        pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
         pPlayer->SetDisplayId(15435);
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
     }
