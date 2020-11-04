@@ -1,4 +1,4 @@
-replace into npc_text (id, text0_0) values ('90000', 'Greetings, welcome to our shop!\n\nHow can I help you?');
+replace into npc_text (id, text0_0) values ('90000', 'Greetings, welcome to our shop!\nHow can I help you?');
 
 drop table if exists shop_categories;
 create table shop_categories (
