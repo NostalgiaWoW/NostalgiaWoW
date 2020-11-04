@@ -101,6 +101,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 bytelimit_troll = 9;
         uint16 bytelimit_orc = 7;
         uint16 bytelimit_undead = 9;
+        uint16 bytelimit_tauren = 9;
 
         uint16 color = 0;
         uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
@@ -122,13 +123,13 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        uint16 bytelimit_human = 18;
-        uint16 bytelimit_elf = 6;
-        uint16 bytelimit_gnome = 6;
-        uint16 bytelimit_dwarf = 13;
-        uint16 bytelimit_troll = 9;
-        uint16 bytelimit_orc = 7;
-        uint16 bytelimit_undead = 9;
+        uint16 bytelimit_human  = (pPlayer->getGender() == GENDER_FEMALE) ? 18 : 11;
+        uint16 bytelimit_elf    = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_gnome  = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_dwarf  = (pPlayer->getGender() == GENDER_FEMALE) ? 13 : 10;
+        uint16 bytelimit_troll  = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 5;
+        uint16 bytelimit_orc    = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
 
         uint16 style = 0;
         uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
@@ -147,6 +148,81 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         pPlayer->SetDisplayId(15435);
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
     }
+    pCreature->HandleEmote(25);
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GossipHello_npc_surgeon(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->HasItemCount(40004, 1))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New skin tone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New facial feature", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(90371, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        uint16 bytelimit_human  = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
+        uint16 bytelimit_elf    = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_gnome  = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 3;
+        uint16 bytelimit_dwarf  = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_troll  = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_orc    = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 7;
+
+        uint16 skintone = 0;
+        uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
+
+        switch (pPlayer->getRace())
+        {
+        case RACE_HUMAN:    skintone = (curr_skintone == bytelimit_human) ? 0 : ++curr_skintone; break;
+        case RACE_NIGHTELF: skintone = (curr_skintone == bytelimit_elf) ? 0 : ++curr_skintone; break;
+        case RACE_GNOME:    skintone = (curr_skintone == bytelimit_gnome) ? 0 : ++curr_skintone; break;
+        case RACE_DWARF:    skintone = (curr_skintone == bytelimit_dwarf) ? 0 : ++curr_skintone; break;
+        case RACE_TROLL:    skintone = (curr_skintone == bytelimit_troll) ? 0 : ++curr_skintone; break;
+        case RACE_ORC:      skintone = (curr_skintone == bytelimit_orc) ? 0 : ++curr_skintone; break;
+        case RACE_UNDEAD:   skintone = (curr_skintone == bytelimit_undead) ? 0 : ++curr_skintone; break;
+        }
+        pPlayer->SetByteValue(PLAYER_BYTES, 0, skintone);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        uint16 bytelimit_human  = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 8;
+        uint16 bytelimit_elf    = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 5;
+        uint16 bytelimit_gnome  = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
+        uint16 bytelimit_dwarf  = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 10;
+        uint16 bytelimit_troll  = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 10;
+        uint16 bytelimit_orc    = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
+        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
+
+        uint16 feature = 0;
+        uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
+
+        switch (pPlayer->getRace())
+        {
+        case RACE_HUMAN:    feature = (curr_feature == bytelimit_human) ? 0 : ++curr_feature; break;
+        case RACE_NIGHTELF: feature = (curr_feature == bytelimit_elf) ? 0 : ++curr_feature; break;
+        case RACE_GNOME:    feature = (curr_feature == bytelimit_gnome) ? 0 : ++curr_feature; break;
+        case RACE_DWARF:    feature = (curr_feature == bytelimit_dwarf) ? 0 : ++curr_feature; break;
+        case RACE_TROLL:    feature = (curr_feature == bytelimit_troll) ? 0 : ++curr_feature; break;
+        case RACE_ORC:      feature = (curr_feature == bytelimit_orc) ? 0 : ++curr_feature; break;
+        case RACE_UNDEAD:   feature = (curr_feature == bytelimit_undead) ? 0 : ++curr_feature; break;
+        }
+        pPlayer->SetByteValue(PLAYER_BYTES_2, 0, feature);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
+    }
+    pCreature->HandleEmote(EMOTE_ONESHOT_POINT);
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -180,5 +256,11 @@ void AddSC_shop_features()
     newscript->Name = "npc_barber";
     newscript->pGossipHello = &GossipHello_npc_barber;
     newscript->pGossipSelect = &GossipSelect_npc_barber;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_surgeon";
+    newscript->pGossipHello = &GossipHello_npc_surgeon;
+    newscript->pGossipSelect = &GossipSelect_npc_surgeon;
     newscript->RegisterSelf();
 } 

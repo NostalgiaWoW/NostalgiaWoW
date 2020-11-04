@@ -210,6 +210,7 @@ replace into gameobject_template values (1000333, 2, 6424, 'Goblin Brainwashing 
 
 replace into npc_text (id, text0_0) values('90350', 'Use this to forget your talents.');
 replace into npc_text (id, text0_0) values('90370', 'Where did the sheep get a hair cut?\n\nAt the baa-baa shop.');
+replace into npc_text (id, text0_0) values('90371', 'I\'m sorry, but you\'re just too ugly for plastic surgery. I suggest wearing a plastic bag over your head.');
 
 replace into creature_template values 
 
