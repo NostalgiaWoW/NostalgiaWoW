@@ -1,17 +1,31 @@
 #include "scriptPCH.h"
+#include "Utilities/EventProcessor.h"
+
+template <typename Functor>
+void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+{
+    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+}
 
 bool ItemUseSpell_shop_character_rename(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer) return false;
 
-    ChatHandler(pPlayer).PSendSysMessage("Please logout and choose a new name.");
     pPlayer->SetAtLoginFlag(AT_LOGIN_RENAME);
+    pPlayer->GetSession()->SendNotification("Please choose a new name.\nYou will be disconnected in 5 seconds.");
+    pPlayer->SaveToDB();
+    DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,[player = pPlayer]() { player->GetSession()->KickPlayer(); });
     return true;
 }
 
 bool ItemUseSpell_shop_mailbox(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
 	if (!pPlayer) return false;
+
+    GameObject* other_mailbox = pPlayer->FindNearestGameObject(144112, 50.0F);
+
+    if (other_mailbox)
+        other_mailbox->SetRespawnTime(1);
 
     float dis{ 2.0F };
     float x, y, z;
@@ -20,7 +34,7 @@ bool ItemUseSpell_shop_mailbox(Player* pPlayer, Item* pItem, const SpellCastTarg
     y += dis * sin(pPlayer->GetOrientation());
 
     pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
-    pPlayer->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+    pPlayer->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
     return true;
 }
 
@@ -67,15 +81,16 @@ bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->HasItemCount(40003, 1))
     {
-        if (pPlayer->getRace() == RACE_TAUREN)
+        switch (pPlayer->getRace())
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New horn color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New horn style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        }
-        else
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New hair color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New hair style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        case RACE_TAUREN:
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Horn Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Horn Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            break;
+        default:
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Hair Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Hair Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            break;      
         }
     }
 
@@ -170,15 +185,15 @@ bool GossipHello_npc_surgeon(Player* pPlayer, Creature* pCreature)
     {
         if (pPlayer->getRace() == RACE_TAUREN)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New fur color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New facial feature", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New face", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Fur Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Features", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Face", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         }
         else
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New skin tone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New facial feature", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "New face", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Skin Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Features", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Face", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         }
     }
 

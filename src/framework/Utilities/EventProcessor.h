@@ -24,6 +24,23 @@
 #include "Platform/Define.h"
 #include <map>
 
+template<typename T>
+class LambdaBasicEvent : public BasicEvent
+{
+public:
+    LambdaBasicEvent(T&& callback) : BasicEvent(), _callback(std::move(callback)) { }
+
+    bool Execute(uint64, uint32) override
+    {
+        _callback();
+        return true;
+    }
+
+private:
+
+    T _callback;
+};
+
 class EventProcessor;
 
 // Note. All times are in milliseconds here.
