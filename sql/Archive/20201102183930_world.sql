@@ -23,15 +23,166 @@ INSERT INTO `quest_template` (`entry`, `patch`, `Method`, `ZoneOrSort`, `MinLeve
 DELETE FROM `quest_template` WHERE `entry`=30008 AND `patch`=0;
 INSERT INTO `quest_template` (`entry`, `patch`, `Method`, `ZoneOrSort`, `MinLevel`, `MaxLevel`, `QuestLevel`, `Type`, `RequiredClasses`, `RequiredRaces`, `RequiredSkill`, `RequiredSkillValue`, `RepObjectiveFaction`, `RepObjectiveValue`, `RequiredMinRepFaction`, `RequiredMinRepValue`, `RequiredMaxRepFaction`, `RequiredMaxRepValue`, `SuggestedPlayers`, `LimitTime`, `QuestFlags`, `SpecialFlags`, `PrevQuestId`, `NextQuestId`, `ExclusiveGroup`, `NextQuestInChain`, `SrcItemId`, `SrcItemCount`, `SrcSpell`, `Title`, `Details`, `Objectives`, `OfferRewardText`, `RequestItemsText`, `EndText`, `ObjectiveText1`, `ObjectiveText2`, `ObjectiveText3`, `ObjectiveText4`, `ReqItemId1`, `ReqItemId2`, `ReqItemId3`, `ReqItemId4`, `ReqItemCount1`, `ReqItemCount2`, `ReqItemCount3`, `ReqItemCount4`, `ReqSourceId1`, `ReqSourceId2`, `ReqSourceId3`, `ReqSourceId4`, `ReqSourceCount1`, `ReqSourceCount2`, `ReqSourceCount3`, `ReqSourceCount4`, `ReqCreatureOrGOId1`, `ReqCreatureOrGOId2`, `ReqCreatureOrGOId3`, `ReqCreatureOrGOId4`, `ReqCreatureOrGOCount1`, `ReqCreatureOrGOCount2`, `ReqCreatureOrGOCount3`, `ReqCreatureOrGOCount4`, `ReqSpellCast1`, `ReqSpellCast2`, `ReqSpellCast3`, `ReqSpellCast4`, `RewChoiceItemId1`, `RewChoiceItemId2`, `RewChoiceItemId3`, `RewChoiceItemId4`, `RewChoiceItemId5`, `RewChoiceItemId6`, `RewChoiceItemCount1`, `RewChoiceItemCount2`, `RewChoiceItemCount3`, `RewChoiceItemCount4`, `RewChoiceItemCount5`, `RewChoiceItemCount6`, `RewItemId1`, `RewItemId2`, `RewItemId3`, `RewItemId4`, `RewItemCount1`, `RewItemCount2`, `RewItemCount3`, `RewItemCount4`, `RewRepFaction1`, `RewRepFaction2`, `RewRepFaction3`, `RewRepFaction4`, `RewRepFaction5`, `RewRepValue1`, `RewRepValue2`, `RewRepValue3`, `RewRepValue4`, `RewRepValue5`, `RewOrReqMoney`, `RewMoneyMaxLevel`, `RewSpell`, `RewSpellCast`, `RewMailTemplateId`, `RewMailDelaySecs`, `PointMapId`, `PointX`, `PointY`, `PointOpt`, `DetailsEmote1`, `DetailsEmote2`, `DetailsEmote3`, `DetailsEmote4`, `DetailsEmoteDelay1`, `DetailsEmoteDelay2`, `DetailsEmoteDelay3`, `DetailsEmoteDelay4`, `IncompleteEmote`, `CompleteEmote`, `OfferRewardEmote1`, `OfferRewardEmote2`, `OfferRewardEmote3`, `OfferRewardEmote4`, `OfferRewardEmoteDelay1`, `OfferRewardEmoteDelay2`, `OfferRewardEmoteDelay3`, `OfferRewardEmoteDelay4`, `StartScript`, `CompleteScript`, `RewardXP`) VALUES (30008, 0, 2, 0, 1, 60, 60, 82, 1024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Arena Reward - Tier Sets', 'Turn in bla blabla', 'Bring me things', 'Choose your rewards', 'Hey dummy wheres the stuff', NULL, 'Turn in arena stuffz', 'Turn in PVP stuffz', NULL, NULL, 80001, 80000, 0, 0, 25, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16836, 16833, 16834, 16835, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
+-- Update to Quest per class
+
+-- Warrior
+UPDATE quest_template
+SET RewChoiceItemId1 =16861 , RewChoiceItemId2 =16862 , RewChoiceItemId3 =16863 , RewChoiceItemId4 =16864
+WHERE entry = 30009;
+
+UPDATE quest_template
+SET RewChoiceItemId1 =16865 , RewChoiceItemId2 =16866 , RewChoiceItemId3 =16867 , RewChoiceItemId4 =16868
+WHERE entry = 30019;
+
+-- Paladin
+UPDATE quest_template
+SET RewChoiceItemId1 =16853 , RewChoiceItemId2 =16854 , RewChoiceItemId3 =16855 , RewChoiceItemId4 =16856
+WHERE entry = 30010;
+
+UPDATE quest_template
+SET RewChoiceItemId1 =16857 , RewChoiceItemId2 =16858 , RewChoiceItemId3 =16859 , RewChoiceItemId4 =16860
+WHERE entry = 30020;
+
+-- Hunter
+UPDATE quest_template
+SET RewChoiceItemId1 =16845 , RewChoiceItemId2 =16846 , RewChoiceItemId3 =16847 , RewChoiceItemId4 =16848
+WHERE entry = 30011;
+
+UPDATE quest_template
+SET RewChoiceItemId1 =16849 , RewChoiceItemId2 =16850 , RewChoiceItemId3 =16851 , RewChoiceItemId4 =16852
+WHERE entry = 30021;
+
+-- Rogue
+UPDATE quest_template
+SET RewChoiceItemId1 =16820 , RewChoiceItemId2 =16821 , RewChoiceItemId3 =16822 , RewChoiceItemId4 =16823
+WHERE entry = 30012;
+
+UPDATE quest_template
+SET RewChoiceItemId1 =16824 , RewChoiceItemId2 =16825 , RewChoiceItemId3 =16826 , RewChoiceItemId4 =16827
+WHERE entry = 30022;
+
+-- Priest
+UPDATE quest_template
+SET RewChoiceItemId1 =16811 , RewChoiceItemId2 =16812 , RewChoiceItemId3 =16813 , RewChoiceItemId4 =16814
+WHERE entry = 30013;
+
+UPDATE quest_template
+SET RewChoiceItemId1 =16815 , RewChoiceItemId2 =16816 , RewChoiceItemId3 =16817 , RewChoiceItemId4 =16819
+WHERE entry = 30023;
+
+-- Shaman
+UPDATE quest_template
+SET RewChoiceItemId1 =16837 , RewChoiceItemId2 =16838 , RewChoiceItemId3 =16839 , RewChoiceItemId4 =16840
+WHERE entry = 30015;
+
+UPDATE quest_template
+SET RewChoiceItemId1 =16841 , RewChoiceItemId2 =16842 , RewChoiceItemId3 =16843 , RewChoiceItemId4 =16844
+WHERE entry = 30025;
+
+-- Mage
+UPDATE quest_template
+SET RewChoiceItemId1 =16795 , RewChoiceItemId2 =16796 , RewChoiceItemId3 =16797 , RewChoiceItemId4 =16798
+WHERE entry = 30016;
+
+UPDATE quest_template
+SET RewChoiceItemId1 =16799 , RewChoiceItemId2 =16800 , RewChoiceItemId3 =16801 , RewChoiceItemId4 =16802
+WHERE entry = 30026;
+
+-- Warlock
+UPDATE quest_template
+SET RewChoiceItemId1 =16803 , RewChoiceItemId2 =16804 , RewChoiceItemId3 =16805 , RewChoiceItemId4 =16806
+WHERE entry = 30017;
+
+UPDATE quest_template
+SET RewChoiceItemId1 =16807 , RewChoiceItemId2 =16808 , RewChoiceItemId3 =16809 , RewChoiceItemId4 =16810
+WHERE entry = 30027;
+
+
 
 -- Relations
 DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
 INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30007, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30008, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30009, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30019, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30010, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30020, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30011, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30021, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30012, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30022, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30013, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30023, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30014, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30024, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30015, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30025, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30016, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30026, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30017, 0);
+DELETE FROM `creature_involvedrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30027, 0);
+
 
 DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
 INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30007, 0);
 DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
 INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30008, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30009, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30019, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30010, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30020, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30011, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30021, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30012, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30022, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30013, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30023, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30014, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30024, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30015, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30025, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30016, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30026, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30007 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30017, 0);
+DELETE FROM `creature_questrelation` WHERE `id`=1200040 AND `quest`=30008 AND `patch`=0;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch`) VALUES (1200040, 30027, 0);
+
 
 
 -- End of migration.

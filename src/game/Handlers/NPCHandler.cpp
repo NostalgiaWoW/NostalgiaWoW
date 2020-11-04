@@ -405,11 +405,14 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
             return;
         }
 
-        // Clear possible StopMoving motion
-        if (pCreature->IsStopped())        
-            pCreature->GetMotionMaster()->Clear();
-            
-        pCreature->StopMoving();
+        if (pCreature->GetCharmInfo() == nullptr || !pCreature->GetCharmInfo()->IsFollowing())
+        {
+            // Clear possible StopMoving motion
+            if (pCreature->IsStopped())
+                pCreature->GetMotionMaster()->Clear();
+
+            pCreature->StopMoving();
+        }
         
 
         if (!sScriptMgr.OnGossipSelect(_player, pCreature, sender, action, code.empty() ? NULL : code.c_str()))

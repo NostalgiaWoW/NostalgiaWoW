@@ -1,4 +1,4 @@
-replace into npc_text (id, text0_0) values ('90000', 'Greetings, welcome to our shop!\n\nHow can I help you?');
+replace into npc_text (id, text0_0) values ('90000', 'Greetings, welcome to our shop!\nHow can I help you?');
 
 drop table if exists shop_categories;
 create table shop_categories (
@@ -27,19 +27,18 @@ replace into shop_categories values
 replace into shop_items values
 -- Character: General
 (100, 1, 40000, 'Character: Rename', 100),
-(101, 1, 40001, 'Character: Change Race', 100),
-(102, 1, 40002, 'Character: Change Faction', 100),
-(103, 1, 40003, 'Summon: Barber Goblin', 100),
-(104, 1, 40004, 'Summon: Plastic Surgeon Goblin', 100),
+(101, 1, 40002, 'Character: Faction Change', 100),
+(102, 1, 40001, 'Character: Race Change', 100),
+(103, 1, 40003, 'Summon: Barber', 100),
+(104, 1, 40004, 'Summon: Surgeon', 100),
 -- Gameplay: Miscellaneous
-(200, 2, 40005, 'Summon: Respec Bot', 100),
-(201, 2, 40006, 'Summon: Repair Bot', 100),
-(202, 2, 40007, 'Summon: Bank (Alliance)', 100),
-(203, 2, 40008, 'Summon: Bank (Horde)', 100),
-(204, 2, 40009, 'Summon: Auctioneer', 100),
-(205, 2, 40010, 'Summon: Mailbox', 100),
-(206, 2, 40011, 'Backpack: 28 slots', 100),
-(207, 2, 40012, 'Backpack: 36 slots', 100),
+(200, 2, 40005, 'Summon: Talent Reset', 100),
+(201, 2, 40007, 'Summon: Bank (Alliance)', 100),
+(202, 2, 40008, 'Summon: Bank (Horde)', 100),
+(203, 2, 40009, 'Summon: Auctioneer', 100),
+(204, 2, 40010, 'Summon: Mailbox', 100),
+(205, 2, 40011, 'Backpack: 28 slots', 100),
+(208, 2, 40012, 'Backpack: 36 slots', 100),
 -- Gameplay: Mounts 
 (300, 3, 23720, 'Riding Turtle', 100),
 -- Gameplay: Companions

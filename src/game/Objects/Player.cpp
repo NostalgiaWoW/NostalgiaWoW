@@ -6712,14 +6712,12 @@ void Player::UpdateArea(uint32 newArea)
     }
 
     if (!isGameMaster())
-    {           // Force faction change in DM for Arena Tournament event.
-        if (sGameEventMgr.IsActiveEvent(GAME_EVENT_ARENAS))
-        {
-            if (areaEntry->Id == 2557)
+    {           // Force faction change at shop mall
+        
+            if (areaEntry->Id == 2401)
                 setFaction(35);
             else if (getFaction() == 35)
                 setFactionForRace(getRace());
-        }
             
     }
 

@@ -209,7 +209,8 @@ replace into item_template values
 replace into gameobject_template values (1000333, 2, 6424, 'Goblin Brainwashing Device', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_brainwashing_device');
 
 replace into npc_text (id, text0_0) values('90350', 'Use this to forget your talents.');
-replace into npc_text (id, text0_0) values('90370', 'Where did the sheep get a hair cut?\n\nAt the baa-baa shop.');
+replace into npc_text (id, text0_0) values('90370', 'Hair to cut, coins to count.\n\nThe busy life of a goblin.');
+replace into npc_text (id, text0_0) values('90371', 'Hey pal, can’t get no love with that face?\n\n I’ve got what you need.');
 
 replace into creature_template values 
 
