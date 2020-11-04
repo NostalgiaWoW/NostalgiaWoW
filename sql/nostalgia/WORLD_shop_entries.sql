@@ -32,7 +32,7 @@ replace into shop_items values
 (103, 1, 40003, 'Summon: Barber Goblin', 100),
 (104, 1, 40004, 'Summon: Plastic Surgeon Goblin', 100),
 -- Gameplay: Miscellaneous
-(200, 2, 40005, 'Summon: Respec Bot', 100),
+(200, 2, 40005, 'Summon: Talent Reset', 100),
 (201, 2, 40006, 'Summon: Repair Bot', 100),
 (202, 2, 40007, 'Summon: Bank (Alliance)', 100),
 (203, 2, 40008, 'Summon: Bank (Horde)', 100),
