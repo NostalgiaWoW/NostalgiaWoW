@@ -33,6 +33,10 @@ typedef std::vector<Script*> ScriptVector;
 int num_sc_scripts;
 ScriptVector m_NPC_scripts;
 
+int num_nonbound_scripts = 0;
+std::unordered_multimap<ScriptType, Script*> m_Nonbound_scripts;
+
+
 ScriptMapMap sQuestEndScripts;
 ScriptMapMap sQuestStartScripts;
 ScriptMapMap sSpellScripts;
@@ -56,6 +60,7 @@ ScriptMgr::~ScriptMgr()
         delete *itr;
 
     m_NPC_scripts.clear();
+    m_Nonbound_scripts.clear();
 
     num_sc_scripts = 0;
 }
@@ -1092,6 +1097,41 @@ bool ScriptMgr::OnGossipSelect(Player* pPlayer, GameObject* pGameObject, uint32 
     return false;
 }
 
+bool ScriptMgr::OnGossipSelect(Player* pPlayer, Player* otherPlayer, uint32 sender, uint32 action, const char* code)
+{
+    sLog.outDebug("Gossip player selection%s, sender: %d, action: %d", code ? " with code" : "", sender, action);
+
+  
+    if (code)
+    {
+        auto playerScripts = m_Nonbound_scripts.equal_range(ScriptType::Player);
+        for (auto itr = playerScripts.first; itr != playerScripts.second; ++itr)
+        {
+            auto script = itr->second;
+            if (script && script->pPlrGossipSelectWithCode)
+            {
+                pPlayer->PlayerTalkClass->ClearMenus();
+                script->pPlrGossipSelectWithCode(pPlayer, otherPlayer, sender, action, code);
+            }
+        }
+    }
+    else
+    {
+        auto playerScripts = m_Nonbound_scripts.equal_range(ScriptType::Player);
+        for (auto itr = playerScripts.first; itr != playerScripts.second; ++itr)
+        {
+            auto script = itr->second;
+            if (script && script->pPlrGossipSelect)
+            {
+                pPlayer->PlayerTalkClass->ClearMenus();
+                script->pPlrGossipSelect(pPlayer, otherPlayer, sender, action);
+            }
+        }
+    }
+
+    return false;
+}
+
 bool ScriptMgr::OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
     //quest scripts have higher priority
@@ -1934,6 +1974,11 @@ void Script::RegisterSelf(bool bReportError)
             sLog.outError("Script registering but ScriptName %s is not assigned in database. Script will not be used.", Name.c_str());
         delete this;
     }
+}
+
+void Script::RegisterSelfNoBind(ScriptType type)
+{
+    m_Nonbound_scripts.insert(std::make_pair(type, this));
 }
 
 void ScriptMgr::FillSpellSummary()

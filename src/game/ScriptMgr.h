@@ -591,6 +591,12 @@ protected:
     ObjectGuid PlayerGuid;
 };
 
+enum class ScriptType
+{
+    Player = 1
+    //can add world/server/ other types soon if needed.
+};
+
 struct Script
 {
     Script() :
@@ -610,11 +616,15 @@ struct Script
     //Methods to be scripted
     bool (*pGossipHello             )(Player*, Creature*);
     bool (*pGOGossipHello           )(Player*, GameObject*);
+    bool (*pPlrGossipHello)          (Player*, Player*);
     bool (*pQuestAcceptNPC          )(Player*, Creature*, Quest const*);
     bool (*pGossipSelect            )(Player*, Creature*, uint32, uint32);
     bool (*pGOGossipSelect          )(Player*, GameObject*, uint32, uint32);
+    bool (*pPlrGossipSelect)         (Player*, Player*, uint32, uint32);
     bool (*pGossipSelectWithCode    )(Player*, Creature*, uint32, uint32, const char*);
     bool (*pGOGossipSelectWithCode  )(Player*, GameObject*, uint32, uint32, const char*);
+    bool (*pPlrGossipSelectWithCode) (Player*, Player*, uint32, uint32, const char*);
+
 //    bool (*pQuestSelect             )(Player*, Creature*, const Quest*);
     bool (*pQuestComplete           )(Player*, Creature*, const Quest*);
     uint32 (*pNPCDialogStatus       )(Player*, Creature*);
@@ -641,6 +651,7 @@ struct Script
     QuestInstance* (*GetQuestInstance)(ObjectGuid PlayerGuid);
     InstanceData* (*GetInstanceData)(Map*);
 
+    void RegisterSelfNoBind(ScriptType type);
     void RegisterSelf(bool custom = false);
 };
 
@@ -731,6 +742,7 @@ class ScriptMgr
         bool OnGossipHello(Player* pPlayer, GameObject* pGameObject);
         bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action, const char* code);
         bool OnGossipSelect(Player* pPlayer, GameObject* pGameObject, uint32 sender, uint32 action, const char* code);
+        bool OnGossipSelect(Player* pPlayer, Player* otherPlayer, uint32 sender, uint32 action, const char* code);
         bool OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* pQuest);
         bool OnQuestAccept(Player* pPlayer, GameObject* pGameObject, Quest const* pQuest);
         bool OnQuestAccept(Player* pPlayer, Item* pItem, Quest const* pQuest);

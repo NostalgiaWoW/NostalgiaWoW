@@ -48,6 +48,7 @@
 #include "Anticheat.hpp"
 #include "MasterPlayer.h"
 #include "GossipDef.h"
+#include "Nostalgia/InspectSystem.h"
 
 void WorldSession::HandleRepopRequestOpcode(WorldPacket & /*recv_data*/)
 {
@@ -1041,15 +1042,13 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recv_data)
     if (!plr)                                               // wrong player
         return;
 
-    // TODO: NOT WORKING, INSPECT IS HANDLED CLIENT SIDE TOO. FIND ANOTHER WAY OF BLOCKING INSPECT (if possible)
-    if (plr->IsBlockingInspect())
-    {
-        return;
-    }
-
     WorldPacket data(SMSG_INSPECT, 8);
     data << ObjectGuid(guid);
     SendPacket(&data);
+
+    //sInspectSystem->BlockInspect(plr, GetPlayer());
+
+
 }
 
 void WorldSession::HandleInspectHonorStatsOpcode(WorldPacket& recv_data) {

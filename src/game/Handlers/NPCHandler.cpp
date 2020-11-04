@@ -428,6 +428,19 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
         if (!sScriptMgr.OnGossipSelect(_player, pGo, sender, action, code.empty() ? NULL : code.c_str()))
             _player->OnGossipSelect(pGo, gossipListId);
     }
+    else if (guid.IsPlayer()) // custom player gossip
+    {
+        Player* otherPlayer = nullptr;
+        if (guid == _player->GetObjectGuid())
+            otherPlayer = _player;
+        else
+            otherPlayer = sObjectMgr.GetPlayer(guid);
+
+        if (otherPlayer)
+        {
+            sScriptMgr.OnGossipSelect(_player, otherPlayer, sender, action, code.empty() ? nullptr : code.c_str());
+        }
+    }
 }
 
 void WorldSession::HandleSpiritHealerActivateOpcode(WorldPacket & recv_data)

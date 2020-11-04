@@ -22,7 +22,7 @@ enum PlayerExtraFlags
     PLAYER_EXTRA_PVP_DEATH          = 0x0100,               // store PvP death status until corpse creating.
     PLAYER_EXTRA_WHISP_RESTRICTION  = 0x0200,
     PLAYER_EXTRA_DUEL_REPLENISH     = 0x0400,
-    PLAYER_EXTRA_INSPECT_ENABLED    = 0x0800
+    PLAYER_EXTRA_INSPECT_DISABLED   = 0x0800
 };
 
 class MasterPlayer;

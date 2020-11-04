@@ -87,6 +87,7 @@ void AddSC_boss_chromaggus();
 void AddSC_boss_nefarian();
 void AddSC_boss_victor_nefarius();
 void AddSC_instance_blackwing_lair();
+void AddSC_inspect_gossip();
 
 void AddSC_deadmines();                              //deadmines
 void AddSC_instance_deadmines();
@@ -564,4 +565,5 @@ void AddScripts()
 
     AddSC_shop();
     AddSC_shop_features();
+    AddSC_inspect_gossip();
 }

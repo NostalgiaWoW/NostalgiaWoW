@@ -45,6 +45,7 @@
 #include "PlayerBroadcaster.h"
 #include "Anticheat.hpp"
 #include "custom/transmog.h"
+#include "Nostalgia/InspectSystem.h"
 
 // config option SkipCinematics supported values
 enum CinematicsSkipMode
@@ -835,6 +836,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     }
 
     ALL_SESSION_SCRIPTS(this, OnLogin(pCurrChar));
+
 
     if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
         sTransmog.LoadTransmog(pCurrChar);

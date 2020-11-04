@@ -1155,15 +1155,15 @@ void Player::SetDrunkValue(uint16 newDrunkenValue, uint32 itemId)
 
 bool Player::IsBlockingInspect()
 {
-    return m_ExtraFlags & PLAYER_EXTRA_INSPECT_ENABLED;
+    return m_ExtraFlags & PLAYER_EXTRA_INSPECT_DISABLED;
 }
 
 void Player::SetInspectState(bool block)
 {
     if (block)
-        m_ExtraFlags |= PLAYER_EXTRA_INSPECT_ENABLED;
+        m_ExtraFlags |= PLAYER_EXTRA_INSPECT_DISABLED;
     else
-        m_ExtraFlags &= ~PLAYER_EXTRA_INSPECT_ENABLED;
+        m_ExtraFlags &= ~PLAYER_EXTRA_INSPECT_DISABLED;
 }
 
 #define PVP_TOKEN 80000
