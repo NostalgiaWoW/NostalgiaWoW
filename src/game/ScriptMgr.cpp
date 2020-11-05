@@ -1132,6 +1132,17 @@ bool ScriptMgr::OnGossipSelect(Player* pPlayer, Player* otherPlayer, uint32 send
     return false;
 }
 
+void ScriptMgr::OnStartup()
+{
+    auto worldScripts = m_Nonbound_scripts.equal_range(ScriptType::World);
+    for (auto itr = worldScripts.first; itr != worldScripts.second; ++itr)
+    {
+        auto script = itr->second;
+        if (script && script->pOnStartup)
+            script->pOnStartup();
+    }
+}
+
 bool ScriptMgr::OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
     //quest scripts have higher priority

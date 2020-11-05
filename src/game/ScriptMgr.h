@@ -593,7 +593,8 @@ protected:
 
 enum class ScriptType
 {
-    Player = 1
+    Player = 1,
+    World = 2
     //can add world/server/ other types soon if needed.
 };
 
@@ -607,7 +608,8 @@ struct Script
         pProcessEventId(nullptr), pItemQuestAccept(nullptr), pGOQuestAccept(nullptr),
         pItemUse(nullptr), pItemUseSpell(nullptr), pEffectDummyCreature(nullptr), pEffectDummyGameObj(nullptr), pEffectDummyItem(nullptr),
         pEffectAuraDummy(nullptr), GOOpen(nullptr),
-        GOGetAI(nullptr), GetAI(nullptr), GetQuestInstance(nullptr), GetInstanceData(nullptr)
+        GOGetAI(nullptr), GetAI(nullptr), GetQuestInstance(nullptr), GetInstanceData(nullptr), pOnStartup(nullptr), pPlrGossipHello(nullptr), pPlrGossipSelect(nullptr),
+        pPlrGossipSelectWithCode(nullptr)
     {}
 
     std::string Name;
@@ -650,6 +652,8 @@ struct Script
     CreatureAI* (*GetAI)(Creature*);
     QuestInstance* (*GetQuestInstance)(ObjectGuid PlayerGuid);
     InstanceData* (*GetInstanceData)(Map*);
+
+    void (*pOnStartup)();
 
     void RegisterSelfNoBind(ScriptType type);
     void RegisterSelf(bool custom = false);
@@ -761,6 +765,8 @@ class ScriptMgr
         bool OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex effIndex, GameObject* pTarget);
         bool OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex effIndex, Item* pTarget);
         bool OnAuraDummy(Aura const* pAura, bool apply);
+
+        void OnStartup();
 
         typedef std::unordered_map<uint32, Script*> QuestScriptMap;
         QuestScriptMap m_questScripts;
