@@ -846,6 +846,7 @@ class MANGOS_DLL_SPEC WorldObject : public Object
         void MonsterSay(const char* text, uint32 language = 0, Unit* target = nullptr);
         void MonsterYell(const char* text, uint32 language = 0, Unit* target = nullptr);
         void MonsterTextEmote(const char* text, Unit* target = nullptr, bool IsBossEmote = false);
+        void PMonsterEmote(const char* text, Unit* target = nullptr, bool IsBossEmote = false, ...);
         void MonsterWhisper(const char* text, Unit* target = nullptr, bool IsBossWhisper = false) const;
         void MonsterSay(int32 textId, uint32 language = 0, Unit* target = nullptr) const;
         void MonsterYell(int32 textId, uint32 language = 0, Unit* target = nullptr) const;

@@ -285,6 +285,7 @@ void AddSC_boss_halloween_zombie();
 void AddSC_shop();
 void AddSC_shop_features();
 void AddSC_inspect_gossip();
+void AddSC_npc_gambling();
 
 void AddScripts()
 {
@@ -566,4 +567,5 @@ void AddScripts()
     AddSC_shop();
     AddSC_shop_features();
     AddSC_inspect_gossip();
+    AddSC_npc_gambling();
 }

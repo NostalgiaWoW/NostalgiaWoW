@@ -1807,6 +1807,16 @@ void WorldObject::MonsterTextEmote(const char* text, Unit* target, bool IsBossEm
     SendMessageToSetInRange(&data, sWorld.getConfig(IsBossEmote ? CONFIG_FLOAT_LISTEN_RANGE_YELL : CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE), true);
 }
 
+void WorldObject::PMonsterEmote(const char *text, Unit* target, bool IsBossEmote, ...)
+{
+    va_list ap;
+    char str[2048];
+    va_start(ap, text);
+    vsnprintf(str, 2048, text, ap);
+    va_end(ap);
+    MonsterTextEmote(str, target, IsBossEmote);
+}
+
 void WorldObject::MonsterWhisper(const char* text, Unit* target, bool IsBossWhisper) const
 {
     if (!target || target->GetTypeId() != TYPEID_PLAYER)
