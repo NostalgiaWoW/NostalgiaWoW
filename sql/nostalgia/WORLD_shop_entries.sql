@@ -27,8 +27,6 @@ replace into shop_categories values
 replace into shop_items values
 -- Character: General
 (100, 1, 40000, 'Character: Rename', 100),
-(101, 1, 40002, 'Character: Faction Change', 100),
-(102, 1, 40001, 'Character: Race Change', 100),
 (103, 1, 40003, 'Summon: Barber', 100),
 (104, 1, 40004, 'Summon: Surgeon', 100),
 -- Gameplay: Miscellaneous

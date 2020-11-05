@@ -296,9 +296,104 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
     return true;
 }
 
+bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    {
+        pPlayer->GetSession()->SendNotification("Can't change race at this moment!");
+        return false;
+    }
+
+    uint32 race = pPlayer->getRace();
+    uint32 bytes  = pPlayer->GetUInt32Value(PLAYER_BYTES);
+    uint32 bytes2 = pPlayer->GetUInt32Value(PLAYER_BYTES_2);
+    uint8 player_class = pPlayer->getClass();
+    uint8 player_gender  = pPlayer->getGender();
+
+    switch (pItem->GetEntry())
+    {
+    case 40013: // Human
+        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_SHAMAN)
+        {
+            pPlayer->GetSession()->SendNotification("This race does not support your class.");
+            return false;
+        }
+        race = RACE_HUMAN;
+        break;
+    case 40014: // Gnome
+        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN)
+        {
+            pPlayer->GetSession()->SendNotification("This race does not support your class.");
+            return false;
+        }
+        race = RACE_GNOME;
+        break;
+    case 40015: // Dwarf
+        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_SHAMAN)
+        {
+            pPlayer->GetSession()->SendNotification("This race does not support your class.");
+            return false;
+        }
+        race = RACE_DWARF;
+        break;
+    case 40016: // Night Elf
+        if (pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN)
+        {
+            pPlayer->GetSession()->SendNotification("This race does not support your class.");
+            return false;
+        }
+        race = RACE_NIGHTELF;
+        break;
+    case 40017: // Orc
+        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_MAGE)
+        {
+            pPlayer->GetSession()->SendNotification("This race does not support your class.");
+            return false;
+        }
+        race = RACE_ORC;
+        break;
+    case 40018: // Troll
+        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_PALADIN)
+        {
+            pPlayer->GetSession()->SendNotification("This race does not support your class.");
+            return false;
+        }
+        race = RACE_TROLL;
+        break;
+    case 40019: // Tauren
+        if (pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_PALADIN)
+        {
+            pPlayer->GetSession()->SendNotification("This race does not support your class.");
+            return false;
+        }
+        race = RACE_TAUREN;
+        break;
+    case 40020: // Undead
+        if (pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_HUNTER)
+        {
+            pPlayer->GetSession()->SendNotification("This race does not support your class.");
+            return false;
+        }
+        race = RACE_UNDEAD;
+        break;
+    }
+
+    bytes2 |= (pPlayer->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
+    pPlayer->SetUInt32Value(PLAYER_BYTES, bytes);
+    pPlayer->SetUInt32Value(PLAYER_BYTES_2, bytes2);
+    pPlayer->SetByteValue(UNIT_FIELD_BYTES_0, 2, player_gender);
+    pPlayer->ChangeRace(race, player_gender, bytes, bytes2);
+    return true;
+}
+
 void AddSC_shop_features()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "shop_racechange";
+    newscript->pItemUseSpell = &ItemUseSpell_shop_racechange;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "shop_brainwashing_device";
