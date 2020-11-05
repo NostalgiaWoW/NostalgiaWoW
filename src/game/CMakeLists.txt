@@ -188,6 +188,7 @@ set(game_SRCS
         Movement/spline/packet_builder.cpp
         Movement/spline/spline.cpp
         Movement/spline/util.cpp
+        Nostalgia/InspectSystem.cpp
         Objects/Bag.cpp
         Objects/Corpse.cpp
         Objects/Creature.cpp
