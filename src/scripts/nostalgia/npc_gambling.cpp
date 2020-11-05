@@ -7,6 +7,10 @@
 #define OPT3 "500 gold coins."
 #define OPT4 "1000 gold coins."
 
+#define COIN_SOUND 1204
+
+#define FIVE_MINUTES 5 * 60
+
 struct GamblerInfo
 {
     uint32 betCount;
@@ -18,33 +22,31 @@ std::unordered_map<uint64, GamblerInfo> gamblingRecords;
 
 uint32 handleRecords(Player* pPlayer, uint32 amount, int result)
 {
-    GamblerInfo currentInfo;
+    GamblerInfo currentInfo{};
     uint32 newAmount = 0;
+    time_t currentTime = time(nullptr);
 
     if (!gamblingRecords.count(pPlayer->GetGUID()))
     {
         currentInfo =
         {
-            1,
+            0,
             amount,
-            time(nullptr)
+            currentTime
         };
         gamblingRecords[pPlayer->GetGUID()] = currentInfo;
     }
     else
-    {
         currentInfo = gamblingRecords[pPlayer->GetGUID()];
-    }
 
-    if (currentInfo.lastBet != amount)
-        currentInfo.betCount = 1;
+    // Reset count if amount is different or last bet is older than 5 minutes.
+    if (currentInfo.lastBet != amount || currentInfo.timestamp < currentTime - FIVE_MINUTES)
+        currentInfo.betCount = 0;
 
     if (currentInfo.betCount == 3 && currentInfo.lastBet == amount)
     {
         if (result > 75)
             newAmount = amount * 3;
-        else
-            newAmount = 0;
 
         currentInfo.betCount = 1;
     }
@@ -54,12 +56,10 @@ uint32 handleRecords(Player* pPlayer, uint32 amount, int result)
         currentInfo.betCount++;
     }
     else
-    {
         currentInfo.betCount = 1;
-    }
 
     currentInfo.lastBet = amount;
-    currentInfo.timestamp = time(nullptr);
+    currentInfo.timestamp = currentTime;
     gamblingRecords[pPlayer->GetGUID()] = currentInfo;
 
     return newAmount;
@@ -108,7 +108,7 @@ bool GossipSelect_npc_gambling(Player* pPlayer, Creature* pCreature, uint32 uiSe
     pPlayer->ModifyMoney(amount * -1);
 
     pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
-    pCreature->PlayDirectSound(1204, pPlayer); // Coin sound
+    pCreature->PlayDirectSound(COIN_SOUND, pPlayer); // Coin sound
 
     int result = irand(1, 100);
     pCreature->PMonsterEmote("Gazrik Goldenspark rolls a dice for %s... %i!", nullptr, false,
@@ -118,11 +118,14 @@ bool GossipSelect_npc_gambling(Player* pPlayer, Creature* pCreature, uint32 uiSe
     uint32 amountToAward = handleRecords(pPlayer, amount, result);
     if (amountToAward > 0)
     {
+        pPlayer->HandleEmote(EMOTE_ONESHOT_CHEER);
         pPlayer->ModifyMoney(amountToAward);
 
         if (amountToAward >= amount * 3)
             pCreature->PMonsterEmote("STREAK!");
     }
+    else
+        pPlayer->HandleEmote(EMOTE_ONESHOT_CRY);
 
     pPlayer->PlayerTalkClass->CloseGossip();
     return true;
