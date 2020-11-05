@@ -73,6 +73,10 @@
 #define BG_AV_REP_OWNED_MINE                24
 #define BG_AV_REP_OWNED_MINE_HOLIDAY        36
 
+#define RES_STEP_1                          250
+#define RES_STEP_2                          500
+#define RES_STEP_3                          750
+
 enum BG_AV_TROOPS_LEVEL
 {
     AV_NPC_BASIC = 0,

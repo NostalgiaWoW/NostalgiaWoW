@@ -63,11 +63,11 @@ uint32 BattleGroundAV::getReinforcementLevelGroundUnit(uint32 faction_id)
 void BattleGroundAV::setReinforcementLevelGroundUnit(uint32 faction_id, uint32 ressources)
 {
     ASSERT(faction_id < BG_TEAMS_COUNT);
-    if (ressources < 500)
+    if (ressources < RES_STEP_1)
         m_reinforcementLevel[faction_id] = AV_NPC_BASIC;
-    else if (ressources < 1000)
+    else if (ressources < RES_STEP_2)
         m_reinforcementLevel[faction_id] = AV_NPC_SEASONED;
-    else if (ressources < 1500)
+    else if (ressources < RES_STEP_3)
         m_reinforcementLevel[faction_id] = AV_NPC_VETERAN;
     else
         m_reinforcementLevel[faction_id] = AV_NPC_CHAMPION;
@@ -431,21 +431,21 @@ void BattleGroundAV::UpgradeArmor(Object* questGiver, Player *player)
     char sMessageRemaining[200]        = "";
     uint32 ressources = 0;
 
-    if (m_Team_QuestStatus[teamIdx][0] >= 500 && getReinforcementLevelGroundUnit(m_faction_id) == AV_NPC_BASIC)
-        ressources = 500;
-    else if (m_Team_QuestStatus[teamIdx][0] >= 1000 && getReinforcementLevelGroundUnit(m_faction_id) == AV_NPC_SEASONED)
-        ressources = 1000;
-    else if (m_Team_QuestStatus[teamIdx][0] >= 1500 && getReinforcementLevelGroundUnit(m_faction_id) == AV_NPC_VETERAN)
-        ressources = 1500;
+    if (m_Team_QuestStatus[teamIdx][0] >= RES_STEP_1 && getReinforcementLevelGroundUnit(m_faction_id) == AV_NPC_BASIC)
+        ressources = RES_STEP_1;
+    else if (m_Team_QuestStatus[teamIdx][0] >= RES_STEP_2 && getReinforcementLevelGroundUnit(m_faction_id) == AV_NPC_SEASONED)
+        ressources = RES_STEP_2;
+    else if (m_Team_QuestStatus[teamIdx][0] >= RES_STEP_3 && getReinforcementLevelGroundUnit(m_faction_id) == AV_NPC_VETERAN)
+        ressources = RES_STEP_3;
 
     setReinforcementLevelGroundUnit(teamIdx, ressources);
 
-    if(ressources%500 == 0 && m_Team_QuestStatus[teamIdx][0] != 0 && questGiver->GetTypeId() == TYPEID_UNIT)
+    if(ressources % RES_STEP_1 == 0 && m_Team_QuestStatus[teamIdx][0] != 0 && questGiver->GetTypeId() == TYPEID_UNIT)
     {
         sprintf(sMessageRemaining,"Thanks for the supplies, %s",player->GetName());
         ((Creature*)questGiver)->MonsterSay(sMessageRemaining, 0, 0);
 
-        if(ressources == 500)
+        if(ressources == RES_STEP_1)
         {
             if (teamIdx == 0)
                 CastSpellOnTeam(28418, ALLIANCE);
@@ -455,7 +455,7 @@ void BattleGroundAV::UpgradeArmor(Object* questGiver, Player *player)
             sprintf(sMessageRemaining,"Seasoned units are entering the battle!");
             ((Creature*)questGiver)->MonsterYell(sMessageRemaining, 0, 0);
         }
-        else if(ressources == 1000)
+        else if(ressources == RES_STEP_2)
         {
             if (teamIdx == 0)
                 CastSpellOnTeam(28419, ALLIANCE);
@@ -465,7 +465,7 @@ void BattleGroundAV::UpgradeArmor(Object* questGiver, Player *player)
             sprintf(sMessageRemaining,"Veteran units are entering the battle!");
             ((Creature*)questGiver)->MonsterYell(sMessageRemaining, 0, 0);
         }
-        else if(ressources == 1500)
+        else if(ressources == RES_STEP_3)
         {
             if (teamIdx == 0)
                 CastSpellOnTeam(28420, ALLIANCE);
@@ -477,7 +477,7 @@ void BattleGroundAV::UpgradeArmor(Object* questGiver, Player *player)
         }
     }
 
-    if (m_Team_QuestStatus[teamIdx][0] == 500 || m_Team_QuestStatus[teamIdx][0] == 1000 || m_Team_QuestStatus[teamIdx][0] == 1500)  //25,50,75 turn ins
+    if (m_Team_QuestStatus[teamIdx][0] == RES_STEP_1 || m_Team_QuestStatus[teamIdx][0] == RES_STEP_2 || m_Team_QuestStatus[teamIdx][0] == RES_STEP_3)  //25,50,75 turn ins
     {
         for (BG_AV_Nodes i = BG_AV_NODES_FIRSTAID_STATION; i <= BG_AV_NODES_FROSTWOLF_HUT; ++i)
             if (m_Nodes[i].Owner == teamIdx && m_Nodes[i].State == POINT_CONTROLLED)
@@ -506,75 +506,34 @@ void BattleGroundAV::HandleQuestComplete(WorldObject* questGiver, uint32 questid
         case BG_AV_QUEST_H_SCRAPS2:
             m_Team_QuestStatus[teamIdx][0] += 20;
 
-            /** Update reinforcement infos */
-//            setReinforcementLevelGroundUnit(teamIdx, m_Team_QuestStatus[teamIdx][0]);
-
-            if((m_Team_QuestStatus[teamIdx][0]%100) == 0 && (m_Team_QuestStatus[teamIdx][0]%500) != 0&& questGiver->GetTypeId() == TYPEID_UNIT)
+            if((m_Team_QuestStatus[teamIdx][0] % RES_STEP_1 * 0.2) == 0 && (m_Team_QuestStatus[teamIdx][0] % RES_STEP_1) != 0 && questGiver->GetTypeId() == TYPEID_UNIT)
             	((Creature*)questGiver)->MonsterSay("Great! Let's keep those supplies coming, people!", 0, 0);
 
-/*            if(m_Team_QuestStatus[teamIdx][0]%500 == 0 && m_Team_QuestStatus[teamIdx][0] != 0 && questGiver->GetTypeId() == TYPEID_UNIT)
-            {
-            	sprintf(sMessageRemaining,"Thanks for the supplies, %s",player->GetName());
-            	((Creature*)questGiver)->MonsterSay(sMessageRemaining, 0, 0);
-
-            	if(m_Team_QuestStatus[teamIdx][0] == 500)            		
-            	{
-                    if (teamIdx == 0)
-                        CastSpellOnTeam(28418, ALLIANCE);
-                    else
-                        CastSpellOnTeam(28418, HORDE);
-
-                   sprintf(sMessageRemaining,"Seasoned units are entering the battle!");
-                   ((Creature*)questGiver)->MonsterYell(sMessageRemaining, 0, 0);
-            	}
-            	else if(m_Team_QuestStatus[teamIdx][0] == 1000)            		
-            	{
-                    if (teamIdx == 0)
-                        CastSpellOnTeam(28419, ALLIANCE);
-                    else
-                        CastSpellOnTeam(28419, HORDE);
-
-            		sprintf(sMessageRemaining,"Veteran units are entering the battle!");
-            		((Creature*)questGiver)->MonsterYell(sMessageRemaining, 0, 0);
-            	}
-            	else if(m_Team_QuestStatus[teamIdx][0] == 1500)            		
-            	{
-                    if (teamIdx == 0)
-                        CastSpellOnTeam(28420, ALLIANCE);
-                    else
-                        CastSpellOnTeam(28420, HORDE);
-
-            		sprintf(sMessageRemaining,"Champion units are entering the battle!");
-            		((Creature*)questGiver)->MonsterYell(sMessageRemaining, 0, 0);
-            	}
-
-            }
-*/
-            /** Adding visual crates each time 100 ressources are added */
-            if((m_Team_QuestStatus[teamIdx][0]%500) == 100)
+            /** Adding visual crates each time 50 ressources are added */
+            if((m_Team_QuestStatus[teamIdx][0] % RES_STEP_1) == RES_STEP_1 * 0.2)
             {
                 SpawnEvent(AV_100_SUPPLIES+teamIdx, 0, true, false);
             }
-            else if((m_Team_QuestStatus[teamIdx][0]%500) == 200)
+            else if((m_Team_QuestStatus[teamIdx][0] % RES_STEP_1) == RES_STEP_1 * 0.4)
             {
                 SpawnEvent(AV_200_SUPPLIES+teamIdx, 0, true, false);
             }
-            else if((m_Team_QuestStatus[teamIdx][0]%500) == 300)
+            else if((m_Team_QuestStatus[teamIdx][0] % RES_STEP_1) == RES_STEP_1 * 0.6)
             {
                 SpawnEvent(AV_300_SUPPLIES+teamIdx, 0, true, true);
             }
-            else if((m_Team_QuestStatus[teamIdx][0]%500) == 400)
+            else if((m_Team_QuestStatus[teamIdx][0] % RES_STEP_1) == RES_STEP_1 * 0.8)
             {
                 SpawnEvent(AV_400_SUPPLIES+teamIdx, 0, true, true);
             }
-            else if((m_Team_QuestStatus[teamIdx][0]%500) == 0 && m_Team_QuestStatus[teamIdx][0] !=0 )
+            else if((m_Team_QuestStatus[teamIdx][0] % RES_STEP_1) == 0 && m_Team_QuestStatus[teamIdx][0] != 0)
             {
                 SpawnEvent(AV_100_SUPPLIES+teamIdx, 2, true, false);
                 SpawnEvent(AV_200_SUPPLIES+teamIdx, 2, true, false);
                 SpawnEvent(AV_300_SUPPLIES+teamIdx, 2, true, false);
                 SpawnEvent(AV_400_SUPPLIES+teamIdx, 2, true, false);
             }
-            else if (m_Team_QuestStatus[teamIdx][0] ==20)
+            else if (m_Team_QuestStatus[teamIdx][0] == 20)
             {
                 SpawnEvent(AV_100_SUPPLIES+teamIdx, 2, true, false);
                 SpawnEvent(AV_200_SUPPLIES+teamIdx, 2, true, false);
@@ -583,14 +542,6 @@ void BattleGroundAV::HandleQuestComplete(WorldObject* questGiver, uint32 questid
             }
 
             reputation = 1;
-/*           if (m_Team_QuestStatus[teamIdx][0] == 500 || m_Team_QuestStatus[teamIdx][0] == 1000 || m_Team_QuestStatus[teamIdx][0] == 1500)  //25,50,75 turn ins
-            {
-                DEBUG_LOG("BattleGroundAV: Quest %i completed starting with unit upgrading..", questid);
-                for (BG_AV_Nodes i = BG_AV_NODES_FIRSTAID_STATION; i <= BG_AV_NODES_FROSTWOLF_HUT; ++i)
-                    if (m_Nodes[i].Owner == teamIdx && m_Nodes[i].State == POINT_CONTROLLED)
-                        PopulateNode(i);
-            }
-*/ 
            break;
         case BG_AV_QUEST_A_COMMANDER1:
         case BG_AV_QUEST_H_COMMANDER1:
@@ -1143,21 +1094,21 @@ void BattleGroundAV::PopulateMineNode(uint8 mine, BattleGroundAVTeamIndex teamId
     uint32 oldMineDefender = 0;
 
     /** Check new unit upgrade */
-    if (m_Team_QuestStatus[ActualMineOwner][0] < 500)
+    if (m_Team_QuestStatus[ActualMineOwner][0] < RES_STEP_1)
         mineDefender = 0;
-    else if (m_Team_QuestStatus[ActualMineOwner][0] < 1000)
+    else if (m_Team_QuestStatus[ActualMineOwner][0] < RES_STEP_2)
         mineDefender = 1;
-    else if (m_Team_QuestStatus[ActualMineOwner][0] < 1500)
+    else if (m_Team_QuestStatus[ActualMineOwner][0] < RES_STEP_3)
         mineDefender = 2;
     else
         mineDefender = 3;
 
     /** Check old unit upgrade */
-    if (oldUpgradeAdvance < 500)
+    if (oldUpgradeAdvance < RES_STEP_1)
         oldMineDefender = 0;
-    else if (oldUpgradeAdvance < 1000)
+    else if (oldUpgradeAdvance < RES_STEP_2)
         oldMineDefender = 1;
-    else if (oldUpgradeAdvance < 1500)
+    else if (oldUpgradeAdvance < RES_STEP_3)
         oldMineDefender = 2;
     else
         oldMineDefender = 3;
@@ -1192,22 +1143,22 @@ void BattleGroundAV::PopulateNode(BG_AV_Nodes node)
 
         if (NewteamIdx == BG_AV_TEAM_NEUTRAL)
             graveDefenderTypeNew = 0;
-        else if (m_Team_QuestStatus[NewteamIdx][0] < 500)
+        else if (m_Team_QuestStatus[NewteamIdx][0] < RES_STEP_1)
             graveDefenderTypeNew = 0;
-        else if (m_Team_QuestStatus[NewteamIdx][0] < 1000)
+        else if (m_Team_QuestStatus[NewteamIdx][0] < RES_STEP_2)
             graveDefenderTypeNew = 1;
-        else if (m_Team_QuestStatus[NewteamIdx][0] < 1500)
+        else if (m_Team_QuestStatus[NewteamIdx][0] < RES_STEP_3)
             graveDefenderTypeNew = 2;
         else
             graveDefenderTypeNew = 3;
 
         if (OldteamIdx == BG_AV_TEAM_NEUTRAL)
             graveDefenderTypeOld = 0;
-        else if (m_Team_QuestStatus[OldteamIdx][0] < 500)
+        else if (m_Team_QuestStatus[OldteamIdx][0] < RES_STEP_1)
             graveDefenderTypeOld = 0;
-        else if (m_Team_QuestStatus[OldteamIdx][0] < 1000)
+        else if (m_Team_QuestStatus[OldteamIdx][0] < RES_STEP_2)
             graveDefenderTypeOld = 1;
-        else if (m_Team_QuestStatus[OldteamIdx][0] < 1500)
+        else if (m_Team_QuestStatus[OldteamIdx][0] < RES_STEP_3)
             graveDefenderTypeOld = 2;
         else
             graveDefenderTypeOld = 3;
