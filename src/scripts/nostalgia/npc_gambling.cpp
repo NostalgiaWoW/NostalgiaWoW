@@ -9,6 +9,8 @@
 
 #define COIN_SOUND 1204
 
+#define SPELL_FIREWORK 11543
+
 #define FIVE_MINUTES 5 * 60
 
 struct GamblerInfo
@@ -34,7 +36,6 @@ uint32 handleRecords(Player* pPlayer, uint32 amount, int result)
             amount,
             currentTime
         };
-        gamblingRecords[pPlayer->GetGUID()] = currentInfo;
     }
     else
         currentInfo = gamblingRecords[pPlayer->GetGUID()];
@@ -42,21 +43,19 @@ uint32 handleRecords(Player* pPlayer, uint32 amount, int result)
     // Reset count if amount is different or last bet is older than 5 minutes.
     if (currentInfo.lastBet != amount || currentInfo.timestamp < currentTime - FIVE_MINUTES)
         currentInfo.betCount = 0;
+    currentInfo.betCount++;
 
     if (currentInfo.betCount == 3 && currentInfo.lastBet == amount)
     {
         if (result > 75)
             newAmount = amount * 3;
 
-        currentInfo.betCount = 1;
+        currentInfo.betCount = 0;
     }
     else if (result > 50)
-    {
         newAmount = amount * 2;
-        currentInfo.betCount++;
-    }
     else
-        currentInfo.betCount = 1;
+        currentInfo.betCount = 0;
 
     currentInfo.lastBet = amount;
     currentInfo.timestamp = currentTime;
@@ -118,11 +117,15 @@ bool GossipSelect_npc_gambling(Player* pPlayer, Creature* pCreature, uint32 uiSe
     uint32 amountToAward = handleRecords(pPlayer, amount, result);
     if (amountToAward > 0)
     {
-        pPlayer->HandleEmote(EMOTE_ONESHOT_CHEER);
         pPlayer->ModifyMoney(amountToAward);
 
         if (amountToAward >= amount * 3)
+        {
             pCreature->PMonsterEmote("STREAK!");
+            pPlayer->SendSpellGo(pPlayer, SPELL_FIREWORK);
+        }
+        else
+            pPlayer->HandleEmote(EMOTE_ONESHOT_CHEER);
     }
     else
         pPlayer->HandleEmote(EMOTE_ONESHOT_CRY);
