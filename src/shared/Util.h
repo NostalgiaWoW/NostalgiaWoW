@@ -401,4 +401,15 @@ template <class C> typename C::value_type const& SelectRandomContainerElement(C 
     return *it;
 }
 
+
+#define DECLARE_SINGLETON(className) \
+public: \
+static className* Instance() \
+{ \
+  static className instance; \
+  return &instance; \
+} \
+ \
+protected: \
+className() = default;
 #endif

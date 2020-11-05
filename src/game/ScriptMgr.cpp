@@ -1143,6 +1143,17 @@ void ScriptMgr::OnStartup()
     }
 }
 
+void ScriptMgr::OnZoneUpdateCheck(Player* player)
+{
+    auto playerScripts = m_Nonbound_scripts.equal_range(ScriptType::Player);
+    for (auto itr = playerScripts.first; itr != playerScripts.second; ++itr)
+    {
+        auto script = itr->second;
+        if (script && script->pOnZoneUpdateCheck)
+            script->pOnZoneUpdateCheck(player);
+    }
+}
+
 bool ScriptMgr::OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
     //quest scripts have higher priority

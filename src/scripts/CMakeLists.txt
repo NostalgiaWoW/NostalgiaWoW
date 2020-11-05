@@ -311,6 +311,7 @@ set (SCRIPTS_SRCS
 	nostalgia/shop.cpp
 	nostalgia/shop_features.cpp
 	nostalgia/inspect_gossip.cpp
+	nostalgia/PvPArenaSystem_loader.cpp
 		nostalgia/npc_gambling.cpp)
 
 

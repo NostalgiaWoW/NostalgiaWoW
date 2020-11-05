@@ -609,7 +609,7 @@ struct Script
         pItemUse(nullptr), pItemUseSpell(nullptr), pEffectDummyCreature(nullptr), pEffectDummyGameObj(nullptr), pEffectDummyItem(nullptr),
         pEffectAuraDummy(nullptr), GOOpen(nullptr),
         GOGetAI(nullptr), GetAI(nullptr), GetQuestInstance(nullptr), GetInstanceData(nullptr), pOnStartup(nullptr), pPlrGossipHello(nullptr), pPlrGossipSelect(nullptr),
-        pPlrGossipSelectWithCode(nullptr)
+        pPlrGossipSelectWithCode(nullptr), pOnZoneUpdateCheck(nullptr)
     {}
 
     std::string Name;
@@ -653,6 +653,7 @@ struct Script
     QuestInstance* (*GetQuestInstance)(ObjectGuid PlayerGuid);
     InstanceData* (*GetInstanceData)(Map*);
 
+    void (*pOnZoneUpdateCheck)(Player* player);
     void (*pOnStartup)();
 
     void RegisterSelfNoBind(ScriptType type);
@@ -767,6 +768,7 @@ class ScriptMgr
         bool OnAuraDummy(Aura const* pAura, bool apply);
 
         void OnStartup();
+        void OnZoneUpdateCheck(Player* player);
 
         typedef std::unordered_map<uint32, Script*> QuestScriptMap;
         QuestScriptMap m_questScripts;

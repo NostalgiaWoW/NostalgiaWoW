@@ -189,6 +189,7 @@ set(game_SRCS
         Movement/spline/spline.cpp
         Movement/spline/util.cpp
         Nostalgia/InspectSystem.cpp
+	Nostalgia/PvPArenaSystem.cpp
         Objects/Bag.cpp
         Objects/Corpse.cpp
         Objects/Creature.cpp

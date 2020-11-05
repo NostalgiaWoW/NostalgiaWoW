@@ -377,6 +377,28 @@ QueryResult* Database::PQuery(const char *format,...)
     return Query(szQuery);
 }
 
+std::unique_ptr<QueryResult> Database::PQuerySafe(const char* format, ...)
+{
+    //we just copy PQuery except for return type here, we cant simply pass to PQuery because of va_args :/
+
+    if (!format) return nullptr;
+
+    va_list ap;
+    char szQuery[MAX_QUERY_LEN];
+    va_start(ap, format);
+    int res = vsnprintf(szQuery, sizeof(szQuery), format, ap);
+    va_end(ap);
+
+    if (res == -1)
+    {
+        sLog.outError("SQL Query truncated (and not execute) for format: %s", format);
+        return nullptr;
+    }
+
+    return QuerySafe(szQuery);
+}
+
+
 QueryNamedResult* Database::PQueryNamed(const char *format,...)
 {
     if(!format) return NULL;

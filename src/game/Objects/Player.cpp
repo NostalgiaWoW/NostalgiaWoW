@@ -1522,6 +1522,8 @@ void Player::Update(uint32 update_diff, uint32 p_time)
 
                 m_zoneUpdateTimer = ZONE_UPDATE_INTERVAL;
             }
+
+            sScriptMgr.OnZoneUpdateCheck(this);
         }
         else
             m_zoneUpdateTimer -= update_diff;

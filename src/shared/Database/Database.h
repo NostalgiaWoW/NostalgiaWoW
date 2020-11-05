@@ -31,6 +31,8 @@
 #include "SqlPreparedStatement.h"
 #include "QueryResult.h"
 
+#include <memory>
+
 class SqlTransaction;
 class SqlResultQueue;
 class SqlQueryHolder;
@@ -115,6 +117,24 @@ class MANGOS_DLL_SPEC SqlConnection
         StmtHolder m_holder;
 };
 
+class MANGOS_DLL_SPEC QueryResultProxy
+{
+public:
+
+    QueryResult& operator*()
+    {
+        return *m_result;
+    }
+
+    QueryResult* operator->()
+    {
+        return m_result.operator->();
+    }
+
+private:
+    std::unique_ptr<QueryResult> m_result;
+};
+
 class MANGOS_DLL_SPEC Database
 {
     public:
@@ -132,6 +152,14 @@ class MANGOS_DLL_SPEC Database
             SqlConnection::Lock guard(getQueryConnection());
             return guard->Query(sql);
         }
+
+        inline std::unique_ptr<QueryResult> QuerySafe(const char* sql)
+        {
+            return std::unique_ptr<QueryResult>(Query(sql));
+        }
+
+        std::unique_ptr<QueryResult> PQuerySafe(const char* sql,...) ATTR_PRINTF(2, 3);
+
 
         inline QueryNamedResult* QueryNamed(const char *sql)
         {
