@@ -18,28 +18,36 @@ create table shop_items (
 ) engine=innodb auto_increment=10 default charset=utf8;
 
 replace into shop_categories values
-(1, 'Character Management'),
-(2, 'Gameplay: Miscellaneous'),
-(3, 'Gameplay: Mounts'),
-(4, 'Gameplay: Companions'),
-(5, 'Gameplay: Enchantments');
+(1, 'Rename & Race Change'),
+(2, 'Miscellaneous'),
+(3, 'Riding Mounts'),
+(4, 'Companions'),
+(5, 'Enchantments');
 
 replace into shop_items values
--- Character: General
+-- Rename & Race Change
 (100, 1, 40000, 'Character: Rename', 100),
-(103, 1, 40003, 'Summon: Barber', 100),
-(104, 1, 40004, 'Summon: Surgeon', 100),
--- Gameplay: Miscellaneous
-(200, 2, 40005, 'Summon: Talent Reset', 100),
-(201, 2, 40007, 'Summon: Bank (Alliance)', 100),
-(202, 2, 40008, 'Summon: Bank (Horde)', 100),
-(203, 2, 40009, 'Summon: Auctioneer', 100),
-(204, 2, 40010, 'Summon: Mailbox', 100),
-(205, 2, 40011, 'Backpack: 28 slots', 100),
-(208, 2, 40012, 'Backpack: 36 slots', 100),
--- Gameplay: Mounts 
+(101, 1, 40013, 'Race Change Token: Human', 100),
+(102, 1, 40014, 'Race Change Token: Gnome', 100),
+(103, 1, 40015, 'Race Change Token: Dwarf', 100),
+(104, 1, 40016, 'Race Change Token: Night Elf', 100),
+(105, 1, 40017, 'Race Change Token: Orc', 100),
+(106, 1, 40018, 'Race Change Token: Troll', 100),
+(107, 1, 40019, 'Race Change Token: Tauren', 100),
+(108, 1, 40020, 'Race Change Token: Undead', 100),
+-- Miscellaneous
+(200, 1, 40003, 'Summon: Barber', 100),
+(200, 1, 40004, 'Summon: Surgeon', 100),
+(201, 2, 40005, 'Summon: Talent Reset', 100),
+(202, 2, 40007, 'Summon: Bank (Alliance)', 100),
+(203, 2, 40008, 'Summon: Bank (Horde)', 100),
+(204, 2, 40009, 'Summon: Auctioneer', 100),
+(205, 2, 40010, 'Summon: Mailbox', 100),
+(206, 2, 40011, 'Backpack: 28 slots', 100),
+(207, 2, 40012, 'Backpack: 36 slots', 100),
+-- Riding Mounts 
 (300, 3, 23720, 'Riding Turtle', 100),
--- Gameplay: Companions
+-- Companions
 (400, 4, 20371, 'Blue Murloc Egg', 100),
--- Gameplay: Enchantments
+-- Enchantments
 (500, 5, 23548, 'Might of the Scourge', 100);
