@@ -36,8 +36,8 @@ replace into shop_items values
 (107, 1, 40019, 'Race Change Token: Tauren', 100),
 (108, 1, 40020, 'Race Change Token: Undead', 100),
 -- Miscellaneous
-(200, 1, 40003, 'Summon: Barber', 100),
-(200, 1, 40004, 'Summon: Surgeon', 100),
+(200, 2, 40003, 'Summon: Barber', 100),
+(200, 2, 40004, 'Summon: Surgeon', 100),
 (201, 2, 40005, 'Summon: Talent Reset', 100),
 (202, 2, 40007, 'Summon: Bank (Alliance)', 100),
 (203, 2, 40008, 'Summon: Bank (Horde)', 100),
