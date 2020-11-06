@@ -84,12 +84,17 @@ bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
         switch (pPlayer->getRace())
         {
         case RACE_TAUREN:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Horn Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Horn Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previous Horn Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Horn Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Horn Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previous Horn Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
             break;
         default:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Hair Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Hair Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Hair Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previuos Hair Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Hair Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previous Hair Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
             break;      
         }
     }
@@ -145,6 +150,36 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
     }
 
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        uint16 bytelimit_human = 9;
+        uint16 bytelimit_elf = 7;
+        uint16 bytelimit_gnome = 8;
+        uint16 bytelimit_dwarf = 8;
+        uint16 bytelimit_troll = 9;
+        uint16 bytelimit_orc = 7;
+        uint16 bytelimit_undead = 9;
+        uint16 bytelimit_tauren = 9;
+
+        uint16 color = 0;
+        uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
+
+        switch (pPlayer->getRace())
+        {
+        case RACE_HUMAN:    color = (curr_color == 0) ? bytelimit_human : --curr_color; break;
+        case RACE_NIGHTELF: color = (curr_color == 0) ? bytelimit_elf : --curr_color; break;
+        case RACE_GNOME:    color = (curr_color == 0) ? bytelimit_gnome : --curr_color; break;
+        case RACE_DWARF:    color = (curr_color == 0) ? bytelimit_dwarf : --curr_color; break;
+        case RACE_TROLL:    color = (curr_color == 0) ? bytelimit_troll : --curr_color; break;
+        case RACE_ORC:      color = (curr_color == 0) ? bytelimit_orc : --curr_color; break;
+        case RACE_UNDEAD:   color = (curr_color == 0) ? bytelimit_undead : --curr_color; break;
+        case RACE_TAUREN:   color = (curr_color == 0) ? bytelimit_tauren : --curr_color; break;
+        }
+        pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(100));
+    }
+
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         uint16 bytelimit_human  = (pPlayer->getGender() == GENDER_FEMALE) ? 18 : 11;
@@ -172,9 +207,38 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
         pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(100));
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 18 : 11;
+        uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 13 : 10;
+        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 5;
+        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
+        uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
+
+        uint16 style = 0;
+        uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
+
+        switch (pPlayer->getRace())
+        {
+        case RACE_HUMAN:    style = (curr_style == 0) ? bytelimit_human : --curr_style; break;
+        case RACE_NIGHTELF: style = (curr_style == 0) ? bytelimit_elf : --curr_style; break;
+        case RACE_GNOME:    style = (curr_style == 0) ? bytelimit_gnome : --curr_style; break;
+        case RACE_DWARF:    style = (curr_style == 0) ? bytelimit_dwarf : --curr_style; break;
+        case RACE_TROLL:    style = (curr_style == 0) ? bytelimit_troll : --curr_style; break;
+        case RACE_ORC:      style = (curr_style == 0) ? bytelimit_orc : --curr_style; break;
+        case RACE_UNDEAD:   style = (curr_style == 0) ? bytelimit_undead : --curr_style; break;
+        case RACE_TAUREN:   style = (curr_style == 0) ? bytelimit_tauren : --curr_style; break;
+        }
+        pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
+        pPlayer->SetDisplayId(15435);
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
     }
-    pCreature->HandleEmote(23);
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
