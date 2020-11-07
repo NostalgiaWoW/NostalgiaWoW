@@ -72,9 +72,11 @@ bool GossipHello_TeleportNPC(Player *player, Creature *_Creature)
     else
     {
         //player->ADD_GOSSIP_ITEM(5, "PreTBC Mall"          , GOSSIP_SENDER_MAIN, 74);
-		player->ADD_GOSSIP_ITEM(5, "Nostalgia WoW Mall",		GOSSIP_SENDER_MAIN, 90);
+		player->ADD_GOSSIP_ITEM(5, "Nostalgia WoW Mall", GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Profession Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
-        player->ADD_GOSSIP_ITEM(5, "Major Cities"               , GOSSIP_SENDER_MAIN, 2);
+		player->ADD_GOSSIP_ITEM(5, "Duel Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
+		player->ADD_GOSSIP_ITEM(5, "Pet Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
+		player->ADD_GOSSIP_ITEM(5, "Major Cities", GOSSIP_SENDER_MAIN, 1);
         //player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 4);
         //player->ADD_GOSSIP_ITEM(5, "Instances"            , GOSSIP_SENDER_MAIN, 5);
         player->ADD_GOSSIP_ITEM(5, "Raids"                 , GOSSIP_SENDER_MAIN, 101);
