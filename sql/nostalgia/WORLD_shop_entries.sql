@@ -37,14 +37,14 @@ replace into shop_items values
 (108, 1, 40020, 'Race Change Token: Undead', 100),
 -- Miscellaneous
 (200, 2, 40003, 'Summon: Barber', 100),
-(200, 2, 40004, 'Summon: Surgeon', 100),
-(201, 2, 40005, 'Summon: Talent Reset', 100),
-(202, 2, 40007, 'Summon: Bank (Alliance)', 100),
-(203, 2, 40008, 'Summon: Bank (Horde)', 100),
-(204, 2, 40009, 'Summon: Auctioneer', 100),
-(205, 2, 40010, 'Summon: Mailbox', 100),
-(206, 2, 40011, 'Backpack: 28 slots', 100),
-(207, 2, 40012, 'Backpack: 36 slots', 100),
+(201, 2, 40004, 'Summon: Surgeon', 100),
+(202, 2, 40005, 'Summon: Talent Reset', 100),
+(203, 2, 40007, 'Summon: Bank (Alliance)', 100),
+(204, 2, 40008, 'Summon: Bank (Horde)', 100),
+(205, 2, 40009, 'Summon: Auctioneer', 100),
+(206, 2, 40010, 'Summon: Mailbox', 100),
+(207, 2, 40011, 'Backpack: 28 slots', 100),
+(208, 2, 40012, 'Backpack: 36 slots', 100),
 -- Riding Mounts 
 (300, 3, 23720, 'Riding Turtle', 100),
 -- Companions
