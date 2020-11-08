@@ -310,6 +310,8 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
 -- Race Change Token: Tauren
 
 set @entry = 40019;
@@ -326,6 +328,8 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
 -- Race Change Token: Undead
 
 set @entry = 40020;
@@ -341,6 +345,8 @@ set @spell = 1575;
 set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Misc. SQL:
 
