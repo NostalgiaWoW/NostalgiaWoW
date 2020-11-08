@@ -477,6 +477,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
+        bytes = pPlayer->getGender() == GENDER_MALE ? 101058307 : 100730885;
         race = RACE_HUMAN;
         break;
     case 40014: // Gnome
@@ -485,6 +486,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
+        bytes = pPlayer->getGender() == GENDER_MALE ? 67372546 : 131076;
         race = RACE_GNOME;
         break;
     case 40015: // Dwarf
@@ -493,6 +495,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
+        bytes = pPlayer->getGender() == GENDER_MALE ? 50528773 : 34406912;
         race = RACE_DWARF;
         break;
     case 40016: // Night Elf
@@ -501,6 +504,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
+        bytes = pPlayer->getGender() == GENDER_MALE ? 132615 : 67503620;
         race = RACE_NIGHTELF;
         break;
     case 40017: // Orc
@@ -509,6 +513,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
+        bytes = pPlayer->getGender() == GENDER_MALE ? 84214788 : 84214788;
         race = RACE_ORC;
         break;
     case 40018: // Troll
@@ -517,6 +522,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
+        bytes = pPlayer->getGender() == GENDER_MALE ? 33751041 : 131587;
         race = RACE_TROLL;
         break;
     case 40019: // Tauren
@@ -525,6 +531,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
+        bytes = pPlayer->getGender() == GENDER_MALE ? 17105153 : 393736;
         race = RACE_TAUREN;
         break;
     case 40020: // Undead
@@ -533,6 +540,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
+        bytes = pPlayer->getGender() == GENDER_MALE ? 117703426 : 151126786;
         race = RACE_UNDEAD;
         break;
     }
