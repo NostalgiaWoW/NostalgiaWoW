@@ -85,20 +85,18 @@ bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
         {
         case RACE_TAUREN:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Horn Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previous Horn Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Horn Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Horn Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previous Horn Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Horn Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previous Horn Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
             break;
         default:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Hair Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previuos Hair Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Hair Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previuos Hair Color", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Next Hair Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Previous Hair Style", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
             break;      
         }
     }
-
     pPlayer->SEND_GOSSIP_MENU(90370, pCreature->GetGUID());
     return true;
 }
@@ -150,7 +148,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
     }
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         uint16 bytelimit_human = 9;
         uint16 bytelimit_elf = 7;
@@ -180,7 +178,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(100));
     }
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
         uint16 bytelimit_human  = (pPlayer->getGender() == GENDER_FEMALE) ? 18 : 11;
         uint16 bytelimit_elf    = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
@@ -239,6 +237,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         pPlayer->SetDisplayId(15435);
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
     }
+    pPlayer->SaveToDB();
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
