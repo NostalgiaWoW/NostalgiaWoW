@@ -175,7 +175,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
         pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(100));
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
@@ -205,7 +205,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
         pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(100));
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(150));
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
