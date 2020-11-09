@@ -79,7 +79,7 @@ struct go_mallboat_enter_trigger : public GameObjectAI
 		if (m_uiUpdateTimer < uiDiff)
 		{
 			std::list<Player*> players;
-			MaNGOS::AnyPlayerInObjectRangeCheck check(me, 2.0f, true, false);
+			MaNGOS::AnyPlayerInObjectRangeCheck check(me, 8.0f, true, false);
 			MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
 			Cell::VisitWorldObjects(me, searcher, 8.0f);
@@ -90,7 +90,7 @@ struct go_mallboat_enter_trigger : public GameObjectAI
 					pPlayer->ResurrectPlayer(0.5f);
 					pPlayer->SpawnCorpseBones();
 				}
-				pPlayer->TeleportTo(0, -1846.31f, -4252.70f, 2.13f, 1.283f);
+				pPlayer->TeleportTo(0, -1853.28f, -4267.23f, 4.75f, 4.26f);
 			}
 			m_uiUpdateTimer = 1000;
 		}
