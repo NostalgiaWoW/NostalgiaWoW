@@ -348,6 +348,24 @@ set @script = 'shop_racechange';
 
 replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
+-- Character: Change Gender
+
+set @entry = 40021;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Character: Change Gender';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_changegender';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
 -- Misc. SQL:
 
 replace into gameobject_template values (1000333, 2, 6424, 'Goblin Brainwashing Device', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_brainwashing_device');

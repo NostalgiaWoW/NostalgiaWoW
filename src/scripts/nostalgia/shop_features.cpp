@@ -553,9 +553,26 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
     return true;
 }
 
+bool ItemUseSpell_shop_changegender(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer) return false;
+
+    uint8 player_gender = (pPlayer->getGender() == GENDER_MALE) ? GENDER_FEMALE : GENDER_MALE;
+    pPlayer->SetByteValue(UNIT_FIELD_BYTES_0, 2, player_gender);
+    pPlayer->GetSession()->SendNotification("You will be disconnected in 5 seconds.");
+    pPlayer->SaveToDB();
+    DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer]() { player->GetSession()->KickPlayer(); });
+    return true;
+}
+
 void AddSC_shop_features()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "shop_changegender";
+    newscript->pItemUseSpell = &ItemUseSpell_shop_changegender;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "shop_racechange";
