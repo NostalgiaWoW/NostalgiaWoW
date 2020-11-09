@@ -20721,14 +20721,14 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender /*= 255*/, uint32 playerb
         // Changement de HomeBind / Teleportation capitale
         if (TeamForRace(newRace) == ALLIANCE)
         {
-            SavePositionInDB(GetObjectGuid(), 0, -8867.68f, 673.373f, 97.9034f, 0.0f, 1519);
-            SetHomebindToLocation(WorldLocation(0, -8867.68f, 673.373f, 97.9034f, 0.0f), 1519);
+            SavePositionInDB(GetObjectGuid(), 0, -1847.98, -4246.67, 2.2, 0.89f, 45);
+            SetHomebindToLocation(WorldLocation(0, -1847.98, -4246.67, 2.2, 0.89f), 45);
             TeleportToHomebind(0, false);
         }
         else
         {
-            SavePositionInDB(GetObjectGuid(), 1, 1633.33f, -4439.11f, 15.7588f, 0.0f, 1637);
-            SetHomebindToLocation(WorldLocation(1, 1633.33f, -4439.11f, 15.7588f, 0.0f), 1637);
+            SavePositionInDB(GetObjectGuid(), 0, -1847.98, -4246.67, 2.2, 0.89f, 45);
+            SetHomebindToLocation(WorldLocation(0, -1847.98, -4246.67, 2.2, 0.89f), 45);
             TeleportToHomebind(0, false);
         }
 
