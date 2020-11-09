@@ -22081,7 +22081,7 @@ void Player::LegitCooldownReset()
 {
     if (!m_spellCooldowns.empty())
     {
-        for (SpellCooldowns::const_iterator itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end(); ++itr)
+        for (SpellCooldowns::const_iterator itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end();)
         {
             switch (itr->first)
             {
@@ -22094,10 +22094,11 @@ void Player::LegitCooldownReset()
                 case RETALIATION:
                 case SHIELD_WALL:
                 case RECKLESSNESS:
+                    ++itr;
                     continue;
                 default:
                     SendClearCooldown(itr->first, this);
-                    m_spellCooldowns.erase(itr);
+                    itr = m_spellCooldowns.erase(itr);
             }
         }
     }

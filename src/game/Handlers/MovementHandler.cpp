@@ -39,7 +39,9 @@
 #include "packet_builder.h"
 #include "MoveSpline.h"
 #include "MovementBroadcaster.h"
+#include "ScriptMgr.h"
 
+constexpr float MinDistForHook = 2.0f;
 
 void WorldSession::HandleMoveWorldportAckOpcode(WorldPacket & /*recv_data*/)
 {
@@ -740,6 +742,16 @@ void WorldSession::HandleMoverRelocation(MovementInfo& movementInfo)
         }
 
         plMover->SetPosition(movementInfo.GetPos()->x, movementInfo.GetPos()->y, movementInfo.GetPos()->z, movementInfo.GetPos()->o);
+
+        auto newPos = *movementInfo.GetPos();
+
+        if (plMover->m_scriptMovementInfo.GetPos()->getDistance(newPos) > MinDistForHook)
+        {
+            sScriptMgr.OnPlayerRelocate(plMover, &plMover->m_movementInfo,& movementInfo);
+            plMover->m_scriptMovementInfo = movementInfo;
+        }
+
+
         plMover->m_movementInfo = movementInfo;
 
         // update time, need for inactivity check

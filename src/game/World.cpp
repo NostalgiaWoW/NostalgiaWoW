@@ -1941,6 +1941,8 @@ void World::Update(uint32 diff)
     // Update liste des ban si besoin
     sAccountMgr.Update(diff);
 
+    sScriptMgr.OnWorldUpdate(diff);
+
     // And last, but not least handle the issued cli commands
     ProcessCliCommands();
 

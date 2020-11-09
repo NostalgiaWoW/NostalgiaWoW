@@ -823,6 +823,7 @@ class MANGOS_DLL_SPEC WorldObject : public Object
         bool IsSwimming() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING); }
         bool IsSplineActive() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_SPLINE_ENABLED); }
 
+        MovementInfo m_scriptMovementInfo;
         MovementInfo m_movementInfo;
         Transport * m_transport;
 

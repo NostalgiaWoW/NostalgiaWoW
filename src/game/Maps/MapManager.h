@@ -87,6 +87,7 @@ class MANGOS_DLL_DECL MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::
 
         uint32 GetContinentInstanceId(uint32 mapId, float x, float y, bool* transitionArea = NULL);
         Map* CreateMap(uint32, const WorldObject* obj);
+        Map* CreateSimplePhaseMap(uint32 mapid, uint32 instanceId);
         Map* CreateBgMap(uint32 mapid, BattleGround* bg);
         Map* CreateTestMap(uint32 mapid, bool instanced, float posX, float posY);
         void DeleteTestMap(Map* map);

@@ -33,6 +33,7 @@
 #include "SystemConfig.h"
 #include "revision.h"
 #include "Util.h"
+#include "Nostalgia/PvPArenaSystem.h"
 
 bool registerPlayerToBg(WorldSession * sess, BattleGroundTypeId bgid)
 {
@@ -485,6 +486,13 @@ bool ChatHandler::HandleInspectModCommand(char* args)
 
     GetSession()->GetPlayer()->SetInspectState(!value);
     PSendSysMessage("Inspect is currently being %s.", value ? "allowed" : "blocked");
+
+    return true;
+}
+
+bool ChatHandler::HandleQueueArenaCommand(char* args)
+{
+    sPvPArenaSystem->Queue(GetSession()->GetPlayer(), ArenaType::OnePlayer);
 
     return true;
 }

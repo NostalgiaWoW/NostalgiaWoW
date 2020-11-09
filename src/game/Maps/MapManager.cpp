@@ -200,6 +200,27 @@ Map* MapManager::CreateMap(uint32 id, const WorldObject* obj)
     return m;
 }
 
+Map* MapManager::CreateSimplePhaseMap(uint32 mapId, uint32 instanceId)
+{
+    Guard _guard(*this);
+
+    Map* m = nullptr;
+
+    const MapEntry* entry = sMapStorage.LookupEntry<MapEntry>(mapId);
+    if (!entry)
+        return nullptr;
+
+    m = FindMap(mapId, instanceId);
+    if (m == nullptr)
+    {
+        m = new WorldMap(mapId, i_gridCleanUpDelay, instanceId);
+        //add map into container
+        i_maps[MapID(mapId, instanceId)] = m;
+        m->SpawnActiveObjects();
+    }
+    return m;
+}
+
 Map* MapManager::CreateBgMap(uint32 mapid, BattleGround* bg)
 {
     sTerrainMgr.LoadTerrain(mapid);

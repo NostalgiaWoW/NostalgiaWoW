@@ -1054,6 +1054,9 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
         {
             sSuspiciousStatisticMgr.OnNpcKilledInWorld((Player*)this, pVictim);
         }
+
+        if (pVictim->IsPlayer())
+            sScriptMgr.OnPvPKill(ToPlayer(), pVictim->ToPlayer());
 	}
 
     // call kill spell proc event (before real die and combat stop to triggering auras removed at death/combat stop)

@@ -1154,6 +1154,39 @@ void ScriptMgr::OnZoneUpdateCheck(Player* player)
     }
 }
 
+void ScriptMgr::OnPlayerRelocate(Player* player, const MovementInfo* oldInfo, const MovementInfo* newInfo)
+{
+    auto playerScripts = m_Nonbound_scripts.equal_range(ScriptType::Player);
+    for (auto itr = playerScripts.first; itr != playerScripts.second; ++itr)
+    {
+        auto script = itr->second;
+        if (script && script->pOnPlayerRelocation)
+            script->pOnPlayerRelocation(player, oldInfo, newInfo);
+    }
+}
+
+void ScriptMgr::OnPvPKill(Player* killer, Player* killed)
+{
+    auto playerScripts = m_Nonbound_scripts.equal_range(ScriptType::Player);
+    for (auto itr = playerScripts.first; itr != playerScripts.second; ++itr)
+    {
+        auto script = itr->second;
+        if (script && script->pOnPvPKill)
+            script->pOnPvPKill(killer, killed);
+    }
+}
+
+void ScriptMgr::OnWorldUpdate(uint32 diff)
+{
+    auto worldScripts = m_Nonbound_scripts.equal_range(ScriptType::World);
+    for (auto itr = worldScripts.first; itr != worldScripts.second; ++itr)
+    {
+        auto script = itr->second;
+        if (script && script->pOnWorldUpdate)
+            script->pOnWorldUpdate(diff);
+    }
+}
+
 bool ScriptMgr::OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
     //quest scripts have higher priority
