@@ -20753,7 +20753,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender /*= 255*/, uint32 playerb
         data->uiRace = newRace;
     }
 
-    //m_session->LogoutPlayer(false);
+    m_session->LogoutPlayer(false);
     return true;
 }
 

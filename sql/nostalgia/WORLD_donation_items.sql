@@ -22,10 +22,10 @@ replace into item_template (entry, class, subclass, name, description, displayid
 set @entry = 40001;
 set @class = 15;
 set @subclass = 0;
-set @name = 'Race Change Token';
-set @description = 'Use command: .changerace N (where name is a name of a target character you want to look like).';
+set @name = 'Deprecated Race Change Token';
+set @description = '';
 set @display = 30658;
-set @quality = 1;
+set @quality = 0;
 set @bonding = 1;
 set @stackable = 20;
 set @spell = 0;
@@ -40,10 +40,10 @@ replace into item_template (entry, class, subclass, name, description, displayid
 set @entry = 40002;
 set @class = 15;
 set @subclass = 0;
-set @name = 'Faction Change Token';
-set @description = 'Use command: .changerace N (where name is a name of a target character you want to look like).';
+set @name = 'Deprecated Faction Change Token';
+set @description = '';
 set @display = 30658;
-set @quality = 1;
+set @quality = 0;
 set @bonding = 1;
 set @stackable = 20;
 set @spell = 0;
@@ -203,6 +203,150 @@ replace into item_template values
 (40011, 0, 1, 0, 'Hexweave Bag', 20709, 4, 0, 1, 320000, 80000, 18, -1, -1, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1),
 
 (40012, 0, 1, 0, 'Silkweave Bag', 31783, 4, 0, 1, 320000, 80000, 18, -1, -1, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1);
+
+-- Race Change Token: Human
+
+set @entry = 40013;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Human';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Gnome
+
+set @entry = 40014;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Gnome';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Dwarf
+
+set @entry = 40015;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Dwarf';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Night Elf
+
+set @entry = 40016;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Night Elf';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Orc
+
+set @entry = 40017;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Orc';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Troll
+
+set @entry = 40018;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Troll';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Tauren
+
+set @entry = 40019;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Tauren';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Undead
+
+set @entry = 40020;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Undead';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Misc. SQL:
 

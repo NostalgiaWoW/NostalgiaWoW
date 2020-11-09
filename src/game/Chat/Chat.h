@@ -957,8 +957,6 @@ class MANGOS_DLL_SPEC ChatHandler
         
         // Donation system
         bool HandleBalanceCommand(char* args);
-        bool HandleChangeRaceCommand(char* args);
-        bool HandleChangeFactionCommand(char* args);
         bool HandleReloadCustomPetEntries(char* args);
         bool HandleReloadShopCommand(char* args);
 
