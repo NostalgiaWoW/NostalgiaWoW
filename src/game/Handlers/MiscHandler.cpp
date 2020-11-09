@@ -49,6 +49,7 @@
 #include "MasterPlayer.h"
 #include "GossipDef.h"
 #include "Nostalgia/InspectSystem.h"
+#include "Nostalgia/PvPArenaSystem.h"
 
 void WorldSession::HandleRepopRequestOpcode(WorldPacket & /*recv_data*/)
 {
@@ -59,6 +60,9 @@ void WorldSession::HandleRepopRequestOpcode(WorldPacket & /*recv_data*/)
     auto player = GetPlayer();
 
     if (player->isAlive() || player->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
+        return;
+
+    if (!sPvPArenaSystem->HandleRequestRepop(player))
         return;
 
     // the world update order is sessions, players, creatures

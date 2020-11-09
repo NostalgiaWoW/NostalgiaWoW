@@ -253,6 +253,17 @@ void PvPArenaSystem::HandlePlayerRelocation(Player* player, const Position& newP
 
 }
 
+bool PvPArenaSystem::HandleRequestRepop(Player* player)
+{
+    auto itr = m_playerLookup.find(player->GetObjectGuid());
+    if (itr != m_playerLookup.end())
+    {
+        player->GetSession()->SendNotification("You can\'t reclaim your corpse in an arena");
+        return false;
+    }
+    return true;
+}
+
 void PvPArenaSystem::HandleWorldUpdate(uint32 diff)
 {
     for (auto& arenaPair : m_activeGames)

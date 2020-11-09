@@ -154,12 +154,13 @@ class PvPArenaSystem
 {
     DECLARE_SINGLETON(PvPArenaSystem)
 public:
+    static const uint32 SenderId = 8916;
 
     void LoadFromDB();
     void HandlePlayerRelocation(Player* player, const Position& newPos);
     void HandlePvPKill(Player* killer, Player* killed);
     void HandleWorldUpdate(uint32 diff);
-
+    bool HandleRequestRepop(Player* player);
 
     QueueResult Queue(Player* player, ArenaType type);
     void ScheduleQueueUpdate();
@@ -171,11 +172,11 @@ private:
     uint32 GenerateArenaId();
     PvPArena PickArenaTemplate(ArenaType type);
 
-    std::unordered_multimap<ArenaType, std::reference_wrapper<PvPArena>> m_freeArenas;
-    std::unordered_multimap<ArenaType, PvPArena> m_arenas;
-    std::unordered_map<ObjectGuid, PartyInfo> m_queuedPlayers;
-    std::unordered_map<ObjectGuid, uint32> m_playerLookup;
-    std::unordered_map<uint32, ArenaGame> m_activeGames;
+    std::unordered_multimap<ArenaType, std::reference_wrapper<PvPArena>> m_freeArenas; // all free arenas to play in at this moment per arena type
+    std::unordered_multimap<ArenaType, PvPArena> m_arenas; // all available arenas from the template per arena type
+    std::unordered_map<ObjectGuid, PartyInfo> m_queuedPlayers; // players that are queued, <leader guid, partyinfo>
+    std::unordered_map<ObjectGuid, uint32> m_playerLookup; // players that are in an active arena game <player guid, arenaId>
+    std::unordered_map<uint32, ArenaGame> m_activeGames; // active games going on <arenaId, ArenaGame>
 
 };
 
