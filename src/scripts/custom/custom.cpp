@@ -65,6 +65,80 @@ GameObjectAI* GetAI_go_auto_fireworks(GameObject* pGo)
 	return new auto_fireworks(pGo);
 }
 
+struct go_mallboat_enter_trigger : public GameObjectAI
+{
+	explicit go_mallboat_enter_trigger(GameObject* pGo) : GameObjectAI(pGo)
+	{
+		m_uiUpdateTimer = 1000;
+	}
+
+	uint32 m_uiUpdateTimer;
+
+	void UpdateAI(uint32 const uiDiff) override
+	{
+		if (m_uiUpdateTimer < uiDiff)
+		{
+			std::list<Player*> players;
+			MaNGOS::AnyPlayerInObjectRangeCheck check(me, 2.0f, true, false);
+			MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+			Cell::VisitWorldObjects(me, searcher, 8.0f);
+
+			for (Player* pPlayer : players)
+			{
+				if (!pPlayer->isAlive()) {
+					pPlayer->ResurrectPlayer(0.5f);
+					pPlayer->SpawnCorpseBones();
+				}
+				pPlayer->TeleportTo(0, -1846.31f, -4252.70f, 2.13f, 1.283f);
+			}
+			m_uiUpdateTimer = 1000;
+		}
+		else
+		{
+			m_uiUpdateTimer -= uiDiff;
+		}
+	}
+};
+
+GameObjectAI* GetAI_go_mallboat_enter_trigger(GameObject* gameobject)
+{
+	return new go_mallboat_enter_trigger(gameobject);
+}
+
+struct go_cot_exit_trigger : public GameObjectAI
+{
+	explicit go_cot_exit_trigger(GameObject* pGo) : GameObjectAI(pGo)
+	{
+		m_uiUpdateTimer = 1000;
+	}
+
+	uint32 m_uiUpdateTimer;
+
+	void UpdateAI(uint32 const uiDiff) override
+	{
+		if (m_uiUpdateTimer < uiDiff)
+		{
+			std::list<Player*> players;
+			MaNGOS::AnyPlayerInObjectRangeCheck check(me, 8.0f, true, false);
+			MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+			Cell::VisitWorldObjects(me, searcher, 8.0f);
+
+			for (Player* pPlayer : players)
+			{
+				//pPlayer->TeleportTo(1, -8349.90f, -4060.05f, -208.06f, 3.48f);
+				pPlayer->TeleportTo(1, -8756.86f, -4191.39f, -209.49f, 5.57f);
+			}
+			m_uiUpdateTimer = 1000;
+		}
+		else
+		{
+			m_uiUpdateTimer -= uiDiff;
+		}
+	}
+};
+
 void AddSC_zero_scripts()
 {
 	Script *newscript;
@@ -75,4 +149,14 @@ void AddSC_zero_scripts()
 	newscript->RegisterSelf();
 	//AddSC_zero_creatures();
 	AddSC_custom_creatures();
+
+	newscript = new Script;
+    newscript->Name = "go_mallboat_enter_trigger";
+    newscript->GOGetAI = &GetAI_go_mallboat_enter_trigger;
+    newscript->RegisterSelf();
+
+    //newscript = new Script;
+    //newscript->Name = "go_cot_exit_trigger";
+    //newscript->GOGetAI = &GetAI_go_cot_exit_trigger;
+    //newscript->RegisterSelf();
 }
