@@ -184,7 +184,7 @@ struct boss_onyxiaAI : public ScriptedAI
         m_uiSummonWhelpsTimer  = 5000;
         m_uiWhelpTimer         = 1000;
         m_uiSummonCount        = 0;
-        m_uiWhelpsToSummon     = 16;
+        m_uiWhelpsToSummon     = 2;
         m_bIsSummoningWhelps   = false;
 
         m_uiBellowingRoarTimer = 10000;
@@ -384,7 +384,7 @@ struct boss_onyxiaAI : public ScriptedAI
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_FLAMEBREATH) == CAST_OK)
             {
                 DelayCastEvents(2000); // 2sec de cast
-                m_uiFlameBreathTimer = urand(10000, 20000);
+                m_uiFlameBreathTimer = urand(16000, 24000);
             }
         }
         else
@@ -393,7 +393,7 @@ struct boss_onyxiaAI : public ScriptedAI
         if (m_uiCleaveTimer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
-                m_uiCleaveTimer = urand(2000, 5000);
+                m_uiCleaveTimer = urand(4000, 6000);
         }
         else
             m_uiCleaveTimer -= uiDiff;
@@ -507,8 +507,8 @@ struct boss_onyxiaAI : public ScriptedAI
             {
                 m_bIsSummoningWhelps = false;
                 m_uiSummonCount = 0;
-                m_uiWhelpsToSummon = 5 + urand(0, 2);
-                m_uiSummonWhelpsTimer = 30000;
+                m_uiWhelpsToSummon = 2 + irand(0, 1);
+                m_uiSummonWhelpsTimer = 32000;
             }
         }
         else
@@ -577,7 +577,7 @@ struct boss_onyxiaAI : public ScriptedAI
                 case 0: m_creature->SummonCreature(NPC_ONYXIAN_WHELP, afSpawnLocations[0][0], afSpawnLocations[0][1], afSpawnLocations[0][2], 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120000); break;
                 case 1: m_creature->SummonCreature(NPC_ONYXIAN_WHELP, afSpawnLocations[1][0], afSpawnLocations[1][1], afSpawnLocations[1][2], 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120000); break;
             }
-            m_uiSummonWhelpsTimer = urand(1000, 10000);
+            m_uiSummonWhelpsTimer = urand(16000, 28000);
         }
         else
             m_uiSummonWhelpsTimer -= uiDiff;
