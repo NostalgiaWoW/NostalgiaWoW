@@ -577,7 +577,7 @@ struct boss_onyxiaAI : public ScriptedAI
                 case 0: m_creature->SummonCreature(NPC_ONYXIAN_WHELP, afSpawnLocations[0][0], afSpawnLocations[0][1], afSpawnLocations[0][2], 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120000); break;
                 case 1: m_creature->SummonCreature(NPC_ONYXIAN_WHELP, afSpawnLocations[1][0], afSpawnLocations[1][1], afSpawnLocations[1][2], 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120000); break;
             }
-            m_uiSummonWhelpsTimer = urand(16000, 28000);
+            m_uiSummonWhelpsTimer = urand(14000, 22000);
         }
         else
             m_uiSummonWhelpsTimer -= uiDiff;
