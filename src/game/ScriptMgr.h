@@ -610,7 +610,7 @@ struct Script
         pItemUse(nullptr), pItemUseSpell(nullptr), pEffectDummyCreature(nullptr), pEffectDummyGameObj(nullptr), pEffectDummyItem(nullptr),
         pEffectAuraDummy(nullptr), GOOpen(nullptr),
         GOGetAI(nullptr), GetAI(nullptr), GetQuestInstance(nullptr), GetInstanceData(nullptr), pOnStartup(nullptr), pPlrGossipHello(nullptr), pPlrGossipSelect(nullptr),
-        pPlrGossipSelectWithCode(nullptr), pOnZoneUpdateCheck(nullptr), pOnPlayerRelocation(nullptr), pOnWorldUpdate(nullptr)
+        pPlrGossipSelectWithCode(nullptr), pOnZoneUpdateCheck(nullptr), pOnPlayerRelocation(nullptr), pOnWorldUpdate(nullptr), pOnPvPKill(nullptr)
     {}
 
     std::string Name;
