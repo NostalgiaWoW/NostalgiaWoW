@@ -2225,21 +2225,21 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
         // and almost never more than 25% resists. How this should work exactly is somewhat a guess.
         // Kalgan post-2.0 dot nerf: "Previously, dots in general were 1/10th as likely to be resisted as normal spells."
         // http://web.archive.org/web/20080601184008/http://forums.worldofwarcraft.com/thread.html?topicId=65457765&pageNo=18&sid=1#348
-        if (damagetype == DOT && spellProto)
-        {
-            switch (spellProto->Id)
-            {
-                // NOSTALRIUS: Some DoTs follow normal resist rules. Need to find which ones, why and how.
-                // We have a video proof for the following ones.
-                case 23461:     // Vaelastrasz's Flame Breath
-                case 24818:     // Nightmare Dragon's Noxious Breath
-                case 25812:     // Lord Kri's Toxic Volley
-                case 28531:     // Sapphiron's Frost Aura
-                    break;
-                default:
-                    resistanceChance *= 0.1f;
-            }
-        }
+        //if (damagetype == DOT && spellProto)
+        //{
+        //    switch (spellProto->Id)
+        //    {
+        //        // NOSTALRIUS: Some DoTs follow normal resist rules. Need to find which ones, why and how.
+        //        // We have a video proof for the following ones.
+        //        case 23461:     // Vaelastrasz's Flame Breath
+        //        case 24818:     // Nightmare Dragon's Noxious Breath
+        //        case 25812:     // Lord Kri's Toxic Volley
+        //        case 28531:     // Sapphiron's Frost Aura
+        //            break;
+        //        default:
+        //            resistanceChance *= 0.1f;
+        //    }
+        //}
 
         ResistanceValues* prev = nullptr;
         ResistanceValues* next = nullptr;
