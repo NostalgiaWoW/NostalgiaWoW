@@ -45,6 +45,41 @@ bool GossipHello_ArenaPortalPhaseNPC(Player* player, Creature* _Creature)
     return true;
 }
 
+// Boat Teleport NPC (Nostalgia WoW)
+bool GossipHello_BoatTeleportNPC(Player* player, Creature* _Creature)
+{
+	player->ADD_GOSSIP_ITEM(2, "Adventurer Ship (Quests Available)", GOSSIP_SENDER_MAIN, 91);
+	player->ADD_GOSSIP_ITEM(2, "Warrior's Ship (Epic Gear Vendors)", GOSSIP_SENDER_MAIN, 92);
+	player->ADD_GOSSIP_ITEM(2, "Apprentice's Ship (Blue Gear Vendors)", GOSSIP_SENDER_MAIN, 93);
+	player->ADD_GOSSIP_ITEM(2, "Training Ship (Class Trainers)", GOSSIP_SENDER_MAIN, 94);
+
+	player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+	return true;
+}
+
+void SendDefaultMenu_BoatTeleportNPC(Player* player, Creature* _Creature, uint32 action)
+{
+	switch (action)
+	{
+		case 91:
+			player->CLOSE_GOSSIP_MENU();
+			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			break;
+		case 92:
+			player->CLOSE_GOSSIP_MENU();
+			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			break;
+		case 93:
+			player->CLOSE_GOSSIP_MENU();
+			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			break;
+		case 94:
+			player->CLOSE_GOSSIP_MENU();
+			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			break;
+	}
+}
+
 
 // TELEPORT NPC
 
@@ -633,6 +668,15 @@ bool GossipSelect_TeleportArenaNPC(Player* player, Creature* _Creature, uint32 s
     return true;
 }
 
+bool GossipSelect_BoatTeleportNPC(Player* player, Creature* _Creature, uint32 sender, uint32 action)
+{
+	// Main menu
+	if (sender == GOSSIP_SENDER_MAIN)
+		SendDefaultMenu_BoatTeleportNPC(player, _Creature, action);
+
+	return true;
+}
+
 
 enum Enchants
 {
@@ -1216,5 +1260,11 @@ void AddSC_custom_creatures()
     newscript->pGossipHello = &GossipHello_TransmogNPC;
     newscript->pGossipSelect = &GossipSelect_TransmogNPC;
     newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_BoatTeleportNPC";
+	newscript->pGossipHello = &GossipHello_BoatTeleportNPC;
+	newscript->pGossipSelect = &GossipSelect_BoatTeleportNPC;
+	newscript->RegisterSelf(true);
 
 }
