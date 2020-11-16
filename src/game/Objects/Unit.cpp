@@ -2265,7 +2265,10 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
         // Players CANNOT resist 100% of damage, it is always rounded down to 75%, despite what Blizzard's table sugests.
         // The true magic damage resist cap is therefore actually ~68-70% because of this mechanic.
         // http://web.archive.org/web/20110808083353/http://elitistjerks.com/f15/t10712-resisting_magical_damage_its_relation_resistance_levels/p4/
-        if (ran < resist100 + resist75)
+        
+		if (spellProto->IsBinary() && ran < resist100 + resist75)
+			resistCnt = 0.75f;
+		else if (ran < resist100 + resist75)
             resistCnt = 0.75f;
         else if (ran < resist100 + resist75 + resist50)
             resistCnt = 0.5f;
@@ -2282,7 +2285,7 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
         *resist = 0;
 
     int32 RemainingDamage = damage - *resist;
-
+		
     // Need remove expired auras after
     bool existExpired = false;
 
@@ -2413,34 +2416,36 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
     }
     
     AuraList const& vSplitDamagePct = GetAurasByType(SPELL_AURA_SPLIT_DAMAGE_PCT);
-    for (AuraList::const_iterator i = vSplitDamagePct.begin(), next; i != vSplitDamagePct.end() && RemainingDamage >= 0; i = next)
-    {
-        next = i;
-        ++next;
-        
-        // check damage school mask
-        if (((*i)->GetModifier()->m_miscvalue & schoolMask) == 0)
-            continue;
-        
-        // Damage can be splitted only if aura has an alive caster
-        Unit *caster = (*i)->GetCaster();
-        if (!caster || caster == this || !caster->IsInWorld() || !caster->isAlive())
-            continue;
-        
-        uint32 splitted = uint32(RemainingDamage * (*i)->GetModifier()->m_amount / 100.0f);
-        
-        RemainingDamage -=  int32(splitted);
-        
-        uint32 split_absorb = 0;
-        pCaster->DealDamageMods(caster, splitted, &split_absorb);
+	for (AuraList::const_iterator i = vSplitDamagePct.begin(), next; i != vSplitDamagePct.end() && RemainingDamage >= 0; i = next)
+	{
+		next = i;
+		++next;
 
-        pCaster->SendSpellNonMeleeDamageLog(caster, (*i)->GetSpellProto()->Id, splitted, schoolMask, split_absorb, 0, false, 0, false);
+		// check damage school mask
+		if (((*i)->GetModifier()->m_miscvalue & schoolMask) == 0)
+			continue;
 
-        CleanDamage cleanDamage = CleanDamage(splitted, BASE_ATTACK, MELEE_HIT_NORMAL, 0, 0);
-        pCaster->DealDamage(caster, splitted, &cleanDamage, DOT, schoolMask, (*i)->GetSpellProto(), false);
-    }
+		// Damage can be splitted only if aura has an alive caster
+		Unit* caster = (*i)->GetCaster();
+		if (!caster || caster == this || !caster->IsInWorld() || !caster->isAlive())
+			continue;
+
+		uint32 splitted = uint32(RemainingDamage * (*i)->GetModifier()->m_amount / 100.0f);
+
+		RemainingDamage -= int32(splitted);
+
+		uint32 split_absorb = 0;
+		pCaster->DealDamageMods(caster, splitted, &split_absorb);
+
+		pCaster->SendSpellNonMeleeDamageLog(caster, (*i)->GetSpellProto()->Id, splitted, schoolMask, split_absorb, 0, false, 0, false);
+
+		CleanDamage cleanDamage = CleanDamage(splitted, BASE_ATTACK, MELEE_HIT_NORMAL, 0, 0);
+		pCaster->DealDamage(caster, splitted, &cleanDamage, DOT, schoolMask, (*i)->GetSpellProto(), false);
+	}
+
 
     *absorb = damage - RemainingDamage - *resist;
+
 }
 
 void Unit::CalculateAbsorbResistBlock(Unit *pCaster, SpellNonMeleeDamage *damageInfo, SpellEntry const* spellProto, WeaponAttackType attType, Spell* spell)
@@ -3103,14 +3108,28 @@ int32 Unit::MagicSpellHitChance(Unit *pVictim, SpellEntry const *spell, Spell* s
     modHitChance += int32(m_modSpellHitChance);
     DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "SPELL_AURA_MOD_SPELL_HIT_CHANCE (+ %i) : %f", int32(m_modSpellHitChance), modHitChance);
 
+	sLog.outError("modHitChance = '%f' with spell: '%i'", modHitChance, spell->Id);
+
     // Nostalrius: sorts binaires.
-    //if (spell->IsBinary())
-    //{
-      //  // Get base victim resistance for school
-       // float resistModHitChance = GetSpellResistChance(pVictim, schoolMask, false);
-       // modHitChance *= (1 - resistModHitChance);
-       // DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "x %f : HitChance = %f", (1 - resistModHitChance), modHitChance);
-    //} // Commented out for Nostalgia WoW. Not blizzlike.
+    if (spell->IsBinary())
+    {
+      //Get base victim resistance for school
+       float resistModHitChance = GetSpellResistChance(pVictim, schoolMask, false);
+       modHitChance *= (1 - resistModHitChance);
+	   sLog.outError("modHitChance = '%f' with spell: '%i'", modHitChance, spell->Id);
+       DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "x %f : HitChance = %f", (1 - resistModHitChance), modHitChance);
+    } 
+
+	else {
+		float resistModHitChance = GetSpellResistChance(pVictim, schoolMask, false);
+		modHitChance *= (1 - resistModHitChance);
+		sLog.outError("modHitChance = '%f' with spell: '%i'", modHitChance, spell->Id);
+		if (modHitChance < 0) {
+			modHitChance = 0.24f;
+			sLog.outError("modHitChance = '%f' with spell: '%i'", modHitChance, spell->Id);
+		}
+	
+	}
 
     int32 HitChance = modHitChance * 100;
     if (HitChance <  100) HitChance =  100;
