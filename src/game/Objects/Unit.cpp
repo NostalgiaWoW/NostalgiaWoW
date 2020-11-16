@@ -3108,25 +3108,20 @@ int32 Unit::MagicSpellHitChance(Unit *pVictim, SpellEntry const *spell, Spell* s
     modHitChance += int32(m_modSpellHitChance);
     DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "SPELL_AURA_MOD_SPELL_HIT_CHANCE (+ %i) : %f", int32(m_modSpellHitChance), modHitChance);
 
-	sLog.outError("modHitChance = '%f' with spell: '%i'", modHitChance, spell->Id);
-
     // Nostalrius: sorts binaires.
     if (spell->IsBinary())
     {
       //Get base victim resistance for school
        float resistModHitChance = GetSpellResistChance(pVictim, schoolMask, false);
        modHitChance *= (1 - resistModHitChance);
-	   sLog.outError("modHitChance = '%f' with spell: '%i'", modHitChance, spell->Id);
        DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "x %f : HitChance = %f", (1 - resistModHitChance), modHitChance);
     } 
 
 	else {
 		float resistModHitChance = GetSpellResistChance(pVictim, schoolMask, false);
 		modHitChance *= (1 - resistModHitChance);
-		sLog.outError("modHitChance = '%f' with spell: '%i'", modHitChance, spell->Id);
 		if (modHitChance < 0) {
 			modHitChance = 0.24f;
-			sLog.outError("modHitChance = '%f' with spell: '%i'", modHitChance, spell->Id);
 		}
 	
 	}
