@@ -1297,7 +1297,7 @@ INSERT INTO `npc_vendor_template` (`entry`, `item`, `maxcount`, `incrtime`, `con
 DELETE FROM `npc_vendor_template` WHERE `entry`=1200017 AND `item`=19365;
 INSERT INTO `npc_vendor_template` (`entry`, `item`, `maxcount`, `incrtime`, `conditionId`) VALUES (1200017, 19365, 0, 0, 0);
 DELETE FROM `npc_vendor_template` WHERE `entry`=1200017 AND `item`=19379;
-INSERT INTO `npc_vendor_template` (`entry`, `item`, `maxcount`, `incrtime`, `conditionId`) VALUES (1200017, 19365, 0, 0, 0);
+INSERT INTO `npc_vendor_template` (`entry`, `item`, `maxcount`, `incrtime`, `conditionId`) VALUES (1200017, 19379, 0, 0, 0);
 DELETE FROM `npc_vendor_template` WHERE `entry`=1200016 AND `item`=19142;
 INSERT INTO `npc_vendor_template` (`entry`, `item`, `maxcount`, `incrtime`, `conditionId`) VALUES (1200016, 19142, 0, 0, 0);
 DELETE FROM `npc_vendor_template` WHERE `entry`=1200016 AND `item`=17073;
