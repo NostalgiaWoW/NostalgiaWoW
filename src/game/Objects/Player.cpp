@@ -6722,9 +6722,9 @@ void Player::UpdateArea(uint32 newArea)
     }
 
     if (!isGameMaster())
-    {           // Force faction change at shop mall
+    {           // Force faction change at shop mall & arena
         
-            if (areaEntry->Id == 2401)
+            if (areaEntry->Id == 2401 || areaEntry->Id == 1637)
                 setFaction(35);
             else if (getFaction() == 35)
                 setFactionForRace(getRace());
@@ -20721,9 +20721,6 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender /*= 255*/, uint32 playerb
         }
     }
 
-    //Close socket before teleport, otherwise client crash
-    m_session->GetSocket()->CloseSocket();
-
     if (bChangeTeam)
     {
         // Changement de HomeBind / Teleportation capitale
@@ -20731,13 +20728,11 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender /*= 255*/, uint32 playerb
         {
             SavePositionInDB(GetObjectGuid(), 0, -1847.98, -4246.67, 2.2, 0.89f, 45);
             SetHomebindToLocation(WorldLocation(0, -1847.98, -4246.67, 2.2, 0.89f), 45);
-            TeleportToHomebind(0, false);
         }
         else
         {
             SavePositionInDB(GetObjectGuid(), 0, -1847.98, -4246.67, 2.2, 0.89f, 45);
             SetHomebindToLocation(WorldLocation(0, -1847.98, -4246.67, 2.2, 0.89f), 45);
-            TeleportToHomebind(0, false);
         }
 
         //learn all taxi pathes
@@ -20760,8 +20755,6 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender /*= 255*/, uint32 playerb
     {
         data->uiRace = newRace;
     }
-
-    m_session->LogoutPlayer(false);
     return true;
 }
 
