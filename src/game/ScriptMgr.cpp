@@ -1176,6 +1176,17 @@ void ScriptMgr::OnPvPKill(Player* killer, Player* killed)
     }
 }
 
+void ScriptMgr::OnPlayerLogout(Player* player)
+{
+    auto playerScripts = m_Nonbound_scripts.equal_range(ScriptType::Player);
+    for (auto itr = playerScripts.first; itr != playerScripts.second; ++itr)
+    {
+        auto script = itr->second;
+        if (script && script->pOnPlayerLogout)
+            script->pOnPlayerLogout(player);
+    }
+}
+
 void ScriptMgr::OnWorldUpdate(uint32 diff)
 {
     auto worldScripts = m_Nonbound_scripts.equal_range(ScriptType::World);

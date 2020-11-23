@@ -47,6 +47,8 @@ enum ArenaEvents
     EVENT_ARENA_STARTING_IN_15 = 15,
     EVENT_ARENA_STARTING_IN_30 = 30,
     
+    EVENT_ARENA_ENDED,
+    EVENT_ARENA_RESS,
     EVENT_ARENA_STARTS
 };
 
@@ -57,30 +59,50 @@ struct PvPArena
     float Radius;
     float Position_x;
     float Position_y;
-    uint32 MapId;
+    uint32 MapId;   
     std::array<Position, 2> TeamPositions;
+    uint32 GateEntry;
+    std::array<uint32, 2> GateGuids;
+};
+
+enum class ConfirmationStatus
+{
+    Blank = 0,
+    Accepted,
+    Declined
 };
 
 struct PartyInfo
 {
     ObjectGuid LeaderGuid;
-    std::vector<ObjectGuid> Group;
+    std::vector<std::pair<ObjectGuid, ConfirmationStatus>> Group;
     ArenaType Type;
+    bool WaitingConfirmation;
 };
+
 
 struct ArenaPlayer
 {
-    ArenaPlayer(ObjectGuid guid) : IsAlive(true), Guid(guid) {}
+    ArenaPlayer(ObjectGuid guid) : IsAlive(true), Guid(guid), Kills(0) {}
     ObjectGuid Guid;
     bool IsAlive;
     WorldLocation OldPosition;
+    uint32 Kills;
+};
+
+enum class TeamOrder
+{
+    Team1,
+    Team2
 };
 
 struct TeamInfo
 {
     std::vector<ArenaPlayer> Group;
     ArenaType Type;
+    TeamOrder Order;
 };
+
 
 class ArenaGame
 {
@@ -100,10 +122,11 @@ public:
 
     void Start();
     void CheckWin();
-    void PlayerDied(Player* player);
+    void PlayerDied(Player* killer, Player* killed, bool disconnected = false);
     void Update(uint32 diff);
     void EndGame(OutcomeResult result);
     void EventArenaActive();
+    void ToggleDoors(bool open);
 
     static void RestoreResources(Player* player);
 
@@ -114,9 +137,9 @@ private:
     template <typename F>
     void DoForAllPlayers(F f)
     {
-        for (const auto& team : m_teams)
+        for (auto& team : m_teams)
         {
-            for (const auto& arenaPlayer : team.Group)
+            for (auto& arenaPlayer : team.Group)
             {
                 f(arenaPlayer.Guid, team, arenaPlayer);
             }
@@ -141,6 +164,13 @@ struct ArenaInfo
     bool InUse;
 };
 
+struct ConfirmationInfo
+{
+    PvPArena* Arena;
+    uint32 WaitTime;
+    std::array<PartyInfo*, 2> Parties;
+};
+
 enum class QueueResult
 {
     Okay,
@@ -150,21 +180,57 @@ enum class QueueResult
     AlreadyInQueue
 };
 
+struct ArenaTotal
+{
+    ArenaTotal() {}
+
+    ArenaType Type;
+    uint32 TotalKills;
+    uint32 TotalDeaths;
+    uint32 TotalWins;
+    uint32 TotalLosses;
+    uint32 TotalDraws;
+    uint32 TotalGames;
+};
+
+struct ArenaStats
+{
+    ArenaStats() : PlayerLowGuid(0) {}
+
+    uint32 PlayerLowGuid;
+    std::unordered_map<ArenaType, ArenaTotal> Stats;
+};
+
 class PvPArenaSystem
 {
     DECLARE_SINGLETON(PvPArenaSystem)
 public:
     static const uint32 SenderId = 8916;
+    static const uint32 ConfirmationSenderId = 7309;
+
+    static const uint32 LeaveQueueAction = 9000;
 
     void LoadFromDB();
     void HandlePlayerRelocation(Player* player, const Position& newPos);
     void HandlePvPKill(Player* killer, Player* killed);
     void HandleWorldUpdate(uint32 diff);
+    void HandleLogout(Player* player);
     bool HandleRequestRepop(Player* player);
+    bool HandleGroupInvite(Player* player);
+    bool HandleGroupRemovePlayer(Player* player);
 
     QueueResult Queue(Player* player, ArenaType type);
+    void SetupConfirmation(ConfirmationInfo* info);
+    void ConfirmationReceived(Player* player, bool leave, uint32 arenaId, bool force = false);
+    void StartGame(ConfirmationInfo* info);
+    void AbortGame(ConfirmationInfo* info);
     void ScheduleQueueUpdate();
     void ArenaGameEnded(ArenaGame* game);
+    void SaveStats(TeamInfo& playerTeam, ArenaPlayer& arenaPlayer, OutcomeResult result);
+
+    void LeaveQueue(Player* player, bool disconnected = false);
+
+    bool IsInQueue(Player* player);
 
     static std::string QueueResultToString(QueueResult result);
 
@@ -177,7 +243,21 @@ private:
     std::unordered_map<ObjectGuid, PartyInfo> m_queuedPlayers; // players that are queued, <leader guid, partyinfo>
     std::unordered_map<ObjectGuid, uint32> m_playerLookup; // players that are in an active arena game <player guid, arenaId>
     std::unordered_map<uint32, ArenaGame> m_activeGames; // active games going on <arenaId, ArenaGame>
+    std::unordered_map<uint32, ConfirmationInfo> m_waitingConfirmation; //players waiting for confirmation for a game
+    std::unordered_map<uint32, ArenaStats> m_playerStats; //arena stats per player <player LOW GUID, ArenaStats>
+    std::unordered_set<uint32> m_requiredStatsUpdate; //set with lowGUID players of stats that require DB saving
+    std::vector<uint32> m_deletedArenas; // arenas to be deleted by game id.
 
+    std::recursive_mutex m_freeArenaLock;
+    std::recursive_mutex m_lookupLock;
+    std::recursive_mutex m_confirmationLock;
+    std::recursive_mutex m_queueLock;
+    std::recursive_mutex m_activeGamesLock;
+    std::recursive_mutex m_deletedArenasLock;
+    std::recursive_mutex m_statsLock;
+    std::recursive_mutex m_requiredStatsLock;
+
+    uint32 m_saveTimer = 300 * IN_MILLISECONDS;
 };
 
 #define sPvPArenaSystem PvPArenaSystem::Instance()

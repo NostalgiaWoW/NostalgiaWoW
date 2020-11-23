@@ -2281,6 +2281,9 @@ class MANGOS_DLL_SPEC Player final: public Unit
                 m_DelayedOperations |= operation;
         }
 
+        template <typename F>
+        void ScheduleGenericDelayedAction(F f) { m_delayedGenericActions.push_back(f); }
+
         PlayerTaxi const& GetTaxi() const { return m_taxi; }
         uint32 GetHomeBindMap() const { return m_homebindMapId; }
         uint16 GetHomeBindAreaId() const { return m_homebindAreaId; }
@@ -2595,6 +2598,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool mPendingFarTeleport;
 
         uint32 m_DelayedOperations;
+        std::vector < std::function<void(Player*)> > m_delayedGenericActions;
         bool m_bCanDelayTeleport;
         bool m_bHasDelayedTeleport;
         bool m_bHasBeenAliveAtDelayedTeleport;

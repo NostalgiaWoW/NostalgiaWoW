@@ -2396,6 +2396,14 @@ void Player::ProcessDelayedOperations()
 
     //we have executed ALL delayed ops, so clear the flag
     m_DelayedOperations = 0;
+
+    //custom delayed actions
+    for (const auto& func : m_delayedGenericActions)
+    {
+        func(this);
+    }
+    m_delayedGenericActions.clear();
+
 }
 
 void Player::AddToWorld()

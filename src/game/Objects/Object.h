@@ -32,6 +32,7 @@
 
 #include <set>
 #include <string>
+#include <functional>
 
 #define CONTACT_DISTANCE            0.5f
 #define INTERACTION_DISTANCE        5.0f
@@ -376,6 +377,8 @@ class MANGOS_DLL_SPEC Object
         void MarkForClientUpdate();
         void SendForcedObjectUpdate();
         void AddDelayedAction(ObjectDelayedAction e) { _delayedActions |= e; }
+        
+
         void ExecuteDelayedActions();
 
         void BuildValuesUpdateBlockForPlayer( UpdateData *data, Player *target ) const;

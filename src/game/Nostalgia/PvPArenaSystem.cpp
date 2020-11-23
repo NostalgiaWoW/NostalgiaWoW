@@ -2,8 +2,21 @@
 #include "World.h"
 #include "Group.h"
 #include "Chat.h"
+#include "GossipDef.h"
+#include "ScriptedGossip.h"
+#include <sstream>
 
 #define AURA_ROOT 23973
+
+template <typename Itr, typename F>
+void DoForAll(Itr begin, Itr end, F f)
+{
+    while (begin != end)
+    {
+        f(begin);
+        ++begin;
+    }
+}
 
 void ArenaGame::Start()
 {
@@ -16,12 +29,15 @@ void ArenaGame::Start()
             float z_arena = m_map->GetHeight(m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, 0.0f);
             if (player)
             {
-                //player->SetWorldMask(i * 2 + 2); // team 0, phasemask 2, team 1, phasemask 4.
                 player->SaveRecallPosition();
                 player->GetPosition(arenaPlayer.OldPosition);
-                player->AddAura(AURA_ROOT);
+                
                 player->TeleportTo(m_arena->MapId, m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, z_arena, 0.0f);
-                player->ApplyLegitReplenishment(true);
+                player->ScheduleGenericDelayedAction([](Player* target) 
+                    {
+                        target->AddAura(AURA_ROOT);
+                        target->ApplyLegitReplenishment(true);
+                    });
             }
             else
             {
@@ -58,6 +74,55 @@ void ArenaGame::Update(uint32 diff)
             {
                 EventArenaActive();
             } break;
+
+            case EVENT_ARENA_RESS:
+            {
+                DoForAllPlayers([](ObjectGuid guid, const TeamInfo& playerTeam, const ArenaPlayer& arenaPlayer)
+                    {
+                        Player* player = sObjectMgr.GetPlayer(guid);
+                        if (player)
+                        {
+                            if (player->isDead())
+                                player->ResurrectPlayer(100.0f, false);
+                            player->SetFFAPvP(false);
+                        }
+                    });
+                m_events.ScheduleEvent(EVENT_ARENA_ENDED, 3000);
+            }break;
+
+            case EVENT_ARENA_ENDED:
+            {
+                {
+                    DoForAllPlayers([](ObjectGuid guid, const TeamInfo& playerTeam, const ArenaPlayer& arenaPlayer)
+                        {
+                            Player* player = sObjectMgr.GetPlayer(guid);
+                            if (player)
+                            {
+                                player->ScheduleGenericDelayedAction([](Player* target)
+                                    {
+                                        if (target->isDead())
+                                            target->ResurrectPlayer(100.0f, false);
+                                        target->ApplyLegitReplenishment(true);
+                                        target->SetFFAPvP(false);
+                                    });
+                                player->TeleportTo(arenaPlayer.OldPosition);
+                            }
+                            else
+                            {
+                                WorldLocation loc = arenaPlayer.OldPosition;
+                                Player::SavePositionInDB(guid, loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z, loc.orientation,
+                                    sTerrainMgr.GetZoneId(loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z));
+                            }
+                        });
+
+
+                    ToggleDoors(false);
+
+                    m_events.Reset();
+
+                    sPvPArenaSystem->ArenaGameEnded(this); // deletes `this`.
+                }
+            }break;
 
             case EVENT_ARENA_STARTING_IN_1:
             case EVENT_ARENA_STARTING_IN_2:
@@ -100,9 +165,28 @@ void ArenaGame::EventArenaActive()
             }
         });
 
+
+    ToggleDoors(true);
+
     m_status = ArenaStatus::Active;
     if (m_earlyConditionsCheck) // someone went offline in wait time, maybe its a won game already.
         CheckWin();
+}
+
+void ArenaGame::ToggleDoors(bool open)
+{
+    Map* map = sMapMgr.FindMap(m_arena->MapId);
+    if (map)
+    {
+        auto gate1 = map->GetGameObject(ObjectGuid{ HIGHGUID_GAMEOBJECT, m_arena->GateEntry, m_arena->GateGuids[0] });
+
+        if (gate1)
+            open ? gate1->UseDoorOrButton() : gate1->ResetDoorOrButton();
+
+        auto gate2 = map->GetGameObject(ObjectGuid{ HIGHGUID_GAMEOBJECT, m_arena->GateEntry, m_arena->GateGuids[1] });
+        if (gate2)
+            open ? gate2->UseDoorOrButton() : gate2->ResetDoorOrButton();
+    }
 }
 
 void ArenaGame::CheckWin()
@@ -115,22 +199,31 @@ void ArenaGame::CheckWin()
     EndGame(result);
 }
 
-void ArenaGame::PlayerDied(Player* player)
+void ArenaGame::PlayerDied(Player* killer, Player* killed, bool disconnected)
 {
+    std::ostringstream ss;
+    ss << killed->GetName();
+    ss << (disconnected ? " disconnected." : " died.");
+    std::string message = ss.str();
+
     bool found = false;
     for (auto& arenaTeam : m_teams)
     {
         for (auto& arenaPlayer : arenaTeam.Group)
         {
-            if (player->GetObjectGuid() == arenaPlayer.Guid)
+            if (killer->GetObjectGuid() == arenaPlayer.Guid && !disconnected)
+                ++arenaPlayer.Kills;
+
+            if (killed->GetObjectGuid() == arenaPlayer.Guid)
             {
                 arenaPlayer.IsAlive = false;
                 found = true;
-                break;
-            }
 
-            if (found)
-                break;
+                if (disconnected)
+                    continue;
+            }
+            
+            ChatHandler(sObjectMgr.GetPlayer(arenaPlayer.Guid)).SendSysMessage(message.c_str());
         }
     }
 
@@ -144,27 +237,16 @@ void ArenaGame::EndGame(OutcomeResult result)
     else if (result == OutcomeResult::Team2Wins)
         sWorld.SendServerMessage(SERVER_MSG_CUSTOM, "Team 2 won!");
 
+    {
 
-    DoForAllPlayers([](ObjectGuid guid, const TeamInfo& playerTeam, const ArenaPlayer& arenaPlayer)
-        {
-            Player* player = sObjectMgr.GetPlayer(guid);
-            if (player)
+        DoForAllPlayers([result](ObjectGuid playerGuid, TeamInfo& playerTeam, ArenaPlayer& arenaPlayer)
             {
-                if (player->isDead())
-                    player->ResurrectPlayer(100.0f, false);
-                player->ApplyLegitReplenishment(true);
-                player->TeleportTo(arenaPlayer.OldPosition);
-                player->SetFFAPvP(false);
-            }
-            else
-            {
-                WorldLocation loc = arenaPlayer.OldPosition;
-                Player::SavePositionInDB(guid, loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z, loc.orientation,
-                    sTerrainMgr.GetZoneId(loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z));
-            }
-        });
+                sPvPArenaSystem->SaveStats(playerTeam, arenaPlayer, result);
+            });
 
-    sPvPArenaSystem->ArenaGameEnded(this);
+    }
+    //schedule teleport event later after ress otherwise client will bug out.
+    m_events.ScheduleEvent(EVENT_ARENA_RESS, 2000);
 }
 
 void ArenaGame::RestoreResources(Player* player)
@@ -226,15 +308,88 @@ void PvPArenaSystem::LoadFromDB()
     do {
         auto fields = result->Fetch();
         PvPArena arena = { fields[0].GetUInt32(), static_cast<ArenaType>(fields[1].GetUInt32()), fields[2].GetFloat(), fields[3].GetFloat(), fields[4].GetFloat(), fields[5].GetUInt32(),
-            {  Position({fields[6].GetFloat(), fields[7].GetFloat(), 0.0f, 0.0f}), Position({fields[8].GetFloat(), fields[9].GetFloat(), 0.0f, 0.0f})   } };        
+            {  Position({fields[6].GetFloat(), fields[7].GetFloat(), 0.0f, 0.0f}), Position({fields[8].GetFloat(), fields[9].GetFloat(), 0.0f, 0.0f})   },
+            fields[10].GetUInt32(), {fields[11].GetUInt32(), fields[12].GetUInt32()} };
         auto res = m_arenas.insert({ arena.Type, std::move(arena) });
         m_freeArenas.insert({ res->first, std::ref(res->second) });
     } while (result->NextRow());
+
+    result = WorldDatabase.QuerySafe("SELECT PlayerLowGuid, ArenaType, SUM(Kills), SUM(Died), SUM(Won), SUM(Lost), COUNT(*) FROM `pvp_arena_system_stats` GROUP BY PlayerLowGuid, ArenaType");
+
+    if (!result)
+        return;
+
+    uint32 lastGuid = 0;
+
+    ArenaStats tempStats;
+    do {
+        auto fields = result->Fetch();
+
+        
+        ArenaTotal total;
+        uint32 playerLowGuid = fields[0].GetUInt32();
+
+
+        if (!lastGuid)
+            lastGuid = playerLowGuid;
+
+        if (lastGuid != playerLowGuid) // new player, save what we have for arenatypes in a bigger container and continue.
+        {
+            tempStats.PlayerLowGuid = lastGuid;
+            m_playerStats.insert({ lastGuid, tempStats });
+            tempStats.Stats.clear();
+        }
+
+        total.Type = (ArenaType)fields[1].GetUInt8();
+        total.TotalKills = fields[2].GetUInt32();
+        total.TotalDeaths = fields[3].GetUInt32();
+        total.TotalWins = fields[4].GetUInt32();
+        total.TotalLosses = fields[5].GetUInt32();
+        total.TotalGames = fields[6].GetUInt32();
+        tempStats.Stats[total.Type] = total;
+    } while (result->NextRow());
+
+    //dont forget last tempstats save.
+    tempStats.PlayerLowGuid = lastGuid;
+    m_playerStats.insert({ lastGuid, tempStats });
+    tempStats.Stats.clear();
+}
+
+void PvPArenaSystem::SaveStats(TeamInfo& playerTeam, ArenaPlayer& arenaPlayer, OutcomeResult result)
+{
+    std::lock_guard<std::recursive_mutex> g(m_statsLock);
+
+    auto& elem = m_playerStats[arenaPlayer.Guid.GetCounter()].Stats[playerTeam.Type];
+
+    if (!arenaPlayer.IsAlive)
+        ++elem.TotalDeaths;
+
+
+    bool won = (playerTeam.Order == TeamOrder::Team1 && result == OutcomeResult::Team1Wins) || (playerTeam.Order == TeamOrder::Team2 && result == OutcomeResult::Team2Wins);
+    bool draw = result == OutcomeResult::Draw;
+
+    if (draw)
+        ++elem.TotalDraws;
+    else if (won)
+        ++elem.TotalWins;
+    else
+        ++elem.TotalLosses;
+
+    elem.TotalKills += arenaPlayer.Kills;
+    ++elem.TotalGames;
+
+    //now mark for update to DB.
+    WorldDatabase.PExecute("INSERT INTO `pvp_arena_system_stats` (`PlayerLowGuid`, `ArenaType`, `Kills`, `Died`, `Won`, `Lost`) VALUES(%u, %u, %u, %u, %u, %u)",
+        arenaPlayer.Guid.GetCounter(), (uint32)playerTeam.Type, arenaPlayer.Kills, arenaPlayer.IsAlive ? 0 : 1, won ? 1 : 0, !won && !draw ? 1 : 0);
 }
 
 void PvPArenaSystem::ArenaGameEnded(ArenaGame* game)
 {
     //add a new free arena, remove players from active game, remove active game and schedule a new queue update for potential players.
+
+    std::lock_guard<std::recursive_mutex> g(m_freeArenaLock);
+    std::lock_guard<std::recursive_mutex> g3(m_lookupLock);
+    std::lock_guard<std::recursive_mutex> g2(m_deletedArenasLock);
 
     m_freeArenas.insert({ game->m_arena->Type, std::ref(*game->m_arena) });
 
@@ -243,18 +398,140 @@ void PvPArenaSystem::ArenaGameEnded(ArenaGame* game)
             m_playerLookup.erase(guid);
         });
 
-    m_activeGames.erase(game->m_gameId);
+    m_deletedArenas.push_back(game->m_gameId);
+}
 
-    ScheduleQueueUpdate();
+bool PvPArenaSystem::IsInQueue(Player* player)
+{
+    auto guid = player->GetGroup() ? player->GetGroup()->GetLeaderGuid() : player->GetObjectGuid();
+
+    std::lock_guard<std::recursive_mutex> g(m_queueLock);
+    return m_queuedPlayers.find(guid) != m_queuedPlayers.end();
 }
 
 void PvPArenaSystem::HandlePlayerRelocation(Player* player, const Position& newPos)
 {
+}
 
+void PvPArenaSystem::HandleLogout(Player* player)
+{
+    {
+        std::lock_guard<std::recursive_mutex> g(m_lookupLock);
+        auto itr = m_playerLookup.find(player->GetObjectGuid());
+
+        if (itr != m_playerLookup.end())
+        {
+            std::lock_guard<std::recursive_mutex> g(m_activeGamesLock);
+            auto arenaItr = m_activeGames.find(itr->second);
+            if (arenaItr != m_activeGames.end())
+            {
+                arenaItr->second.PlayerDied(player, player, true); //kill logged out player
+                return;
+            }
+        }
+    }
+
+    LeaveQueue(player, true);
+
+}
+
+void PvPArenaSystem::LeaveQueue(Player* player, bool disconnected)
+{
+    auto guid = player->GetObjectGuid();
+    if (player->GetGroup())
+        guid = player->GetGroup()->GetLeaderGuid();
+
+    std::ostringstream ss;
+    ss << "Left queue because " << player->GetName()
+        << disconnected ? " disconnected." : " left.";
+
+    std::string message = ss.str();
+
+    std::lock_guard<std::recursive_mutex> g(m_queueLock);
+    auto leaderGuid = guid;
+    auto itr = m_queuedPlayers.find(leaderGuid);
+
+    if (itr != m_queuedPlayers.end())
+    {
+        DoForAll(itr->second.Group.begin(), itr->second.Group.end(), [player, &message, disconnected](decltype(itr->second.Group)::iterator itr)
+            {
+                if (itr->first == player->GetObjectGuid() && disconnected)
+                    return;
+
+                Player* member = sObjectMgr.GetPlayer(itr->first);
+                if (member)
+                    ChatHandler(member).SendSysMessage(message.c_str());
+            });
+
+        if (itr->second.WaitingConfirmation)
+        {
+            //search confimation container too..
+            std::lock_guard<std::recursive_mutex> g(m_confirmationLock);
+            auto foundItr = std::find_if(m_waitingConfirmation.begin(), m_waitingConfirmation.end(), [leaderGuid](const decltype(m_waitingConfirmation)::value_type& val)
+                {
+                    return val.second.Parties[0]->LeaderGuid == leaderGuid || val.second.Parties[1]->LeaderGuid == leaderGuid;
+                });
+
+            if (foundItr != m_waitingConfirmation.end())
+                ConfirmationReceived(player, true, foundItr->first, true); // emulate a decline from the logged out player, this will destroy the confirmationinfo too.
+        }
+        else
+            m_queuedPlayers.erase(itr); // queuedplayers is erased in ConfirmationReceived -> AbortGame if it goes through, so else-only.
+    }
+}
+
+
+bool PvPArenaSystem::HandleGroupInvite(Player* player)
+{
+    {
+        std::lock_guard<std::recursive_mutex> g(m_lookupLock);
+        auto itr = m_playerLookup.find(player->GetObjectGuid());
+        if (itr != m_playerLookup.end())
+        {
+            player->GetSession()->SendNotification("You can\'t invite someone in the arena.");
+            return false; //cant invite in arena.
+        }
+    }
+
+    {
+        std::lock_guard<std::recursive_mutex> g(m_queueLock);
+        auto itr = m_queuedPlayers.find(player->GetObjectGuid());
+        if (itr != m_queuedPlayers.end())
+        {
+            player->GetSession()->SendNotification("You can\'t invite someone in the arena queue.");
+            return false; //cant invite in queue.
+        }
+    }
+    return true;
+}
+
+bool PvPArenaSystem::HandleGroupRemovePlayer(Player* player)
+{
+    {
+        std::lock_guard<std::recursive_mutex> g(m_lookupLock);
+        auto itr = m_playerLookup.find(player->GetObjectGuid());
+        if (itr != m_playerLookup.end())
+        {
+            player->GetSession()->SendNotification("You can\'t remove someone in the arena.");
+            return false; //cant invite in arena.
+        }
+    }
+
+    {
+        std::lock_guard<std::recursive_mutex> g(m_queueLock);
+        auto itr = m_queuedPlayers.find(player->GetObjectGuid());
+        if (itr != m_queuedPlayers.end())
+        {
+            player->GetSession()->SendNotification("You can\'t remove someone in the arena queue.");
+            return false; //cant invite in queue.
+        }
+    }
+    return true;
 }
 
 bool PvPArenaSystem::HandleRequestRepop(Player* player)
 {
+    std::lock_guard<std::recursive_mutex> g(m_lookupLock);
     auto itr = m_playerLookup.find(player->GetObjectGuid());
     if (itr != m_playerLookup.end())
     {
@@ -266,14 +543,36 @@ bool PvPArenaSystem::HandleRequestRepop(Player* player)
 
 void PvPArenaSystem::HandleWorldUpdate(uint32 diff)
 {
-    for (auto& arenaPair : m_activeGames)
+    bool arenasRemoved = !m_deletedArenas.empty();
     {
-        arenaPair.second.Update(diff);
+        if (arenasRemoved)
+        {
+            std::lock_guard<std::recursive_mutex> g2(m_deletedArenasLock);
+            m_activeGamesLock.lock();
+            for (auto arenaId : m_deletedArenas)
+            {
+                m_activeGames.erase(arenaId);
+            }
+            m_activeGamesLock.unlock();
+        }
     }
+
+    {
+        std::lock_guard<std::recursive_mutex> g2(m_activeGamesLock);
+        for (auto& arenaPair : m_activeGames)
+        {
+            arenaPair.second.Update(diff);
+        }
+    }
+
+    if (arenasRemoved)
+        ScheduleQueueUpdate();
 }
 
 void PvPArenaSystem::HandlePvPKill(Player* killer, Player* killed)
 {
+    std::lock_guard<std::recursive_mutex> g(m_lookupLock);
+    std::lock_guard<std::recursive_mutex> g2(m_activeGamesLock);
     auto killerItr = m_playerLookup.find(killer->GetObjectGuid());
 
     if (killerItr == m_playerLookup.end())
@@ -295,23 +594,28 @@ void PvPArenaSystem::HandlePvPKill(Player* killer, Player* killed)
 
 
     ArenaGame* game = &killerGameItr->second;
-    game->PlayerDied(killed);
+    game->PlayerDied(killer, killed);
 }
 
 QueueResult PvPArenaSystem::Queue(Player* player, ArenaType type)
 {
-    auto itr = m_queuedPlayers.find(player->GetObjectGuid());
+    {
+        std::lock_guard<std::recursive_mutex> g(m_lookupLock);
+        std::lock_guard<std::recursive_mutex> g2(m_queueLock);
+        auto itr = m_queuedPlayers.find(player->GetObjectGuid());
 
-    if (itr != m_queuedPlayers.end())
-        return QueueResult::AlreadyInQueue;
+        if (itr != m_queuedPlayers.end())
+            return QueueResult::AlreadyInQueue;
 
-    auto lookupItr = m_playerLookup.find(player->GetObjectGuid());
-    if (lookupItr != m_playerLookup.end())
-        return QueueResult::AlreadyInQueue;
+        auto lookupItr = m_playerLookup.find(player->GetObjectGuid());
+        if (lookupItr != m_playerLookup.end())
+            return QueueResult::AlreadyInQueue;
+    }
 
     PartyInfo info;
     info.LeaderGuid = player->GetObjectGuid();
     info.Type = type;
+    info.WaitingConfirmation = false;
 
     if (type != ArenaType::OnePlayer)
     {
@@ -328,13 +632,13 @@ QueueResult PvPArenaSystem::Queue(Player* player, ArenaType type)
 
         for (auto itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
         {
-            info.Group.push_back(itr->getSource()->GetObjectGuid());
+            info.Group.push_back({ itr->getSource()->GetObjectGuid(), ConfirmationStatus::Blank });
             ChatHandler(itr->getSource()).SendSysMessage("Queued.");
         }
     }
     else
     {
-        info.Group.push_back(player->GetObjectGuid());
+        info.Group.push_back({ player->GetObjectGuid(), ConfirmationStatus::Blank });
         ChatHandler(player).SendSysMessage("Queued.");
     }
 
@@ -343,10 +647,167 @@ QueueResult PvPArenaSystem::Queue(Player* player, ArenaType type)
     return QueueResult::Okay;
 }
 
+void PvPArenaSystem::SetupConfirmation(ConfirmationInfo* info)
+{
+    for (const auto& party : info->Parties)
+    {
+        for (const auto& guidPair : party->Group)
+        {
+            auto player = sObjectMgr.GetPlayer(guidPair.first);
+            if (player)
+            {
+                player->PlayerTalkClass->CloseGossip();
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "I\'m ready", ConfirmationSenderId, info->Arena->Id);
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Leave queue", ConfirmationSenderId,
+                    LeaveQueueAction + info->Arena->Id);
+                player->SEND_GOSSIP_MENU(907, player->GetGUID());
+            }
+        }
+    }
+}
+
+void PvPArenaSystem::ConfirmationReceived(Player* player, bool leave, uint32 arenaId, bool force)
+{
+    ConfirmationInfo* info = nullptr;
+    {
+        std::lock_guard<std::recursive_mutex> g(m_confirmationLock);
+        auto confirmationItr = m_waitingConfirmation.find(arenaId);
+        if (confirmationItr == m_waitingConfirmation.end())
+            return;
+        info = &confirmationItr->second;
+    }
+
+    bool found = false;
+    for (const auto& party : info->Parties)
+    {
+        for (auto& partyPair : party->Group)
+        {
+            if (partyPair.first == player->GetObjectGuid())
+            {
+                if (partyPair.second == ConfirmationStatus::Blank || force)
+                {
+                    found = true;
+                    partyPair.second = leave ? ConfirmationStatus::Declined : ConfirmationStatus::Accepted;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!found) // cheating, doesnt belong to team or already accepted
+        return;
+
+    if (leave)
+        AbortGame(info);
+    else
+    {
+        //check if all parties have accepted, if so, start the game.
+        bool allAccepted = std::all_of(info->Parties.begin(), info->Parties.end(), [](PartyInfo* info)
+            {
+                return std::all_of(info->Group.begin(), info->Group.end(), [](decltype(PartyInfo::Group)::value_type elem)
+                    {
+                        auto player = sObjectMgr.GetPlayer(elem.first);
+                        if (player)
+                            ChatHandler(player).SendSysMessage("Player Accepted.");
+
+                        return elem.second == ConfirmationStatus::Accepted;
+                    });
+            });
+
+
+        if (allAccepted)
+            StartGame(info);
+    }
+}
+
+void PvPArenaSystem::StartGame(ConfirmationInfo* info)
+{
+    //remove from confirmationwait queue, remove players from queue, add to player lookup and init new arenagame.
+
+    PvPArena* arena = info->Arena;
+
+    {
+        std::lock_guard<std::recursive_mutex> g(m_confirmationLock);
+        m_waitingConfirmation.erase(arena->Id);
+    }
+
+    uint32 id = GenerateArenaId();
+    std::vector<ArenaPlayer> players1;
+    std::vector<ArenaPlayer> players2;
+
+    int32 k = 0;
+    {
+        std::lock_guard<std::recursive_mutex> g(m_queueLock);
+
+        for (const auto& party : info->Parties)
+        {
+            for (const auto& playerGuid : party->Group)
+            {
+                k == 0 ? players1.push_back(playerGuid.first) : players2.push_back(playerGuid.first);
+                m_playerLookup.insert({ playerGuid.first, id });
+            }
+            ++k;
+            m_queuedPlayers.erase(party->LeaderGuid);
+        }
+    }
+
+    std::lock_guard<std::recursive_mutex> g(m_activeGamesLock);
+    m_activeGames.insert({ id, ArenaGame{ id, arena, TeamInfo { players1, arena->Type, TeamOrder::Team1}, TeamInfo {players2, arena->Type, TeamOrder::Team2} } });
+    m_activeGames[id].Start();
+
+}
+
+void PvPArenaSystem::AbortGame(ConfirmationInfo* info)
+{
+    PvPArena* arena = info->Arena;
+
+    //re-add arena into free arenas, remove players from queue, remove from confirmationwait queue, schedule queue update
+
+    {
+        std::lock_guard<std::recursive_mutex> g(m_freeArenaLock);
+        m_freeArenas.insert({ arena->Type, std::ref(*arena) });
+    }
+
+
+    //first remove waitingconfirmation, otherwise ::Parties would be dangling.
+    {
+        std::lock_guard<std::recursive_mutex> g(m_confirmationLock);
+        m_waitingConfirmation.erase(arena->Id);
+    }
+
+    //only remove the party of the declinees
+    {
+        std::lock_guard<std::recursive_mutex> g(m_queueLock);
+        for (auto& party : info->Parties)
+        {
+            if (std::any_of(party->Group.begin(), party->Group.end(), [](decltype(PartyInfo::Group)::value_type elem)
+                {
+                    return elem.second == ConfirmationStatus::Declined;
+                }))
+            {
+                m_queuedPlayers.erase(party->LeaderGuid);
+            }
+            else
+            {
+                //else remove waitingconfirmation so the party can be requeued.
+                party->WaitingConfirmation = false;
+                
+                //and remove confirmationstatus
+                for (auto& partyMember : party->Group)
+                {
+                    partyMember.second = ConfirmationStatus::Blank;
+                }
+            }
+        }
+    }
+
+    ScheduleQueueUpdate(); // and off we go
+}
+
+
 void PvPArenaSystem::ScheduleQueueUpdate()
 {
-
-
+    std::lock_guard<std::recursive_mutex> g(m_queueLock);
     std::unordered_map<ArenaType, std::vector<decltype(m_queuedPlayers)::iterator>> queuedPlayers;
 
     for (auto itr = m_queuedPlayers.begin(); itr != m_queuedPlayers.end(); ++itr)
@@ -366,18 +827,25 @@ void PvPArenaSystem::ScheduleQueueUpdate()
         {
             if (!teamInfo1)
             {
-                teamInfo1 = &info->second;
-                team1Itr = info;
+                if (!info->second.WaitingConfirmation)
+                {
+                    teamInfo1 = &info->second;
+                    team1Itr = info;
+                }
             }
             else if (!teamInfo2)
             {
-                teamInfo2 = &info->second;
-                team2Itr = info;
+                if (!info->second.WaitingConfirmation)
+                {
+                    teamInfo2 = &info->second;
+                    team2Itr = info;
+                }
             }
 
             if (teamInfo1 && teamInfo2)
             {
                 //Try to start a game. First check if there are any free arenas.
+                std::lock_guard<std::recursive_mutex> g2(m_freeArenaLock);
                 auto itr = m_freeArenas.find(typePair.first);
                 if (itr == m_freeArenas.end())
                 {
@@ -385,31 +853,17 @@ void PvPArenaSystem::ScheduleQueueUpdate()
                     break;
                 }
 
-                uint32 id = GenerateArenaId();
+                //setup the confirmation for game first.
+                team1Itr->second.WaitingConfirmation = true;
+                team2Itr->second.WaitingConfirmation = true;
 
-                TeamInfo team1;
-                team1.Type = typePair.first;
-                std::vector<ArenaPlayer> players1;
-                for (const auto& plr : teamInfo1->Group)
-                {
-                    players1.push_back(plr);
-                    m_playerLookup.insert({ plr, id });
-                }
-
-                std::vector<ArenaPlayer> players2;
-                for (const auto& plr : teamInfo2->Group)
-                {
-                    players2.push_back(plr);
-                    m_playerLookup.insert({ plr, id });
-                }
-
-                m_queuedPlayers.erase(team1Itr);
-                m_queuedPlayers.erase(team2Itr);
-
-
-                m_activeGames.insert({ id, ArenaGame{ id, &itr->second.get(), TeamInfo { players1, typePair.first}, TeamInfo {players2, typePair.first} }  });
+                auto res = m_waitingConfirmation.insert({ itr->second.get().Id, ConfirmationInfo{&itr->second.get(),
+                     30 * IN_MILLISECONDS,
+                    {teamInfo1, teamInfo2}} });
                 m_freeArenas.erase(itr);
-                m_activeGames[id].Start();
+
+                SetupConfirmation(&res.first->second);
+
 
                 teamInfo1 = nullptr;
                 teamInfo2 = nullptr;

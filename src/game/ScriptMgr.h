@@ -610,7 +610,7 @@ struct Script
         pItemUse(nullptr), pItemUseSpell(nullptr), pEffectDummyCreature(nullptr), pEffectDummyGameObj(nullptr), pEffectDummyItem(nullptr),
         pEffectAuraDummy(nullptr), GOOpen(nullptr),
         GOGetAI(nullptr), GetAI(nullptr), GetQuestInstance(nullptr), GetInstanceData(nullptr), pOnStartup(nullptr), pPlrGossipHello(nullptr), pPlrGossipSelect(nullptr),
-        pPlrGossipSelectWithCode(nullptr), pOnZoneUpdateCheck(nullptr), pOnPlayerRelocation(nullptr), pOnWorldUpdate(nullptr), pOnPvPKill(nullptr)
+        pPlrGossipSelectWithCode(nullptr), pOnZoneUpdateCheck(nullptr), pOnPlayerRelocation(nullptr), pOnWorldUpdate(nullptr), pOnPvPKill(nullptr), pOnPlayerLogout(nullptr)
     {}
 
     std::string Name;
@@ -659,6 +659,7 @@ struct Script
     void (*pOnPlayerRelocation)(Player* player, const MovementInfo* oldInfo, const MovementInfo* newInfo);
     void (*pOnPvPKill)(Player* killer, Player* killed);
     void (*pOnWorldUpdate)(uint32 diff);
+    void (*pOnPlayerLogout)(Player* player);
 
     void RegisterSelfNoBind(ScriptType type);
     void RegisterSelf(bool custom = false);
@@ -775,6 +776,7 @@ class ScriptMgr
         void OnZoneUpdateCheck(Player* player);
         void OnPlayerRelocate(Player* player, const MovementInfo* oldInfo, const MovementInfo* newInfo);
         void OnPvPKill(Player* killer, Player* killed);
+        void OnPlayerLogout(Player* player);
         void OnWorldUpdate(uint32 diff);
 
         typedef std::unordered_map<uint32, Script*> QuestScriptMap;

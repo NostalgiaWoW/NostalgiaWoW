@@ -31,6 +31,7 @@
 #include "Group.h"
 #include "SocialMgr.h"
 #include "Util.h"
+#include "Nostalgia/PvPArenaSystem.h"
 
 /* differeces from off:
     -you can uninvite yourself - is is useful
@@ -122,6 +123,9 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
             return;
         }
     }
+
+    if (!sPvPArenaSystem->HandleGroupInvite(GetPlayer()))
+        return;
 
     // ok, but group not exist, start a new group
     // but don't create and save the group to the DB until
@@ -245,6 +249,9 @@ void WorldSession::HandleGroupUninviteGuidOpcode(WorldPacket & recv_data)
     if (!grp)
         return;
 
+    if (!sPvPArenaSystem->HandleGroupRemovePlayer(GetPlayer()))
+        return;
+
     if (grp->IsMember(guid))
     {
         Player::RemoveFromGroup(grp, guid);
@@ -278,6 +285,9 @@ void WorldSession::HandleGroupUninviteOpcode(WorldPacket & recv_data)
 
     Group* grp = GetPlayer()->GetGroup();
     if (!grp)
+        return;
+
+    if (!sPvPArenaSystem->HandleGroupRemovePlayer(GetPlayer()))
         return;
 
     if (ObjectGuid guid = grp->GetMemberGuid(membername))
