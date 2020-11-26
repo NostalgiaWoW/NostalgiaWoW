@@ -6722,9 +6722,9 @@ void Player::UpdateArea(uint32 newArea)
     }
 
     if (!isGameMaster())
-    {           // Force faction change at shop mall & arena
+    {           // Force faction change at shop mall
         
-            if (areaEntry->Id == 2401 || areaEntry->Id == 1637)
+            if (areaEntry->Id == 2401)
                 setFaction(35);
             else if (getFaction() == 35)
                 setFactionForRace(getRace());
