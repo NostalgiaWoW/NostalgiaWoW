@@ -42,13 +42,13 @@ bool GossipHello_ArenaPortalPhaseNPC(Player* player, Creature* _Creature)
         portal->MonsterSay(-1999603);
     
     
-    return true;
+	return true;
 }
 
 // Boat Teleport NPC (Nostalgia WoW)
 bool GossipHello_BoatTeleportNPC(Player* player, Creature* _Creature)
 {
-	player->ADD_GOSSIP_ITEM(2, "Adventurer Ship (Quests Available)", GOSSIP_SENDER_MAIN, 91);
+	//player->ADD_GOSSIP_ITEM(2, "Adventurer Ship (Quests Available)", GOSSIP_SENDER_MAIN, 91);
 	player->ADD_GOSSIP_ITEM(2, "Warrior's Ship (Epic Gear Vendors)", GOSSIP_SENDER_MAIN, 92);
 	player->ADD_GOSSIP_ITEM(2, "Apprentice's Ship (Blue Gear Vendors)", GOSSIP_SENDER_MAIN, 93);
 	player->ADD_GOSSIP_ITEM(2, "Training Ship (Class Trainers)", GOSSIP_SENDER_MAIN, 94);
@@ -61,21 +61,21 @@ void SendDefaultMenu_BoatTeleportNPC(Player* player, Creature* _Creature, uint32
 {
 	switch (action)
 	{
-		case 91:
-			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
-			break;
+		//case 91:
+			//player->CLOSE_GOSSIP_MENU();
+			//player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			//break;
 		case 92:
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			player->TeleportTo(0, -1892.98, -4352.19, 6.10, 3.45f);
 			break;
 		case 93:
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			player->TeleportTo(0, -1942.56, -4263.59, 5.93, 3.67f);
 			break;
 		case 94:
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			player->TeleportTo(0, -1759.90, -4367.84, 6.10, 2.73f);
 			break;
 	}
 }
@@ -92,7 +92,7 @@ bool GossipHello_TeleportNPC(Player *player, Creature *_Creature)
 		player->ADD_GOSSIP_ITEM(5, "Nostalgia WoW Mall",		GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Profession Zone (NOT DONE)",	GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Duel Zone (NOT DONE)",			GOSSIP_SENDER_MAIN, 90);
-		player->ADD_GOSSIP_ITEM(5, "Pet Zone (NOT DONE)",			GOSSIP_SENDER_MAIN, 90);
+		player->ADD_GOSSIP_ITEM(5, "Pet Zone",			GOSSIP_SENDER_MAIN, 90);
         player->ADD_GOSSIP_ITEM(5, "Major Cities"               , GOSSIP_SENDER_MAIN, 1);
         //player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 3);
         //player->ADD_GOSSIP_ITEM(5, "Instances"            , GOSSIP_SENDER_MAIN, 5);
@@ -110,7 +110,7 @@ bool GossipHello_TeleportNPC(Player *player, Creature *_Creature)
 		player->ADD_GOSSIP_ITEM(5, "Nostalgia WoW Mall", GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Profession Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Duel Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
-		player->ADD_GOSSIP_ITEM(5, "Pet Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
+		player->ADD_GOSSIP_ITEM(5, "Pet Zone", GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Major Cities", GOSSIP_SENDER_MAIN, 1);
         //player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 4);
         //player->ADD_GOSSIP_ITEM(5, "Instances"            , GOSSIP_SENDER_MAIN, 5);
@@ -270,7 +270,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
 // ----### NOSTALGIA WOW ###----
 		case 90: // Mall
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1847.98, -4246.67, 2.13, 0.89f);
+			player->TeleportTo(0, -10736.35, -2474.02, 6.41, 4.685f);
 			break;
 
 // ----### CITIES ###----
@@ -613,12 +613,12 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
         case 100: // Main Menu
             // HORDE
             if (player->GetTeam() == HORDE)
-            {
+			{
 				// player->ADD_GOSSIP_ITEM(5, "PreTBC Mall"          , GOSSIP_SENDER_MAIN, 74);
 				player->ADD_GOSSIP_ITEM(5, "Nostalgia WoW Mall", GOSSIP_SENDER_MAIN, 90);
-				player->ADD_GOSSIP_ITEM(5, "Profession Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
+				//player->ADD_GOSSIP_ITEM(5, "Profession Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
 				player->ADD_GOSSIP_ITEM(5, "Duel Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
-				player->ADD_GOSSIP_ITEM(5, "Pet Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
+				player->ADD_GOSSIP_ITEM(5, "Pet Zone", GOSSIP_SENDER_MAIN, 90);
 				player->ADD_GOSSIP_ITEM(5, "Major Cities", GOSSIP_SENDER_MAIN, 1);
 				//player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 3);
 				//player->ADD_GOSSIP_ITEM(5, "Instances"            , GOSSIP_SENDER_MAIN, 5);
@@ -627,26 +627,26 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
 				//player->ADD_GOSSIP_ITEM(5, "Zones - Kalimdor"     , GOSSIP_SENDER_MAIN, 6010);
 				//player->ADD_GOSSIP_ITEM(5, "Zones - Eastern Kingdoms"     , GOSSIP_SENDER_MAIN, 6020);
 
-                player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
-            }
-            // ALLIANCE
-            else
-            {
-				// player->ADD_GOSSIP_ITEM(5, "PreTBC Mall"          , GOSSIP_SENDER_MAIN, 74);
+				player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+			}
+			// ALLIANCE
+			else
+			{
+				//player->ADD_GOSSIP_ITEM(5, "PreTBC Mall"          , GOSSIP_SENDER_MAIN, 74);
 				player->ADD_GOSSIP_ITEM(5, "Nostalgia WoW Mall", GOSSIP_SENDER_MAIN, 90);
-				player->ADD_GOSSIP_ITEM(5, "Profession Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
+				//player->ADD_GOSSIP_ITEM(5, "Profession Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
 				player->ADD_GOSSIP_ITEM(5, "Duel Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
-				player->ADD_GOSSIP_ITEM(5, "Pet Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
+				player->ADD_GOSSIP_ITEM(5, "Pet Zone", GOSSIP_SENDER_MAIN, 90);
 				player->ADD_GOSSIP_ITEM(5, "Major Cities", GOSSIP_SENDER_MAIN, 1);
-				//player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 3);
+				//player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 4);
 				//player->ADD_GOSSIP_ITEM(5, "Instances"            , GOSSIP_SENDER_MAIN, 5);
 				player->ADD_GOSSIP_ITEM(5, "Raids", GOSSIP_SENDER_MAIN, 101);
 				//player->ADD_GOSSIP_ITEM(5, "Gurubashi Arena" , GOSSIP_SENDER_MAIN, 4015);
 				//player->ADD_GOSSIP_ITEM(5, "Zones - Kalimdor"     , GOSSIP_SENDER_MAIN, 6010);
 				//player->ADD_GOSSIP_ITEM(5, "Zones - Eastern Kingdoms"     , GOSSIP_SENDER_MAIN, 6020);
 
-                player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
-            }
+				player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+			}
             break;
     }
 }
