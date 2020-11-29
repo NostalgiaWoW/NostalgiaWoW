@@ -1005,8 +1005,128 @@ bool GossipHello_ProfessionNPC(Player* player, Creature* creature)
     player->PlayerTalkClass->SendGossipMenu(1, creature->GetGUID());
 
     player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
+	player->SEND_VENDORLIST(creature->GetGUID());
     return true;
 }
+
+
+bool GossipHello_ProfessionAlchemyNPC(Player* player, Creature* creature)
+{
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Alchemy", GOSSIP_SENDER_MAIN, 1);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionBlacksmithingNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Blacksmithing", GOSSIP_SENDER_MAIN, 2);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionLeatherworkingNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Leatherworking", GOSSIP_SENDER_MAIN, 3);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionTailoringNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Tailoring", GOSSIP_SENDER_MAIN, 4);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionEngineeringNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Engineering", GOSSIP_SENDER_MAIN, 5);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionEnchantingNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Enchanting", GOSSIP_SENDER_MAIN, 6);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionHerbalismNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Herbalism", GOSSIP_SENDER_MAIN, 9);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionSkinningNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Skinning", GOSSIP_SENDER_MAIN, 10);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionMiningNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Mining", GOSSIP_SENDER_MAIN, 11);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionFirstAidNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "First Aid", GOSSIP_SENDER_MAIN, 12);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionFishingNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Fishing", GOSSIP_SENDER_MAIN, 13);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+bool GossipHello_ProfessionCookingNPC(Player* player, Creature* creature)
+{
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Cooking", GOSSIP_SENDER_MAIN, 14);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
+	creature->HandleEmote(EMOTE_ONESHOT_BOW);
+	return true;
+}
+
+
+
 void CompleteLearnProfession(Player *pPlayer, Creature *pCreature, SkillType skill)
 {
     if (pPlayer->GetFreePrimaryProfessionPoints() == 0 && !(skill == SKILL_COOKING || skill == SKILL_FIRST_AID))
@@ -1026,7 +1146,6 @@ bool GossipSelect_ProfessionNPC(Player* player, Creature* creature, uint32 sende
     case 1:
         if (!player->HasSkill(SKILL_ALCHEMY))
             CompleteLearnProfession(player, creature, SKILL_ALCHEMY);
-        break;
     case 2:
         if (!player->HasSkill(SKILL_BLACKSMITHING))
             CompleteLearnProfession(player, creature, SKILL_BLACKSMITHING);
@@ -1075,7 +1194,9 @@ bool GossipSelect_ProfessionNPC(Player* player, Creature* creature, uint32 sende
             CompleteLearnProfession(player, creature, SKILL_COOKING);
         break;
     }
-
+	if (creature->isVendor()) {
+		player->SEND_VENDORLIST(creature->GetGUID());
+	} else
     player->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -1267,4 +1388,75 @@ void AddSC_custom_creatures()
 	newscript->pGossipSelect = &GossipSelect_BoatTeleportNPC;
 	newscript->RegisterSelf(true);
 
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsAlchemyNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionAlchemyNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsBlacksmithingNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionBlacksmithingNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsLeatherworkingNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionLeatherworkingNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsTailoringNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionTailoringNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsEnginerringNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionEngineeringNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsEnchantingNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionEnchantingNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsHerbalismNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionHerbalismNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsSkinningNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionSkinningNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsMiningNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionMiningNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsFirstAidNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionFirstAidNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsFishingNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionFishingNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_ProfessionsCookingNPC";
+	newscript->pGossipHello = &GossipHello_ProfessionCookingNPC;
+	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
 }
