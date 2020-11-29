@@ -270,7 +270,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
 // ----### NOSTALGIA WOW ###----
 		case 90: // Mall
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -10736.35, -2474.02, 6.41, 4.685f);
+			player->TeleportTo(0, -1847.80, -4244.382, 2.13, 1.05f);
 			break;
 
 // ----### CITIES ###----
