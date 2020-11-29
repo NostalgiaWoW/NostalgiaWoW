@@ -1013,7 +1013,7 @@ bool GossipHello_ProfessionNPC(Player* player, Creature* creature)
 bool GossipHello_ProfessionAlchemyNPC(Player* player, Creature* creature)
 {
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Alchemy", GOSSIP_SENDER_MAIN, 1);
-	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, 15);
 	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
 	creature->HandleEmote(EMOTE_ONESHOT_BOW);
 	return true;
@@ -1023,7 +1023,7 @@ bool GossipHello_ProfessionBlacksmithingNPC(Player* player, Creature* creature)
 {
 
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Blacksmithing", GOSSIP_SENDER_MAIN, 2);
-	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, 15);
 	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
 	creature->HandleEmote(EMOTE_ONESHOT_BOW);
 	return true;
@@ -1033,7 +1033,7 @@ bool GossipHello_ProfessionLeatherworkingNPC(Player* player, Creature* creature)
 {
 
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Leatherworking", GOSSIP_SENDER_MAIN, 3);
-	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, 15);
 	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
 	creature->HandleEmote(EMOTE_ONESHOT_BOW);
 	return true;
@@ -1052,7 +1052,7 @@ bool GossipHello_ProfessionEngineeringNPC(Player* player, Creature* creature)
 {
 
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Engineering", GOSSIP_SENDER_MAIN, 5);
-	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, 15);
 	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
 	creature->HandleEmote(EMOTE_ONESHOT_BOW);
 	return true;
@@ -1062,7 +1062,7 @@ bool GossipHello_ProfessionEnchantingNPC(Player* player, Creature* creature)
 {
 
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Enchanting", GOSSIP_SENDER_MAIN, 6);
-	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, 15);
 	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
 	creature->HandleEmote(EMOTE_ONESHOT_BOW);
 	return true;
@@ -1090,7 +1090,7 @@ bool GossipHello_ProfessionMiningNPC(Player* player, Creature* creature)
 {
 
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Mining", GOSSIP_SENDER_MAIN, 11);
-	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, 15);
 	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
 	creature->HandleEmote(EMOTE_ONESHOT_BOW);
 	return true;
@@ -1109,7 +1109,7 @@ bool GossipHello_ProfessionFishingNPC(Player* player, Creature* creature)
 {
 
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Fishing", GOSSIP_SENDER_MAIN, 13);
-	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, 15);
 	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
 	creature->HandleEmote(EMOTE_ONESHOT_BOW);
 	return true;
@@ -1119,7 +1119,7 @@ bool GossipHello_ProfessionCookingNPC(Player* player, Creature* creature)
 {
 
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Cooking", GOSSIP_SENDER_MAIN, 14);
-	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, 15);
 	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
 	creature->HandleEmote(EMOTE_ONESHOT_BOW);
 	return true;
@@ -1193,10 +1193,10 @@ bool GossipSelect_ProfessionNPC(Player* player, Creature* creature, uint32 sende
         if (!player->HasSkill(SKILL_COOKING))
             CompleteLearnProfession(player, creature, SKILL_COOKING);
         break;
-    }
-	if (creature->isVendor()) {
+	case 15:
 		player->SEND_VENDORLIST(creature->GetGUID());
-	} else
+    }
+
     player->CLOSE_GOSSIP_MENU();
     return true;
 }
