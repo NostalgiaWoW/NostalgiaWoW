@@ -916,7 +916,7 @@ VALUES
 (6001115, 22085, 100, 0, 1, 1, 0);
 
 -- Vendor update
-DELETE FROM npc_vendor_template WHERE entry = 1200020
+DELETE FROM npc_vendor_template WHERE entry = 1200020;
 DELETE FROM `npc_vendor_template` WHERE `entry`=1200020 AND `item`=6001107;
 INSERT INTO `npc_vendor_template` (`entry`, `item`, `maxcount`, `incrtime`, `conditionId`) VALUES (1200020, 6001107, 0, 0, 0);
 DELETE FROM `npc_vendor_template` WHERE `entry`=1200020 AND `item`=6001108;

@@ -46,8 +46,3 @@ END??
 delimiter ; 
 CALL add_migration();
 DROP PROCEDURE IF EXISTS add_migration;
-
-
-
-
-1637
