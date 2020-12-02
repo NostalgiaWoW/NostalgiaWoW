@@ -67,11 +67,11 @@ void SendDefaultMenu_BoatTeleportNPC(Player* player, Creature* _Creature, uint32
 			//break;
 		case 92:
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1944.31, -4352.65, 6.09, 5.86f);
+			player->TeleportTo(0, -1943.60, -4352.58, 6.09, 5.86f);
 			break;
 		case 93:
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1990.74, -4278.37, 5.93, 6.09f);
+			player->TeleportTo(0, -1990.34, -4278.39, 5.93, 6.09f);
 			break;
 		case 94:
 			player->CLOSE_GOSSIP_MENU();
