@@ -67,15 +67,15 @@ void SendDefaultMenu_BoatTeleportNPC(Player* player, Creature* _Creature, uint32
 			//break;
 		case 92:
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1892.98, -4352.19, 6.10, 3.45f);
+			player->TeleportTo(0, -1944.31, -4352.65, 6.09, 5.86f);
 			break;
 		case 93:
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1942.56, -4263.59, 5.93, 3.67f);
+			player->TeleportTo(0, -1990.74, -4278.37, 5.93, 6.09f);
 			break;
 		case 94:
 			player->CLOSE_GOSSIP_MENU();
-			player->TeleportTo(0, -1759.90, -4367.84, 6.10, 2.73f);
+			player->TeleportTo(0, -1799.76, -4336.80, 6.10, 5.10f);
 			break;
 	}
 }
@@ -1342,6 +1342,256 @@ bool GossipSelect_TransmogNPC(Player* player, Creature* creature, uint32 sender,
     return true;
 }
 
+// NOTE: Nostalgia WoW AOE Spell Cast for Horde & Alliance Buffs
+struct SpawnLocation
+{
+	float m_fX, m_fY, m_fZ;
+};
+
+static const SpawnLocation aRallyGeneratorLocs[6] =
+{
+	{ -1812.83f, -4191.94f, 4.78f }, // (Middle)
+	{ -1878.186f, -4325.56f, 0.00f }, // (East)
+	{ -1972.38f, -4083.60f, 2.04f }, // (South)
+	{ -1820.36f, -4050.87f, 55.79f }, // (West)
+	{ -1669.12f, -4230.29f, 1.99f }, // (North)
+
+};
+
+enum
+{
+	SPELL_RALLYING_CRY_DRAGONSLAYER = 22888,
+	SPELL_WARCHIEF_BLESSING = 16609,
+	NPC_RALLY_CRY_GENERATOR = 1201165,
+
+	MAX_RALLY_GENERATORS = 5,
+
+	QUEST_ONY_HORDE = 30150,
+	QUEST_ONY_ALLIANCE = 30154,
+	QUEST_NEF_HORDE = 30151,
+	QUEST_NEF_ALLIANCE = 30153,
+	QUEST_WARCHIEF = 30152,
+
+	YELL_ONY_REWARD_1 = -1901174,
+	YELL_ONY_REWARD_2 = -1901173,
+
+	YELL_NEF_REWARD_1 = -1901171,
+	YELL_NEF_REWARD_2 = -1901172,
+
+	YELL_WARCHIEF_BLESSING_1 = -1901175,
+	YELL_WARCHIEF_BLESSING_2 = -1901176,
+
+	GO_NEFARIANS_HEAD_HORDE = 179881,
+	GO_ONYXIAS_HEAD_HORDE = 179556
+};
+
+struct MallAOESpellNPCAI : public ScriptedAI
+{
+	MallAOESpellNPCAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+	uint32 m_uiTick;
+	uint32 m_uiDialogueTimer;
+	bool m_bRallyingCryEvent;
+	ObjectGuid m_playerGuid;
+	uint32 m_currentQuest;
+
+	void SetCurrentQuest(uint32 currentQuest)
+	{
+		m_currentQuest = currentQuest;
+	}
+
+	void Reset()
+	{
+		m_uiTick = 0;
+		m_uiDialogueTimer = 2000;
+		m_bRallyingCryEvent = false;
+		m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
+		m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+	}
+
+	void StartRallyEvent(ObjectGuid playerGuid)
+	{
+		m_playerGuid = playerGuid;
+		m_bRallyingCryEvent = true;
+		m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
+		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+	}
+
+	void MovementInform(uint32 uiType, uint32 uiPointId)
+	{
+		if (uiType != POINT_MOTION_TYPE)
+			return;
+
+		switch (uiPointId)
+		{
+		case 0:
+			m_creature->GetMotionMaster()->MovePoint(1, -1812.9903, -4179.3437f, 7.350588f);
+			break;
+		case 1:
+			m_uiDialogueTimer = 1000;
+			m_uiTick++;
+			break;
+		case 2:
+			m_creature->GetMotionMaster()->MovePoint(3, -1822.05f, -4189.0239f, 3.99778f);
+			break;
+		case 3:
+			Reset();
+			break;
+		}
+	}
+
+	void UpdateAI(uint32 const uiDiff)
+	{
+
+		if (m_bRallyingCryEvent)
+		{
+			if (m_uiDialogueTimer <= uiDiff)
+			{
+				switch (m_uiTick)
+				{
+				case 0:
+					m_creature->GetMotionMaster()->MovePoint(0, -1813.31f, -4177.73f, 7.77f, MOVE_PATHFINDING);
+					m_uiDialogueTimer = 30000; //handled by MovementInform
+					break;
+				case 1:
+					if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_playerGuid))
+					{
+						if (m_currentQuest == QUEST_ONY_ALLIANCE || m_currentQuest == QUEST_ONY_HORDE) {
+							m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
+							m_creature->MonsterYellToZone(YELL_ONY_REWARD_1, 0, pPlayer);
+						}
+						else if (m_currentQuest == QUEST_NEF_HORDE || m_currentQuest == QUEST_NEF_ALLIANCE) {
+							m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
+							m_creature->MonsterYellToZone(YELL_NEF_REWARD_1, 0, pPlayer);
+						}
+						else if (m_currentQuest == QUEST_WARCHIEF) {
+							m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
+							m_creature->MonsterYellToZone(YELL_WARCHIEF_BLESSING_1, 0, pPlayer);
+						}
+					}
+
+					if (m_currentQuest == QUEST_ONY_ALLIANCE || m_currentQuest == QUEST_ONY_HORDE)
+					{
+
+						if (GameObject* pGo = m_creature->FindNearestGameObject(GO_ONYXIAS_HEAD_HORDE, 150.0f)) 
+						{
+
+							if (!pGo->isSpawned())
+							{
+								pGo->SetRespawnTime(7200);
+								pGo->Refresh();
+							}
+						}
+
+					}
+					else if (m_currentQuest == QUEST_NEF_HORDE || m_currentQuest == QUEST_NEF_ALLIANCE)
+					{
+
+						if (GameObject* pGo = m_creature->FindNearestGameObject(GO_NEFARIANS_HEAD_HORDE, 150.0f))
+						{
+
+							if (!pGo->isSpawned())
+							{
+								pGo->SetRespawnTime(7200);
+								pGo->Refresh();
+							}
+						}
+					}
+						
+					m_uiDialogueTimer = 8000;
+					m_uiTick++;
+					break;
+					
+				case 2:
+					if (m_currentQuest == QUEST_ONY_ALLIANCE || m_currentQuest == QUEST_ONY_HORDE) {
+						m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
+						m_creature->MonsterYellToZone(YELL_ONY_REWARD_2);
+
+						if (GameObject* pGo = m_creature->FindNearestGameObject(GO_ONYXIAS_HEAD_HORDE, 150.0f))
+						{
+							pGo->SetGoState(GO_STATE_ACTIVE);
+						}
+					}
+					else if (m_currentQuest == QUEST_NEF_HORDE || m_currentQuest == QUEST_NEF_ALLIANCE) {
+						m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
+						m_creature->MonsterYellToZone(YELL_NEF_REWARD_2);
+
+						if (GameObject* pGo = m_creature->FindNearestGameObject(GO_NEFARIANS_HEAD_HORDE, 150.0f))
+						{
+							pGo->SetGoState(GO_STATE_ACTIVE);
+						}
+					}
+
+					else if (m_currentQuest == QUEST_WARCHIEF) {
+						m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
+						m_creature->MonsterYellToZone(YELL_WARCHIEF_BLESSING_2);
+						}
+					m_uiDialogueTimer = 7000;
+					m_uiTick++;
+					break;
+				
+				case 3:
+					m_creature->CastSpell(m_creature, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
+					for (uint8 i = 0; i < MAX_RALLY_GENERATORS; ++i)
+					{
+						if (Creature* pGenerator = m_creature->SummonCreature(NPC_RALLY_CRY_GENERATOR, aRallyGeneratorLocs[i].m_fX, aRallyGeneratorLocs[i].m_fY, aRallyGeneratorLocs[i].m_fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 1000))
+							pGenerator->CastSpell(pGenerator, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
+					}
+					m_uiDialogueTimer = 2000;
+					m_uiTick++;
+					break;
+				case 4:
+					m_creature->GetMotionMaster()->MovePoint(2, -1822.32f, -4188.29f, 4.05919f);
+					m_uiDialogueTimer = 30000; //handled by MovementInform
+					return;
+					
+				}
+			}
+			else m_uiDialogueTimer -= uiDiff;
+		}
+
+		if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+			return;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_MallAOESpellNPC(Creature* pCreature)
+{
+	return new MallAOESpellNPCAI(pCreature);
+}
+
+bool QuestRewarded_MallAOESpellNPC(Player* pPlayer, Creature* pCreature, Quest const* quest)
+{
+	uint32 currentQuest = quest->GetQuestId();
+
+	if (MallAOESpellNPCAI* pAOESpellNPC = dynamic_cast<MallAOESpellNPCAI*>(pCreature->AI()))
+		pAOESpellNPC->SetCurrentQuest(currentQuest);
+
+	if (quest->GetQuestId() == QUEST_ONY_ALLIANCE || quest->GetQuestId() == QUEST_ONY_HORDE)
+	{
+		if (MallAOESpellNPCAI* pAOESpellNPC = dynamic_cast<MallAOESpellNPCAI*>(pCreature->AI()))
+			pAOESpellNPC->StartRallyEvent(pPlayer->GetObjectGuid());
+	}
+
+	else if (quest->GetQuestId() == QUEST_NEF_HORDE || quest->GetQuestId() == QUEST_NEF_ALLIANCE)
+	{
+		if (MallAOESpellNPCAI* pAOESpellNPC = dynamic_cast<MallAOESpellNPCAI*>(pCreature->AI()))
+			pAOESpellNPC->StartRallyEvent(pPlayer->GetObjectGuid());
+	}
+
+	else if (quest->GetQuestId() == QUEST_WARCHIEF)
+	{
+		if (MallAOESpellNPCAI* pAOESpellNPC = dynamic_cast<MallAOESpellNPCAI*>(pCreature->AI()))
+			pAOESpellNPC->StartRallyEvent(pPlayer->GetObjectGuid());
+	}
+	return true;
+}
+
+
 void AddSC_custom_creatures()
 {
     Script *newscript;
@@ -1458,5 +1708,11 @@ void AddSC_custom_creatures()
 	newscript->Name = "custom_ProfessionsCookingNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionCookingNPC;
 	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_MallAOESpellNPC";
+	newscript->GetAI = &GetAI_MallAOESpellNPC;
+	newscript->pQuestRewardedNPC = &QuestRewarded_MallAOESpellNPC;
 	newscript->RegisterSelf(true);
 }
