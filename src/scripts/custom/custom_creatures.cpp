@@ -1507,7 +1507,7 @@ struct MallAOESpellNPCAI : public ScriptedAI
 				case 2:
 					if (m_currentQuest == QUEST_ONY_ALLIANCE || m_currentQuest == QUEST_ONY_HORDE) {
 						m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
-						m_creature->MonsterYellToZone(YELL_ONY_REWARD_2);
+						m_creature->MonsterYellToZone(YELL_ONY_REWARD_2, 0);
 
 						if (GameObject* pGo = m_creature->FindNearestGameObject(GO_ONYXIAS_HEAD_HORDE, 150.0f))
 						{
@@ -1516,24 +1516,24 @@ struct MallAOESpellNPCAI : public ScriptedAI
 					}
 					else if (m_currentQuest == QUEST_NEF_HORDE || m_currentQuest == QUEST_NEF_ALLIANCE) {
 						m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
-						m_creature->MonsterYellToZone(YELL_NEF_REWARD_2);
+						m_creature->MonsterYellToZone(YELL_NEF_REWARD_2, 0);
 
 						if (GameObject* pGo = m_creature->FindNearestGameObject(GO_NEFARIANS_HEAD_HORDE, 150.0f))
 						{
 							pGo->SetGoState(GO_STATE_ACTIVE);
 						}
 					}
-
 					else if (m_currentQuest == QUEST_WARCHIEF) {
 						m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
 						m_creature->MonsterYellToZone(YELL_WARCHIEF_BLESSING_2);
 						}
+
 					m_uiDialogueTimer = 7000;
 					m_uiTick++;
 					break;
 				
 				case 3:
-					if (m_currentQuest == QUEST_ONY_ALLIANCE || m_currentQuest == QUEST_ONY_HORDE) {
+					if (m_currentQuest == QUEST_ONY_ALLIANCE || m_currentQuest == QUEST_ONY_HORDE || m_currentQuest == QUEST_NEF_HORDE || m_currentQuest == QUEST_NEF_ALLIANCE) {
 						m_creature->CastSpell(m_creature, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
 						for (uint8 i = 0; i < MAX_RALLY_GENERATORS; ++i)
 						{
