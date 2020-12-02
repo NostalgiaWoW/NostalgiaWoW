@@ -1533,11 +1533,22 @@ struct MallAOESpellNPCAI : public ScriptedAI
 					break;
 				
 				case 3:
-					m_creature->CastSpell(m_creature, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
-					for (uint8 i = 0; i < MAX_RALLY_GENERATORS; ++i)
-					{
-						if (Creature* pGenerator = m_creature->SummonCreature(NPC_RALLY_CRY_GENERATOR, aRallyGeneratorLocs[i].m_fX, aRallyGeneratorLocs[i].m_fY, aRallyGeneratorLocs[i].m_fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 1000))
-							pGenerator->CastSpell(pGenerator, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
+					if (m_currentQuest == QUEST_ONY_ALLIANCE || m_currentQuest == QUEST_ONY_HORDE) {
+						m_creature->CastSpell(m_creature, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
+						for (uint8 i = 0; i < MAX_RALLY_GENERATORS; ++i)
+						{
+							if (Creature* pGenerator = m_creature->SummonCreature(NPC_RALLY_CRY_GENERATOR, aRallyGeneratorLocs[i].m_fX, aRallyGeneratorLocs[i].m_fY, aRallyGeneratorLocs[i].m_fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 1000))
+								pGenerator->CastSpell(pGenerator, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
+						}
+					}
+					else if (m_currentQuest == QUEST_WARCHIEF) {
+
+						m_creature->CastSpell(m_creature, SPELL_WARCHIEF_BLESSING, true);
+						for (uint8 i = 0; i < MAX_RALLY_GENERATORS; ++i)
+						{
+							if (Creature* pGenerator = m_creature->SummonCreature(NPC_RALLY_CRY_GENERATOR, aRallyGeneratorLocs[i].m_fX, aRallyGeneratorLocs[i].m_fY, aRallyGeneratorLocs[i].m_fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 1000))
+								pGenerator->CastSpell(pGenerator, SPELL_WARCHIEF_BLESSING, true);
+						}
 					}
 					m_uiDialogueTimer = 2000;
 					m_uiTick++;
