@@ -491,28 +491,28 @@ bool ChatHandler::HandleInspectModCommand(char* args)
 
     return true;
 }
-
-bool ChatHandler::HandleQueueArenaCommand(char* args)
-{
-    auto player = GetSession()->GetPlayer();
-
-    player->PlayerTalkClass->ClearMenus();
-
-    if (sPvPArenaSystem->IsInQueue(player))
-    {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Leave Queue", PvPArenaSystem::SenderId, 10);
-    }
-    else
-    {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "1v1", PvPArenaSystem::SenderId, 1);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "2v2", PvPArenaSystem::SenderId, 2);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "3v3", PvPArenaSystem::SenderId, 3);
-    }
-
-    player->SEND_GOSSIP_MENU(907, player->GetObjectGuid());
-
-    return true;
-}
+// Deprecated. Put into ArenaCommand.
+//bool ChatHandler::HandleQueueArenaCommand(char* args)
+//{
+//    auto player = GetSession()->GetPlayer();
+//
+//    player->PlayerTalkClass->ClearMenus();
+//
+//    if (sPvPArenaSystem->IsInQueue(player))
+//    {
+//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Leave Queue", PvPArenaSystem::SenderId, 10);
+//    }
+//    else
+//    {
+//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "1v1", PvPArenaSystem::SenderId, 1);
+//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "2v2", PvPArenaSystem::SenderId, 2);
+//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "3v3", PvPArenaSystem::SenderId, 3);
+//    }
+//
+//    player->SEND_GOSSIP_MENU(907, player->GetObjectGuid());
+//
+//    return true;
+//}
 
 bool ChatHandler::HandleArenaCommand(char* args)
 {

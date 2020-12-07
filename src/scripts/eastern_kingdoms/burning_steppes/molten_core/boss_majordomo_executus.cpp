@@ -110,10 +110,10 @@ struct boss_majordomoAI : public ScriptedAI
         AddsAlive = 8;
         Immune = 0;
 
-        while (Creature* Add = m_creature->FindNearestCreature(11663, 100.0f, true))
+        while (Creature* Add = m_creature->FindNearestCreature(11663, 250.0f, true))
             Add->ForcedDespawn();
 
-        while (Creature* Add = m_creature->FindNearestCreature(11664, 100.0f, true))
+        while (Creature* Add = m_creature->FindNearestCreature(11664, 250.0f, true))
             Add->ForcedDespawn();
 
         TeleportInstantly = false;
