@@ -5,6 +5,7 @@
 #include "GossipDef.h"
 #include "ScriptedGossip.h"
 #include <sstream>
+#include <mutex>
 
 #define AURA_ROOT 23973
 

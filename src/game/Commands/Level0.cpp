@@ -513,3 +513,25 @@ bool ChatHandler::HandleQueueArenaCommand(char* args)
 
     return true;
 }
+
+bool ChatHandler::HandleArenaCommand(char* args)
+{
+	auto player = GetSession()->GetPlayer();
+
+	player->PlayerTalkClass->ClearMenus();
+
+	if (sPvPArenaSystem->IsInQueue(player))
+	{
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Leave Queue", PvPArenaSystem::SenderId, 10);
+	}
+	else {
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Queue Arena", PvPArenaSystem::CommandSenderId, 4);
+	}
+
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Spectate Arena", PvPArenaSystem::CommandSenderId, 5);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Your PvP Stats", PvPArenaSystem::CommandSenderId, 6);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "View Top Arena Players", PvPArenaSystem::CommandSenderId, 7);
+
+	player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
+	return true;
+}

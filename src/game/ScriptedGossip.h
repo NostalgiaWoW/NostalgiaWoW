@@ -51,6 +51,7 @@ enum
     GOSSIP_ACTION_INN_INFO         = 11,
     GOSSIP_ACTION_UNLEARN          = 12,
     GOSSIP_ACTION_INFO_DEF         = 1000,
+	GOSSIP_ACTION_INFO_DEF_2	   = 2000,
 
     GOSSIP_SENDER_MAIN             = 1,
     GOSSIP_SENDER_INN_INFO         = 2,
