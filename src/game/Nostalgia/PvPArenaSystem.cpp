@@ -151,6 +151,13 @@ void ArenaGame::Update(uint32 diff)
     }
 }
 
+
+void ArenaGame::AddSpectator(Player* player)
+{
+
+}
+
+
 void ArenaGame::EventArenaActive()
 {
     DoForAllPlayers([](ObjectGuid playerGuid, const TeamInfo& playerTeam, const ArenaPlayer& arenaPlayer)

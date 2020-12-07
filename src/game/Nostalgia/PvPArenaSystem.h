@@ -127,6 +127,7 @@ public:
     void EndGame(OutcomeResult result);
     void EventArenaActive();
     void ToggleDoors(bool open);
+    void AddSpectator(Player* player);
 
     static void RestoreResources(Player* player);
 
@@ -149,6 +150,7 @@ private:
     EventMap m_events;
     uint32 m_gameId;
     std::array<TeamInfo, 2> m_teams;
+    std::vector<ArenaPlayer> m_specatators;
     PvPArena* m_arena;
     Map* m_map;
     bool m_earlyConditionsCheck;
