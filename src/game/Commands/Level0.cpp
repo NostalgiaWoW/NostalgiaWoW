@@ -491,25 +491,47 @@ bool ChatHandler::HandleInspectModCommand(char* args)
 
     return true;
 }
+// Deprecated. Put into ArenaCommand.
+//bool ChatHandler::HandleQueueArenaCommand(char* args)
+//{
+//    auto player = GetSession()->GetPlayer();
+//
+//    player->PlayerTalkClass->ClearMenus();
+//
+//    if (sPvPArenaSystem->IsInQueue(player))
+//    {
+//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Leave Queue", PvPArenaSystem::SenderId, 10);
+//    }
+//    else
+//    {
+//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "1v1", PvPArenaSystem::SenderId, 1);
+//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "2v2", PvPArenaSystem::SenderId, 2);
+//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "3v3", PvPArenaSystem::SenderId, 3);
+//    }
+//
+//    player->SEND_GOSSIP_MENU(907, player->GetObjectGuid());
+//
+//    return true;
+//}
 
-bool ChatHandler::HandleQueueArenaCommand(char* args)
+bool ChatHandler::HandleArenaCommand(char* args)
 {
-    auto player = GetSession()->GetPlayer();
+	auto player = GetSession()->GetPlayer();
 
-    player->PlayerTalkClass->ClearMenus();
+	player->PlayerTalkClass->ClearMenus();
 
-    if (sPvPArenaSystem->IsInQueue(player))
-    {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Leave Queue", PvPArenaSystem::SenderId, 10);
-    }
-    else
-    {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "1v1", PvPArenaSystem::SenderId, 1);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "2v2", PvPArenaSystem::SenderId, 2);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "3v3", PvPArenaSystem::SenderId, 3);
-    }
+	if (sPvPArenaSystem->IsInQueue(player))
+	{
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Leave Queue", PvPArenaSystem::SenderId, 10);
+	}
+	else {
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Queue Arena", PvPArenaSystem::CommandSenderId, 4);
+	}
 
-    player->SEND_GOSSIP_MENU(907, player->GetObjectGuid());
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Spectate Arena", PvPArenaSystem::CommandSenderId, 5);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Your PvP Stats", PvPArenaSystem::CommandSenderId, 6);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "View Top Arena Players", PvPArenaSystem::CommandSenderId, 7);
 
-    return true;
+	player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
+	return true;
 }

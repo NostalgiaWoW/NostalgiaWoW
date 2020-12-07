@@ -208,6 +208,7 @@ class PvPArenaSystem
     DECLARE_SINGLETON(PvPArenaSystem)
 public:
     static const uint32 SenderId = 8916;
+	static const uint32 CommandSenderId = 8917;
     static const uint32 ConfirmationSenderId = 7309;
 
     static const uint32 LeaveQueueAction = 9000;

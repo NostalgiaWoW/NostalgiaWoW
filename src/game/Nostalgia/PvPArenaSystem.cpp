@@ -5,6 +5,7 @@
 #include "GossipDef.h"
 #include "ScriptedGossip.h"
 #include <sstream>
+#include <mutex>
 
 #define AURA_ROOT 23973
 
@@ -733,11 +734,6 @@ void PvPArenaSystem::StartGame(ConfirmationInfo* info)
 
     PvPArena* arena = info->Arena;
 
-    {
-        std::lock_guard<std::recursive_mutex> g(m_confirmationLock);
-        m_waitingConfirmation.erase(arena->Id);
-    }
-
     uint32 id = GenerateArenaId();
     std::vector<ArenaPlayer> players1;
     std::vector<ArenaPlayer> players2;
@@ -759,8 +755,13 @@ void PvPArenaSystem::StartGame(ConfirmationInfo* info)
     }
 
     std::lock_guard<std::recursive_mutex> g(m_activeGamesLock);
-    m_activeGames.insert({ id, ArenaGame{ id, arena, TeamInfo { players1, arena->Type, TeamOrder::Team1}, TeamInfo {players2, arena->Type, TeamOrder::Team2} } });
+    m_activeGames.insert({ id, ArenaGame{ id, arena, TeamInfo { std::move(players1), arena->Type, TeamOrder::Team1}, TeamInfo { std::move(players2), arena->Type, TeamOrder::Team2} } });
     m_activeGames[id].Start();
+
+	{
+		std::lock_guard<std::recursive_mutex> g(m_confirmationLock);
+		m_waitingConfirmation.erase(arena->Id);
+	}
 
 }
 
