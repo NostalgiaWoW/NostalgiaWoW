@@ -67,6 +67,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 		switch (action)
 		{
 		case 4:
+			player->PlayerTalkClass->ClearMenus();
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "1v1", PvPArenaSystem::SenderId, 1);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "2v2", PvPArenaSystem::SenderId, 2);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "3v3", PvPArenaSystem::SenderId, 3);
@@ -75,6 +76,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 			break;
 
 		case 5: 
+			player->PlayerTalkClass->ClearMenus();
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "COMING SOON!", PvPArenaSystem::SenderId, 0);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
 			player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
@@ -147,6 +149,8 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 				strstreamfifthkills << "5th: " << fifth;
 				std::string formattedMessage5 = strstreamfifthkills.str();
 
+				player->PlayerTalkClass->ClearMenus();
+
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "-----TOP 5 KILLS-----", PvPArenaSystem::SenderId, 0);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage1.c_str(), PvPArenaSystem::SenderId, 0);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage2.c_str(), PvPArenaSystem::SenderId, 0);
@@ -156,6 +160,9 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
 			}
 			else {
+
+				player->PlayerTalkClass->ClearMenus();
+
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "ERROR: NO GUIDS FOUND", PvPArenaSystem::SenderId, 0);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
 				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
@@ -224,6 +231,8 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 				strstreamfifthkills << "5th: " << fifth;
 				std::string formattedMessage5 = strstreamfifthkills.str();
 
+				player->PlayerTalkClass->ClearMenus();
+
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "-----TOP 5 ARENA WINS-----", PvPArenaSystem::SenderId, 0);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage1.c_str(), PvPArenaSystem::SenderId, 0);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage2.c_str(), PvPArenaSystem::SenderId, 0);
@@ -234,6 +243,9 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
 			}
 			else {
+
+				player->PlayerTalkClass->ClearMenus();
+
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "ERROR: NO GUIDS FOUND", PvPArenaSystem::SenderId, 0);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
 				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
@@ -243,7 +255,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 		}
 
 		case 8:
-
+			player->PlayerTalkClass->ClearMenus();
 			if (sPvPArenaSystem->IsInQueue(player))
 			{
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Leave Queue", PvPArenaSystem::SenderId, 10);
@@ -277,6 +289,8 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 
 			if (!guidResult)
 			{
+				player->PlayerTalkClass->ClearMenus();
+
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "You have not participated in any PvP Arenas.", GOSSIP_SENDER_MAIN, 0);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
 				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
@@ -318,6 +332,8 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 				std::stringstream strstreamWinLoss;
 				strstreamWinLoss << "-----Win/Loss Ratio: " << winLossRatio << " -----";
 				std::string formattedMessage6 = strstreamWinLoss.str();
+
+					player->PlayerTalkClass->ClearMenus();
 
 					player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage6.c_str(), GOSSIP_SENDER_MAIN, 0);
 					player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage1.c_str(), GOSSIP_SENDER_MAIN, 0);
