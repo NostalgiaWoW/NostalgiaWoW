@@ -510,8 +510,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleDuelModCommand(char* args);
         bool HandleInspectModCommand(char* args);
 		bool HandleArenaCommand(char* args);
-        bool HandleQueueArenaCommand(char* args);
-		bool HandleArenaStatsCommand(char* args);
 
         bool HandleGameObjectAddCommand(char* args);
         bool HandleGameObjectDeleteCommand(char* args);
