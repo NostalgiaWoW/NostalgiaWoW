@@ -56,7 +56,8 @@ bool OnPlayerGossipSelect(Player* player, Player* otherPlayer, uint32 sender, ui
 
 bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 sender, uint32 action)
 {
-
+	if (action)
+		sLog.outError("RECEIVED CLICK");
 	if (sender != PvPArenaSystem::CommandSenderId)
 		return false;
 
