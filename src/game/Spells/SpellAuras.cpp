@@ -4406,6 +4406,10 @@ void Aura::HandlePeriodicDamage(bool apply, bool Real)
                         m_modifier.m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * cp / 100);
                     }
                 }
+
+				else if (spellProto->IsFitToFamilyMask<CF_ROGUE_GARROTE>())
+					m_modifier.m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.03f);
+
                 break;
             }
             default:
