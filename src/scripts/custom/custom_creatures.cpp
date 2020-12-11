@@ -1603,22 +1603,29 @@ bool QuestRewarded_MallAOESpellNPC(Player* pPlayer, Creature* pCreature, Quest c
 	return true;
 }
 
-struct StevenGuardNPCAI : public ScriptedAI
-{};
-
-//CreatureAI* GetAI_StevenGuardNPC(Creature* pCreature)
+//struct StevenGuardNPCAI : public ScriptedAI
+//{};
+//
+////CreatureAI* GetAI_StevenGuardNPC(Creature* pCreature)
+////{
+////	return new StevenGuardNPCAI(pCreature);
+////};
+//
+//bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
 //{
-//	return new StevenGuardNPCAI(pCreature);
-//};
-
-bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
-{
-	player->ADD_GOSSIP_ITEM(120001, "What are they guilty of?", GOSSIP_SENDER_MAIN, 1);
-	player->ADD_GOSSIP_ITEM(120001, "Torch 'em.", GOSSIP_SENDER_MAIN, 1);
-
-	player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
-	return true;
-}
+//	player->ADD_GOSSIP_ITEM(120001, "What are they guilty of?", GOSSIP_SENDER_MAIN, 1);
+//	player->ADD_GOSSIP_ITEM(120001, "Torch 'em.", GOSSIP_SENDER_MAIN, 2);
+//
+//	player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+//	return true;
+//}
+//
+//bool GossipSelect_StevenGuardNPC(Player* player, Creature* creature, uint32 sender, uint32 action)
+//{
+//	switch
+//
+//	
+//}
 
 
 void AddSC_custom_creatures()
@@ -1745,11 +1752,11 @@ void AddSC_custom_creatures()
 	newscript->pQuestRewardedNPC = &QuestRewarded_MallAOESpellNPC;
 	newscript->RegisterSelf(true);
 
-	newscript = new Script;
-	newscript->Name = "custom_StevenGuardNPC"; 
-	newscript->GetAI = &GetAI_StevenGuardNPC;
-	newscript->pGossipHello = &GossipHello_StevenGuardNPC;
-	newscript->pGossipSelect = &GossipSelect_StevenGuardNPC;
-	newscript->RegisterSelf(true);
+	//newscript = new Script;
+	//newscript->Name = "custom_StevenGuardNPC"; 
+	//newscript->GetAI = &GetAI_StevenGuardNPC;
+	//newscript->pGossipHello = &GossipHello_StevenGuardNPC;
+	//newscript->pGossipSelect = &GossipSelect_StevenGuardNPC;
+	//newscript->RegisterSelf(true);
 
 }
