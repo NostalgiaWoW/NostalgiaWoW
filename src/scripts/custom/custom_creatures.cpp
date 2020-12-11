@@ -111,7 +111,7 @@ bool GossipHello_TeleportNPC(Player *player, Creature *_Creature)
 		player->ADD_GOSSIP_ITEM(5, "Profession Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Duel Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Pet Zone", GOSSIP_SENDER_MAIN, 90);
-		player->ADD_GOSSIP_ITEM(5, "Major Cities", GOSSIP_SENDER_MAIN, 1);
+		player->ADD_GOSSIP_ITEM(5, "Major Cities", GOSSIP_SENDER_MAIN, 2);
         //player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 4);
         //player->ADD_GOSSIP_ITEM(5, "Instances"            , GOSSIP_SENDER_MAIN, 5);
         player->ADD_GOSSIP_ITEM(5, "Raids"                 , GOSSIP_SENDER_MAIN, 101);
@@ -191,10 +191,10 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
             break;
         case 101: // Raids
-            player->ADD_GOSSIP_ITEM(5, "Zul'Gurub" , GOSSIP_SENDER_MAIN, 4000);
             player->ADD_GOSSIP_ITEM(5, "Onyxia's Lair" , GOSSIP_SENDER_MAIN, 4001);
             player->ADD_GOSSIP_ITEM(5, "Molten Core" , GOSSIP_SENDER_MAIN, 4002);
             player->ADD_GOSSIP_ITEM(5, "Blackwing Lair" , GOSSIP_SENDER_MAIN, 4003);
+			player->ADD_GOSSIP_ITEM(5, "Zul'Gurub", GOSSIP_SENDER_MAIN, 4000);
             player->ADD_GOSSIP_ITEM(5, "Ruins of Ahn'Qiraj" , GOSSIP_SENDER_MAIN, 4004);
             player->ADD_GOSSIP_ITEM(5, "Temple of Ahn'Qiraj" , GOSSIP_SENDER_MAIN, 4005);
             player->ADD_GOSSIP_ITEM(5, "Naxxramas" , GOSSIP_SENDER_MAIN, 4006);
@@ -499,7 +499,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             break;
         case 4006:// Naxxramas
             player->CLOSE_GOSSIP_MENU();
-            player->TeleportTo(533, 3005.87f, -3435.0f, 293.89f, 0.0f);
+            player->TeleportTo(0, 3102.03f, -3714.53f, 132.83f, 0.0f);
             break;
         case 601: // Kalimdor -> Ashenvale
             player->CLOSE_GOSSIP_MENU();
@@ -977,7 +977,7 @@ bool LearnAllRecipesInProfession(Player *pPlayer, SkillType skill)
 
     skill_name = SkillInfo->name[sWorld.GetDefaultDbcLocale()];
 
-    pPlayer->SetSkill(SkillInfo->id, 300, 300);
+    //pPlayer->SetSkill(SkillInfo->id, 300, 300);
     LearnSkillRecipesHelper(pPlayer, SkillInfo->id);
     pPlayer->GetSession()->SendNotification("All recipes for %s learned", skill_name);
     return true;
@@ -1146,6 +1146,7 @@ bool GossipSelect_ProfessionNPC(Player* player, Creature* creature, uint32 sende
     case 1:
         if (!player->HasSkill(SKILL_ALCHEMY))
             CompleteLearnProfession(player, creature, SKILL_ALCHEMY);
+		break;
     case 2:
         if (!player->HasSkill(SKILL_BLACKSMITHING))
             CompleteLearnProfession(player, creature, SKILL_BLACKSMITHING);
@@ -1602,6 +1603,14 @@ bool QuestRewarded_MallAOESpellNPC(Player* pPlayer, Creature* pCreature, Quest c
 	return true;
 }
 
+struct StevenGuardNPCAI : public ScriptedAI
+{};
+
+CreatureAI* GetAI_StevenGuardNPC(Creature* pCreature)
+{
+	return new StevenGuardNPCAI(pCreature);
+};
+
 
 void AddSC_custom_creatures()
 {
@@ -1726,4 +1735,12 @@ void AddSC_custom_creatures()
 	newscript->GetAI = &GetAI_MallAOESpellNPC;
 	newscript->pQuestRewardedNPC = &QuestRewarded_MallAOESpellNPC;
 	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_StevenGuardNPC"; 
+	newscript->GetAI = &GetAI_StevenGuardNPC;
+	newscript->pGossipHello = &GossipHello_StevenGuardNPC;
+	newscript->pGossipSelect = &GossipSelect_StevenGuardNPC;
+	newscript->RegisterSelf(true);
+
 }
