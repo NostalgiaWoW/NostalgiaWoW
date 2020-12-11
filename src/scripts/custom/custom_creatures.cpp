@@ -1606,10 +1606,19 @@ bool QuestRewarded_MallAOESpellNPC(Player* pPlayer, Creature* pCreature, Quest c
 struct StevenGuardNPCAI : public ScriptedAI
 {};
 
-CreatureAI* GetAI_StevenGuardNPC(Creature* pCreature)
+//CreatureAI* GetAI_StevenGuardNPC(Creature* pCreature)
+//{
+//	return new StevenGuardNPCAI(pCreature);
+//};
+
+bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
 {
-	return new StevenGuardNPCAI(pCreature);
-};
+	player->ADD_GOSSIP_ITEM(120001, "What are they guilty of?", GOSSIP_SENDER_MAIN, 1);
+	player->ADD_GOSSIP_ITEM(120001, "Torch 'em.", GOSSIP_SENDER_MAIN, 1);
+
+	player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+	return true;
+}
 
 
 void AddSC_custom_creatures()
