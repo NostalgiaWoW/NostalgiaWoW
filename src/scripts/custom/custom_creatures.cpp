@@ -1383,7 +1383,13 @@ enum
 	YELL_WARCHIEF_BLESSING_2 = -1901176,
 
 	GO_NEFARIANS_HEAD_HORDE = 179881,
-	GO_ONYXIAS_HEAD_HORDE = 179556
+	GO_ONYXIAS_HEAD_HORDE = 179556,
+	GO_PRISON_FIRE = 184743,
+	SPELL_THROW_LIQUID_FIRE = 19784,
+	NPC_PRISONER = 1201192,
+	NPC_PRISONER1 = 1201194,
+	NPC_PRISONER2 = 1201193,
+	COIN_SOUND = 1204
 };
 
 struct MallAOESpellNPCAI : public ScriptedAI
@@ -1603,29 +1609,102 @@ bool QuestRewarded_MallAOESpellNPC(Player* pPlayer, Creature* pCreature, Quest c
 	return true;
 }
 
-//struct StevenGuardNPCAI : public ScriptedAI
-//{};
-//
-////CreatureAI* GetAI_StevenGuardNPC(Creature* pCreature)
-////{
-////	return new StevenGuardNPCAI(pCreature);
-////};
-//
-//bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
+struct StevenGuardNPCAI : public ScriptedAI
+{
+};
+
+//creatureai* getai_stevenguardnpc(creature* pcreature)
 //{
-//	player->ADD_GOSSIP_ITEM(120001, "What are they guilty of?", GOSSIP_SENDER_MAIN, 1);
-//	player->ADD_GOSSIP_ITEM(120001, "Torch 'em.", GOSSIP_SENDER_MAIN, 2);
-//
-//	player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
-//	return true;
-//}
-//
-//bool GossipSelect_StevenGuardNPC(Player* player, Creature* creature, uint32 sender, uint32 action)
-//{
-//	switch
-//
-//	
-//}
+//	return new stevenguardnpcai(pcreature);
+//};
+
+
+
+bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
+{
+	player->PlayerTalkClass->ClearMenus();
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What are they guilty of?", GOSSIP_SENDER_MAIN, 200);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Here's 100g - torch 'em.", GOSSIP_SENDER_MAIN, 201);
+	player->SEND_GOSSIP_MENU(120001, _Creature->GetGUID());
+	return true;
+}
+
+
+void GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 action)
+{
+	switch (action)
+	{
+	case 200:
+
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Here's 100g - torch 'em.", GOSSIP_SENDER_MAIN, 201);
+		player->SEND_GOSSIP_MENU(120002, _Creature->GetGUID());
+		break;
+
+	case 201:
+
+		Unit* pTarget1 = _Creature->FindNearestCreature(NPC_PRISONER1, 150.0f, true);
+		Unit* pTarget2 = _Creature->FindNearestCreature(NPC_PRISONER2, 150.0f, true);
+		Unit* pTarget = _Creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
+
+		if (!pTarget)
+			{
+			_Creature->MonsterSay("Let's give their corpses a minute to cool off before we light em up again, $N.");
+			player->CLOSE_GOSSIP_MENU();
+			}
+
+		else if (pTarget)
+		{
+
+			if (player->GetMoney() < 1000000)
+			{
+				player->GetSession()->SendNotification("You don't have enough money!");
+				player->PlayerTalkClass->CloseGossip();
+			}
+			else {
+				player->ModifyMoney(-1000000);
+
+				_Creature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+				_Creature->PlayDirectSound(COIN_SOUND, player); // Coin sound
+				_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
+
+				pTarget->SetHealthPercent(0.00f);
+				pTarget->SetDeathState(JUST_DIED);
+				pTarget1->SetHealthPercent(0.00f);
+				pTarget1->SetDeathState(JUST_DIED);
+				pTarget2->SetHealthPercent(0.00f);
+				pTarget2->SetDeathState(JUST_DIED);
+
+					if (GameObject* pGo = _Creature->FindNearestGameObject(GO_PRISON_FIRE, 150.0f))
+					{
+						if (!pGo->isSpawned())
+						{
+						pGo->SetRespawnTime(300);
+						pGo->Refresh();
+						}
+					else 
+					{
+						pGo->SetGoState(GO_STATE_ACTIVE);
+						player->CLOSE_GOSSIP_MENU();
+					}
+				}
+			}
+		} 
+		
+		break;
+
+	}
+
+}
+
+bool GossipSelect_StevenGuardNPC(Player* player, Creature* _Creature, uint32 sender, uint32 action)
+{
+	// Main menu
+	if (sender == GOSSIP_SENDER_MAIN)
+		GossipDefault_StevenGuardNPC(player, _Creature, action);
+
+	return true;
+}
+
 
 
 void AddSC_custom_creatures()
@@ -1752,11 +1831,11 @@ void AddSC_custom_creatures()
 	newscript->pQuestRewardedNPC = &QuestRewarded_MallAOESpellNPC;
 	newscript->RegisterSelf(true);
 
-	//newscript = new Script;
-	//newscript->Name = "custom_StevenGuardNPC"; 
+	newscript = new Script;
+	newscript->Name = "custom_StevenGuardNPC"; 
 	//newscript->GetAI = &GetAI_StevenGuardNPC;
-	//newscript->pGossipHello = &GossipHello_StevenGuardNPC;
-	//newscript->pGossipSelect = &GossipSelect_StevenGuardNPC;
-	//newscript->RegisterSelf(true);
+	newscript->pGossipHello = &GossipHello_StevenGuardNPC;
+	newscript->pGossipSelect = &GossipSelect_StevenGuardNPC;
+	newscript->RegisterSelf(true);
 
 }
