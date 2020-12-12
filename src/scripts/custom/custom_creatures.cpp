@@ -17,6 +17,13 @@
 #include "scriptPCH.h"
 #include "custom.h"
 #include "transmog.h"
+#include "Utilities/EventProcessor.h"
+
+template <typename Functor>
+void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+{
+	player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+}
 
  // Teleport Arena NPC
 bool GossipHello_TeleportArenaNPC(Player* player, Creature* _Creature)
@@ -1389,7 +1396,10 @@ enum
 	NPC_PRISONER = 1201192,
 	NPC_PRISONER1 = 1201194,
 	NPC_PRISONER2 = 1201193,
-	COIN_SOUND = 1204
+	COIN_SOUND = 1204,
+	GUARD_SAY_WAIT = -1999964,
+	GUARD_SAY_BURN = -1999965,
+	GUARD_EMOTE_EYES = -1999966
 };
 
 struct MallAOESpellNPCAI : public ScriptedAI
@@ -1630,7 +1640,7 @@ bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
 }
 
 
-void GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 action)
+bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 action)
 {
 	switch (action)
 	{
@@ -1645,55 +1655,83 @@ void GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 		Unit* pTarget1 = _Creature->FindNearestCreature(NPC_PRISONER1, 150.0f, true);
 		Unit* pTarget2 = _Creature->FindNearestCreature(NPC_PRISONER2, 150.0f, true);
 		Unit* pTarget = _Creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
+		Creature* steven = _Creature;
 
 		if (!pTarget)
 			{
-			_Creature->MonsterSay("Let's give their corpses a minute to cool off before we light em up again, $N.");
+			_Creature->MonsterSay("Let's give their corpses a minute to cool off before we light em up again."); 
 			player->CLOSE_GOSSIP_MENU();
 			}
-
-		else if (pTarget)
+		else
 		{
 
 			if (player->GetMoney() < 1000000)
 			{
-				player->GetSession()->SendNotification("You don't have enough money!");
-				player->PlayerTalkClass->CloseGossip();
+				_Creature->MonsterSay("Come back when you've got enough gold.");
+				player->CLOSE_GOSSIP_MENU();
+				return false;
 			}
 			else {
-				player->ModifyMoney(-1000000);
-
+				player->ModifyMoney(-1000000); // Take payment
 				_Creature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
 				_Creature->PlayDirectSound(COIN_SOUND, player); // Coin sound
-				_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
 
-				pTarget->SetHealthPercent(0.00f);
-				pTarget->SetDeathState(JUST_DIED);
-				pTarget1->SetHealthPercent(0.00f);
-				pTarget1->SetDeathState(JUST_DIED);
-				pTarget2->SetHealthPercent(0.00f);
-				pTarget2->SetDeathState(JUST_DIED);
+				uint32 movementStep = 0;
 
-					if (GameObject* pGo = _Creature->FindNearestGameObject(GO_PRISON_FIRE, 150.0f))
+				do {
+					switch (movementStep)
 					{
-						if (!pGo->isSpawned())
+					case 0:
+						_Creature->GetMotionMaster()->MovePoint(0, -1804.43, -4252.62, 2.13); // move to cages
+						_Creature->SetWalk(true);
+						break;
+					case 1:
+						_Creature->MonsterTextEmote(GUARD_EMOTE_EYES);
+						_Creature->MonsterSay(GUARD_SAY_BURN);
+						_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
+
+						pTarget->SetHealthPercent(0.00f);
+						pTarget->SetDeathState(JUST_DIED);
+						pTarget1->SetHealthPercent(0.00f);
+						pTarget1->SetDeathState(JUST_DIED);
+						pTarget2->SetHealthPercent(0.00f);
+						pTarget2->SetDeathState(JUST_DIED);
+
+						if (GameObject* pGo = _Creature->FindNearestGameObject(GO_PRISON_FIRE, 150.0f))
 						{
-						pGo->SetRespawnTime(300);
-						pGo->Refresh();
+							if (!pGo->isSpawned())
+							{
+								pGo->SetRespawnTime(300);
+								pGo->Refresh();
+							}
+							else
+							{
+								pGo->SetGoState(GO_STATE_ACTIVE);
+								player->CLOSE_GOSSIP_MENU();
+							}
 						}
-					else 
-					{
-						pGo->SetGoState(GO_STATE_ACTIVE);
-						player->CLOSE_GOSSIP_MENU();
+
+						break;
+					case 2:
+						_Creature->GetMotionMaster()->MoveTargetedHome();
+						_Creature->SetWalk(true);
+						break;
 					}
-				}
+					movementStep++;
+
+				} while (movementStep < 3);
+
+				//_Creature->GetMotionMaster()->MovePoint(0, -1808.10, -4247.40, 2.13); // turn
+				//_Creature->SetWalk(true);
+
+
 			}
-		} 
+		}  player->CLOSE_GOSSIP_MENU();
 		
 		break;
 
 	}
-
+	return true;
 }
 
 bool GossipSelect_StevenGuardNPC(Player* player, Creature* _Creature, uint32 sender, uint32 action)
