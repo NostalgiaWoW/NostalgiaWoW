@@ -63,7 +63,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 
 	if (sender == PvPArenaSystem::CommandSenderId)
 	{
-		player->PlayerTalkClass->CloseGossip();
+		//player->PlayerTalkClass->CloseGossip();
 
 		switch (action)
 		{
