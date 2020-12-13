@@ -62,7 +62,8 @@ enum
     GOSSIP_SENDER_SEC_BANK         = 7,
     GOSSIP_SENDER_SEC_INN          = 8,
     GOSSIP_SENDER_SEC_MAILBOX      = 9,
-    GOSSIP_SENDER_SEC_STABLEMASTER = 10
+    GOSSIP_SENDER_SEC_STABLEMASTER = 10,
+	GOSSIP_SENDER_STEVEN = 11
 };
 
 extern uint32 GetSkillLevel(Player* pPlayer,uint32 skill);

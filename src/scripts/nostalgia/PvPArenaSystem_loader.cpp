@@ -56,7 +56,8 @@ bool OnPlayerGossipSelect(Player* player, Player* otherPlayer, uint32 sender, ui
 
 bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 sender, uint32 action)
 {
-
+	if (action)
+		sLog.outError("RECEIVED CLICK");
 	if (sender != PvPArenaSystem::CommandSenderId)
 		return false;
 
@@ -67,6 +68,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 		switch (action)
 		{
 		case 4:
+			player->PlayerTalkClass->ClearMenus();
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "1v1", PvPArenaSystem::SenderId, 1);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "2v2", PvPArenaSystem::SenderId, 2);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "3v3", PvPArenaSystem::SenderId, 3);
@@ -75,6 +77,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 			break;
 
 		case 5: 
+			player->PlayerTalkClass->ClearMenus();
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "COMING SOON!", PvPArenaSystem::SenderId, 0);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
 			player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
@@ -82,14 +85,178 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 
 
 		case 7:
+		{
+			
+			// ARENA KILLS
+			QueryResult* guidResultKills = WorldDatabase.PQuery("SELECT playerlowguid FROM `pvp_arena_system_stats` GROUP BY `playerlowguid` ORDER BY SUM(`kills`) DESC LIMIT 5");
+			
+			if (guidResultKills) {
 
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "COMING SOON!", PvPArenaSystem::SenderId, 0);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
-			player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
+				std::string first;
+				std::string second;
+				std::string third;
+				std::string fourth;
+				std::string fifth;
+
+
+				BarGoLink bar(guidResultKills->GetRowCount());
+				do
+				{
+					bar.step();
+					Field* fields = guidResultKills->Fetch();
+					uint32 guid = fields[0].GetInt32();
+
+					QueryResult* nameResult = CharacterDatabase.PQuery("SELECT `name` FROM `characters` WHERE `guid` = %u", guid);
+					Field* nameFields = nameResult->Fetch();
+					std::string name = nameFields[0].GetCppString();
+
+					if (first == "") {
+						first = name;
+					}
+					else if (second == "") {
+						second = name;
+					}
+					else if (third == "") {
+						third = name;
+					}
+					else if (fourth == "") {
+						fourth = name;
+					}
+					else if (fifth == "") {
+						fifth = name;
+					}
+
+				} while (guidResultKills->NextRow());
+				delete guidResultKills;
+
+				// String out to gossip window
+				std::stringstream strstreamFirstKills;
+				strstreamFirstKills << "1st: " << first;
+				std::string formattedMessage1 = strstreamFirstKills.str();
+
+				std::stringstream strstreamSecondKills;
+				strstreamSecondKills << "2nd: " << second;
+				std::string formattedMessage2 = strstreamSecondKills.str();
+
+				std::stringstream strstreamthirdkills;
+				strstreamthirdkills << "3rd: " << third;
+				std::string formattedMessage3 = strstreamthirdkills.str();
+
+				std::stringstream strstreamfourthkills;
+				strstreamfourthkills << "4th: " << fourth;
+				std::string formattedMessage4 = strstreamfourthkills.str();
+
+				std::stringstream strstreamfifthkills;
+				strstreamfifthkills << "5th: " << fifth;
+				std::string formattedMessage5 = strstreamfifthkills.str();
+
+				player->PlayerTalkClass->ClearMenus();
+
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "-----TOP 5 KILLS-----", PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage1.c_str(), PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage2.c_str(), PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage3.c_str(), PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage4.c_str(), PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage5.c_str(), PvPArenaSystem::SenderId, 0);
+				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
+			}
+			else {
+
+				player->PlayerTalkClass->ClearMenus();
+
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "ERROR: NO GUIDS FOUND", PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
+				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
+			}
+
+			//ARENA WINS
+			QueryResult* guidResultWins = WorldDatabase.PQuery("SELECT playerlowguid FROM `pvp_arena_system_stats` GROUP BY `playerlowguid` ORDER BY SUM(`Won`) DESC LIMIT 5");
+
+			if (guidResultWins) {
+
+				std::string first;
+				std::string second;
+				std::string third;
+				std::string fourth;
+				std::string fifth;
+
+
+				BarGoLink bar(guidResultWins->GetRowCount());
+				do
+				{
+					bar.step();
+					Field* fields = guidResultWins->Fetch();
+					uint32 guid = fields[0].GetInt32();
+
+					QueryResult* nameResult = CharacterDatabase.PQuery("SELECT `name` FROM `characters` WHERE `guid` = %u", guid);
+					Field* nameFields = nameResult->Fetch();
+					std::string name = nameFields[0].GetCppString();
+
+					if (first == "") {
+						first = name;
+					}
+					else if (second == "") {
+						second = name;
+					}
+					else if (third == "") {
+						third = name;
+					}
+					else if (fourth == "") {
+						fourth = name;
+					}
+					else if (fifth == "") {
+						fifth = name;
+					}
+
+				} while (guidResultWins->NextRow());
+				delete guidResultWins;
+
+				// String out to gossip window
+				std::stringstream strstreamFirstKills;
+				strstreamFirstKills << "1st: " << first;
+				std::string formattedMessage1 = strstreamFirstKills.str();
+
+				std::stringstream strstreamSecondKills;
+				strstreamSecondKills << "2nd: " << second;
+				std::string formattedMessage2 = strstreamSecondKills.str();
+
+				std::stringstream strstreamthirdkills;
+				strstreamthirdkills << "3rd: " << third;
+				std::string formattedMessage3 = strstreamthirdkills.str();
+
+				std::stringstream strstreamfourthkills;
+				strstreamfourthkills << "4th: " << fourth;
+				std::string formattedMessage4 = strstreamfourthkills.str();
+
+				std::stringstream strstreamfifthkills;
+				strstreamfifthkills << "5th: " << fifth;
+				std::string formattedMessage5 = strstreamfifthkills.str();
+
+				player->PlayerTalkClass->ClearMenus();
+
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "-----TOP 5 ARENA WINS-----", PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage1.c_str(), PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage2.c_str(), PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage3.c_str(), PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage4.c_str(), PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage5.c_str(), PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
+				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
+			}
+			else {
+
+				player->PlayerTalkClass->ClearMenus();
+
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "ERROR: NO GUIDS FOUND", PvPArenaSystem::SenderId, 0);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
+				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
+			}
+
 			break;
+		}
 
 		case 8:
-
+			player->PlayerTalkClass->ClearMenus();
 			if (sPvPArenaSystem->IsInQueue(player))
 			{
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Leave Queue", PvPArenaSystem::SenderId, 10);
@@ -123,6 +290,8 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 
 			if (!guidResult)
 			{
+				player->PlayerTalkClass->ClearMenus();
+
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "You have not participated in any PvP Arenas.", GOSSIP_SENDER_MAIN, 0);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
 				player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
@@ -164,6 +333,8 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 				std::stringstream strstreamWinLoss;
 				strstreamWinLoss << "-----Win/Loss Ratio: " << winLossRatio << " -----";
 				std::string formattedMessage6 = strstreamWinLoss.str();
+
+					player->PlayerTalkClass->ClearMenus();
 
 					player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage6.c_str(), GOSSIP_SENDER_MAIN, 0);
 					player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage1.c_str(), GOSSIP_SENDER_MAIN, 0);
