@@ -223,11 +223,25 @@ public:
         }
 
         uint32 count = m.size();
+		double countm = 1.0;
         data.put(0, clientcount);                               // insert right count, listed count
-        data.put(4, count > 49 ? count : clientcount);          // insert right count, online count
 
-        sess->SendPacket(&data);
-        DEBUG_LOG("WORLD: Send SMSG_WHO Message");
+
+		if (count > 101)
+			countm = sWorld.getConfig(CONFIG_FLOAT_POPULATION_MULTIPLIER);
+		else if (count > 61 && count < 72)
+			countm = 1.04;
+		else if (count > 71 && count < 87)
+			countm = 1.11;
+		else if (count > 86 && count < 102)
+			countm = 1.14;
+
+		data.put(4, count > 49 ? (int)(count * countm) : clientcount);
+
+		//data.put(4, count > 49 ? (int)(count * sWorld.getConfig(CONFIG_FLOAT_POPULATION_MULTIPLIER)) : clientcount); // insert right count, online count
+
+		sess->SendPacket(&data);
+		DEBUG_LOG("WORLD: Send SMSG_WHO Message");
     }
 };
 

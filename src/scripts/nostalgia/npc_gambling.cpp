@@ -118,10 +118,11 @@ bool GossipSelect_npc_gambling(Player* pPlayer, Creature* pCreature, uint32 uiSe
     if (amountToAward > 0)
     {
         pPlayer->ModifyMoney(amountToAward);
+		pCreature->MonsterSay("Winner!");
 
         if (amountToAward >= amount * 3)
         {
-            pCreature->PMonsterEmote("STREAK!");
+			pCreature->MonsterSay("You're on a streak!");
             pPlayer->SendSpellGo(pPlayer, SPELL_FIREWORK);
         }
         else

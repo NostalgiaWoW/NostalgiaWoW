@@ -1689,32 +1689,9 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 						_Creature->MonsterTextEmote(GUARD_EMOTE_EYES);
 						_Creature->MonsterSay(GUARD_SAY_BURN);
 						_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
-
-						pTarget->SetHealthPercent(0.00f);
-						pTarget->SetDeathState(JUST_DIED);
-						pTarget1->SetHealthPercent(0.00f);
-						pTarget1->SetDeathState(JUST_DIED);
-						pTarget2->SetHealthPercent(0.00f);
-						pTarget2->SetDeathState(JUST_DIED);
-
-						if (GameObject* pGo = _Creature->FindNearestGameObject(GO_PRISON_FIRE, 150.0f))
-						{
-							if (!pGo->isSpawned())
-							{
-								pGo->SetRespawnTime(300);
-								pGo->Refresh();
-							}
-							else
-							{
-								pGo->SetGoState(GO_STATE_ACTIVE);
-								player->CLOSE_GOSSIP_MENU();
-							}
-						}
-
 						break;
 					case 2:
 						_Creature->GetMotionMaster()->MoveTargetedHome();
-						_Creature->SetWalk(true);
 						break;
 					}
 					movementStep++;
@@ -1724,7 +1701,26 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 				//_Creature->GetMotionMaster()->MovePoint(0, -1808.10, -4247.40, 2.13); // turn
 				//_Creature->SetWalk(true);
 
+				pTarget->SetHealthPercent(0.00f);
+				pTarget->SetDeathState(JUST_DIED);
+				pTarget1->SetHealthPercent(0.00f);
+				pTarget1->SetDeathState(JUST_DIED);
+				pTarget2->SetHealthPercent(0.00f);
+				pTarget2->SetDeathState(JUST_DIED);
 
+					if (GameObject* pGo = _Creature->FindNearestGameObject(GO_PRISON_FIRE, 150.0f))
+					{
+						if (!pGo->isSpawned())
+						{
+						pGo->SetRespawnTime(300);
+						pGo->Refresh();
+						}
+					else 
+					{
+						pGo->SetGoState(GO_STATE_ACTIVE);
+						player->CLOSE_GOSSIP_MENU();
+					}
+				}
 			}
 		}  player->CLOSE_GOSSIP_MENU();
 		
