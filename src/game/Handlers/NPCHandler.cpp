@@ -390,6 +390,8 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
         DEBUG_LOG("Gossip code: %s", code.c_str());
     }
 
+    sLog.outError("SELECT CALLED %u, %u", guid.GetCounter(), gossipListId);
+
     GetPlayer()->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_TALK); // Removes stealth, feign death ...
 
     uint32 sender = _player->PlayerTalkClass->GossipOptionSender(gossipListId);
@@ -433,6 +435,8 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
     }
     else if (guid.IsPlayer()) // custom player gossip
     {
+
+        sLog.outError("SELECT CALLED PLAYER");
         Player* otherPlayer = nullptr;
         if (guid == _player->GetObjectGuid())
             otherPlayer = _player;
