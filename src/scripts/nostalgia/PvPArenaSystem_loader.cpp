@@ -63,11 +63,13 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 
 	if (sender == PvPArenaSystem::CommandSenderId)
 	{
+		sLog.outError("Made it into PvPArenaSystem::CommandSenderId ");
 		//player->PlayerTalkClass->CloseGossip();
 
 		switch (action)
 		{
 		case 4:
+			sLog.outError("RECEIVED CLICK 4");
 			player->PlayerTalkClass->ClearMenus();
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "1v1", PvPArenaSystem::SenderId, 1);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "2v2", PvPArenaSystem::SenderId, 2);
@@ -77,6 +79,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 			break;
 
 		case 5: 
+			sLog.outError("RECEIVED CLICK 5");
 			player->PlayerTalkClass->ClearMenus();
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "COMING SOON!", PvPArenaSystem::SenderId, 0);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "<-- Back to main menu", PvPArenaSystem::CommandSenderId, 8);
@@ -86,6 +89,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 
 		case 7:
 		{
+			sLog.outError("RECEIVED CLICK 7");
 			
 			// ARENA KILLS
 			QueryResult* guidResultKills = WorldDatabase.PQuery("SELECT playerlowguid FROM `pvp_arena_system_stats` GROUP BY `playerlowguid` ORDER BY SUM(`kills`) DESC LIMIT 5");
@@ -256,6 +260,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 		}
 
 		case 8:
+			sLog.outError("RECEIVED CLICK 8");
 			player->PlayerTalkClass->ClearMenus();
 			if (sPvPArenaSystem->IsInQueue(player))
 			{
@@ -273,6 +278,7 @@ bool OnPlayerGossipSelect_Command(Player* player, Player* otherPlayer, uint32 se
 			break;
 
 		case 6:
+			sLog.outError("RECEIVED CLICK 6");
 			uint32 guid = player->GetGUIDLow();
 
 			// check for any stats to avoid null pointer
