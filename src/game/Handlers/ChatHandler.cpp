@@ -112,7 +112,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         else
         {
             // send in universal language in two side iteration allowed mode
-            if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) || (sWorld.getConfig(CONFIG_BOOL_EVENT_CHAT_UNITED) && _player && _player->GetZoneId() == 2557))
+            if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) || (sWorld.getConfig(CONFIG_BOOL_EVENT_CHAT_UNITED) && _player))
                 lang = LANG_UNIVERSAL;
             else
             {

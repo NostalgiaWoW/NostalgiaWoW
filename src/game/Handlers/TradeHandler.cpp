@@ -626,7 +626,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 		}
 	}
 
-    if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_TRADE) && pOther->GetTeam() != _player->GetTeam())
+    if (pOther->GetTeam() != _player->GetTeam() && _player->GetAreaId() != 2401)
     {
         SendTradeStatus(TRADE_STATUS_WRONG_FACTION);
         return;
