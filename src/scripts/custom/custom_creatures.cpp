@@ -198,8 +198,8 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
             break;
         case 101: // Raids
-            player->ADD_GOSSIP_ITEM(5, "Onyxia's Lair" , GOSSIP_SENDER_MAIN, 4001);
             player->ADD_GOSSIP_ITEM(5, "Molten Core" , GOSSIP_SENDER_MAIN, 4002);
+			player->ADD_GOSSIP_ITEM(5, "Onyxia's Lair", GOSSIP_SENDER_MAIN, 4001);
             player->ADD_GOSSIP_ITEM(5, "Blackwing Lair" , GOSSIP_SENDER_MAIN, 4003);
 			player->ADD_GOSSIP_ITEM(5, "Zul'Gurub", GOSSIP_SENDER_MAIN, 4000);
             player->ADD_GOSSIP_ITEM(5, "Ruins of Ahn'Qiraj" , GOSSIP_SENDER_MAIN, 4004);
@@ -1592,10 +1592,6 @@ CreatureAI* GetAI_MallAOESpellNPC(Creature* pCreature)
 	return new MallAOESpellNPCAI(pCreature);
 }
 
-//CreatureAI* GetAI_MallGuardSwitchNPC(Creature* pCreature)
-//{
-//	return new MallGuardSwitchAI(pCreature);
-//}
 
 bool QuestRewarded_MallAOESpellNPC(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
@@ -1735,32 +1731,32 @@ bool GossipSelect_StevenGuardNPC(Player* player, Creature* _Creature, uint32 sen
 
 }
 
-//struct MallGuardSwitchAI : public ScriptedAI
-//{
-//
-//	MallGuardSwitchAI(Creature* pCreature) : ScriptedAI(pCreature)
-//	{
-//		Reset();
-//	}
-//
-//	void Reset()
-//	{
-//
-//	}
-//
-//	void UpdateAI(uint32 const uiDiff)
-//	{
-//
-//		if (sGameEventMgr.IsActiveEvent(221)) {
-//
-//
-//		}
-//	}
-//
-//};
 
+struct MallGuardSwitchAI : public ScriptedAI
+{
 
+	MallGuardSwitchAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+	}
 
+	void Reset() 
+	{
+	}
+
+	void JustRespawned() {
+		if (m_creature->GetDisplayId() == 15896) // if is horde
+		{
+			m_creature->SetDisplayId(7308); // set to alliance
+		}
+		else if (m_creature->GetDisplayId() == 7308)
+			m_creature->SetDisplayId(15896);
+	}
+};
+
+CreatureAI* GetAI_MallGuardSwitchNPC(Creature* pCreature)
+{
+	return new MallGuardSwitchAI(pCreature);
+}
 
 
 void AddSC_custom_creatures()
@@ -1894,9 +1890,9 @@ void AddSC_custom_creatures()
 	newscript->pGossipSelect = &GossipSelect_StevenGuardNPC;
 	newscript->RegisterSelf(true);
 
-	//newscript = new Script;
-	//newscript->Name = "custom_MallGuardSwitchNPC";
-	//newscript->GetAI = &GetAI_MallGuardSwitchNPC;
-	//newscript->RegisterSelf(true);
+	newscript = new Script;
+	newscript->Name = "custom_MallGuardSwitchNPC";
+	newscript->GetAI = &GetAI_MallGuardSwitchNPC;
+	newscript->RegisterSelf(true);
 
 }
