@@ -1592,6 +1592,11 @@ CreatureAI* GetAI_MallAOESpellNPC(Creature* pCreature)
 	return new MallAOESpellNPCAI(pCreature);
 }
 
+CreatureAI* GetAI_MallGuardSwitchNPC(Creature* pCreature)
+{
+	return new MallGuardSwitchAI(pCreature);
+}
+
 bool QuestRewarded_MallAOESpellNPC(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
 	uint32 currentQuest = quest->GetQuestId();
@@ -1655,7 +1660,6 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 		Unit* pTarget1 = _Creature->FindNearestCreature(NPC_PRISONER1, 150.0f, true);
 		Unit* pTarget2 = _Creature->FindNearestCreature(NPC_PRISONER2, 150.0f, true);
 		Unit* pTarget = _Creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
-		Creature* steven = _Creature;
 
 		if (!pTarget)
 			{
@@ -1712,7 +1716,7 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 					{
 						if (!pGo->isSpawned())
 						{
-						pGo->SetRespawnTime(300);
+						pGo->SetRespawnTime(10);
 						pGo->Refresh();
 						}
 					else 
@@ -1737,7 +1741,29 @@ bool GossipSelect_StevenGuardNPC(Player* player, Creature* _Creature, uint32 sen
 		GossipDefault_StevenGuardNPC(player, _Creature, action);
 
 	return true;
+
+
+
 }
+
+struct MallGuardSwitchAI : public ScriptedAI
+{
+
+	MallGuardSwitchAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+	void UpdateAI(uint32 const uiDiff)
+	{
+
+		if (sGameEventMgr.IsActiveEvent(221)) {
+
+		}
+	}
+
+};
+
+
 
 
 
@@ -1870,6 +1896,11 @@ void AddSC_custom_creatures()
 	//newscript->GetAI = &GetAI_StevenGuardNPC;
 	newscript->pGossipHello = &GossipHello_StevenGuardNPC;
 	newscript->pGossipSelect = &GossipSelect_StevenGuardNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_MallGuardSwitchNPC";
+	newscript->GetAI = &GetAI_MallGuardSwitchNPC;
 	newscript->RegisterSelf(true);
 
 }
