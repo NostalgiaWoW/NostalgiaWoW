@@ -436,7 +436,7 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
     else if (guid.IsPlayer()) // custom player gossip
     {
 
-        sLog.outError("SELECT CALLED PLAYER");
+        sLog.outError("SELECT CALLED PLAYER, sender: %u, action: %u", sender, action);
         Player* otherPlayer = nullptr;
         if (guid == _player->GetObjectGuid())
             otherPlayer = _player;
