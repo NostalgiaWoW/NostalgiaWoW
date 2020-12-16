@@ -1701,7 +1701,8 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 		break;
 
 	case 201:
-
+		float cOrientation = _Creature->GetOrientation();
+		
 		if (!pTarget)
 			{
 			_Creature->MonsterSay("Let's give their corpses a minute to cool off before we light em up again."); 
@@ -1727,9 +1728,7 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 				_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
 
 				_Creature->m_Events.AddEvent(new StevenGuardEvent(player, _Creature), _Creature->m_Events.CalculateTime(1500));
-						
-
-				
+				_Creature->SetOrientation(cOrientation);
 			}
 		}  player->CLOSE_GOSSIP_MENU();
 		
