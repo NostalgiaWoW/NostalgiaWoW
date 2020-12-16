@@ -1634,34 +1634,41 @@ public:
 
 	bool Execute(uint64 /*e_time*/, uint32 /*p_time*/) override
 	{
-		
+
 		Unit* pTarget1 = m_creature->FindNearestCreature(NPC_PRISONER1, 150.0f, true);
 		Unit* pTarget2 = m_creature->FindNearestCreature(NPC_PRISONER2, 150.0f, true);
 		Unit* pTarget = m_creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
-		
-		if (GameObject* pGo = m_creature->FindNearestGameObject(GO_PRISON_FIRE, 150.0f))
+
+		if (pTarget)
 		{
-			if (!pGo->isSpawned())
+
+			if (GameObject* pGo = m_creature->FindNearestGameObject(GO_PRISON_FIRE, 150.0f))
 			{
-				pGo->SetRespawnTime(10);
-				pGo->Refresh();
-			}
-			else
-			{
-				pGo->SetGoState(GO_STATE_ACTIVE);
-				m_player->CLOSE_GOSSIP_MENU();
+				if (!pGo->isSpawned())
+				{
+					pGo->SetRespawnTime(10);
+					pGo->Refresh();
+				}
+				else
+				{
+					pGo->SetGoState(GO_STATE_ACTIVE);
+					m_player->CLOSE_GOSSIP_MENU();
+				}
+
 			}
 
+
+			pTarget->SetHealthPercent(0.00f);
+			pTarget->SetDeathState(JUST_DIED);
+			pTarget1->SetHealthPercent(0.00f);
+			pTarget1->SetDeathState(JUST_DIED);
+			pTarget2->SetHealthPercent(0.00f);
+			pTarget2->SetDeathState(JUST_DIED);
+
+			return true;
 		}
-
-
-		pTarget->SetHealthPercent(0.00f);
-		pTarget->SetDeathState(JUST_DIED);
-		pTarget1->SetHealthPercent(0.00f);
-		pTarget1->SetDeathState(JUST_DIED);
-		pTarget2->SetHealthPercent(0.00f);
-		pTarget2->SetDeathState(JUST_DIED);
-
+		else
+			m_creature->m_Events.AddEvent(new StevenGuardEvent(m_player, m_creature), m_creature->m_Events.CalculateTime(1500));
 		return true;
 	}
 
@@ -1714,28 +1721,13 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 				_Creature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
 				_Creature->PlayDirectSound(COIN_SOUND, player); // Coin sound
 
-				uint32 movementStep = 0;
+				
+				_Creature->MonsterTextEmote(GUARD_EMOTE_EYES);
+				_Creature->MonsterSay(GUARD_SAY_BURN);
+				_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
 
-				do {
-					switch (movementStep)
-					{
-					case 0:
-						_Creature->GetMotionMaster()->MoveWaypoint(0); // move to cages
-						_Creature->SetWalk(true);
-						break;
-					case 1:
-						_Creature->MonsterTextEmote(GUARD_EMOTE_EYES);
-						_Creature->MonsterSay(GUARD_SAY_BURN);
-						_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
-						_Creature->m_Events.AddEvent(new StevenGuardEvent(player, _Creature), _Creature->m_Events.CalculateTime(1500));
-						break;
-					case 2:
-						_Creature->GetMotionMaster()->MoveTargetedHome();
-						break;
-					}
-					movementStep++;
-
-				} while (movementStep < 3);
+				_Creature->m_Events.AddEvent(new StevenGuardEvent(player, _Creature), _Creature->m_Events.CalculateTime(1500));
+						
 
 				
 			}
