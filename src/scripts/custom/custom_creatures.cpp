@@ -1021,6 +1021,7 @@ bool GossipHello_ProfessionAlchemyNPC(Player* player, Creature* creature)
 {
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "Alchemy", GOSSIP_SENDER_MAIN, 1);
 	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, 15);
+	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "What can you train me?", GOSSIP_SENDER_MAIN, 16);
 	player->SEND_GOSSIP_MENU(90373, creature->GetGUID());
 	creature->HandleEmote(EMOTE_ONESHOT_BOW);
 	return true;
@@ -1203,6 +1204,12 @@ bool GossipSelect_ProfessionNPC(Player* player, Creature* creature, uint32 sende
         break;
 	case 15:
 		player->SEND_VENDORLIST(creature->GetGUID());
+		break;
+
+	case 16:
+		player->SEND_TRAINERLIST(creature->GetGUID());
+		break;
+
     }
 
     player->CLOSE_GOSSIP_MENU();
@@ -1620,7 +1627,49 @@ bool QuestRewarded_MallAOESpellNPC(Player* pPlayer, Creature* pCreature, Quest c
 	return true;
 }
 
+class StevenGuardEvent : public BasicEvent
+{
+public: 
+	StevenGuardEvent(Player* plr, Creature* cr) : BasicEvent(), m_player(plr), m_creature(cr) {}
 
+	bool Execute(uint64 /*e_time*/, uint32 /*p_time*/) override
+	{
+		
+		Unit* pTarget1 = m_creature->FindNearestCreature(NPC_PRISONER1, 150.0f, true);
+		Unit* pTarget2 = m_creature->FindNearestCreature(NPC_PRISONER2, 150.0f, true);
+		Unit* pTarget = m_creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
+		
+		if (GameObject* pGo = m_creature->FindNearestGameObject(GO_PRISON_FIRE, 150.0f))
+		{
+			if (!pGo->isSpawned())
+			{
+				pGo->SetRespawnTime(10);
+				pGo->Refresh();
+			}
+			else
+			{
+				pGo->SetGoState(GO_STATE_ACTIVE);
+				m_player->CLOSE_GOSSIP_MENU();
+			}
+
+		}
+
+
+		pTarget->SetHealthPercent(0.00f);
+		pTarget->SetDeathState(JUST_DIED);
+		pTarget1->SetHealthPercent(0.00f);
+		pTarget1->SetDeathState(JUST_DIED);
+		pTarget2->SetHealthPercent(0.00f);
+		pTarget2->SetDeathState(JUST_DIED);
+
+		return true;
+	}
+
+private:
+	Player* m_player;
+	Creature* m_creature;
+
+};
 
 
 bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
@@ -1634,6 +1683,8 @@ bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
 
 bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 action)
 {
+	Unit* pTarget = _Creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
+
 	switch (action)
 	{
 	case 200:
@@ -1643,10 +1694,6 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 		break;
 
 	case 201:
-
-		Unit* pTarget1 = _Creature->FindNearestCreature(NPC_PRISONER1, 150.0f, true);
-		Unit* pTarget2 = _Creature->FindNearestCreature(NPC_PRISONER2, 150.0f, true);
-		Unit* pTarget = _Creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
 
 		if (!pTarget)
 			{
@@ -1673,13 +1720,14 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 					switch (movementStep)
 					{
 					case 0:
-						_Creature->GetMotionMaster()->MovePoint(0, -1804.43, -4252.62, 2.13); // move to cages
+						_Creature->GetMotionMaster()->MoveWaypoint(0); // move to cages
 						_Creature->SetWalk(true);
 						break;
 					case 1:
 						_Creature->MonsterTextEmote(GUARD_EMOTE_EYES);
 						_Creature->MonsterSay(GUARD_SAY_BURN);
 						_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
+						_Creature->m_Events.AddEvent(new StevenGuardEvent(player, _Creature), _Creature->m_Events.CalculateTime(1500));
 						break;
 					case 2:
 						_Creature->GetMotionMaster()->MoveTargetedHome();
@@ -1689,29 +1737,7 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 
 				} while (movementStep < 3);
 
-				//_Creature->GetMotionMaster()->MovePoint(0, -1808.10, -4247.40, 2.13); // turn
-				//_Creature->SetWalk(true);
-
-				pTarget->SetHealthPercent(0.00f);
-				pTarget->SetDeathState(JUST_DIED);
-				pTarget1->SetHealthPercent(0.00f);
-				pTarget1->SetDeathState(JUST_DIED);
-				pTarget2->SetHealthPercent(0.00f);
-				pTarget2->SetDeathState(JUST_DIED);
-
-					if (GameObject* pGo = _Creature->FindNearestGameObject(GO_PRISON_FIRE, 150.0f))
-					{
-						if (!pGo->isSpawned())
-						{
-						pGo->SetRespawnTime(10);
-						pGo->Refresh();
-						}
-					else 
-					{
-						pGo->SetGoState(GO_STATE_ACTIVE);
-						player->CLOSE_GOSSIP_MENU();
-					}
-				}
+				
 			}
 		}  player->CLOSE_GOSSIP_MENU();
 		
@@ -1737,6 +1763,7 @@ struct MallGuardSwitchAI : public ScriptedAI
 
 	MallGuardSwitchAI(Creature* pCreature) : ScriptedAI(pCreature)
 	{
+		JustRespawned();
 	}
 
 	void Reset() 
@@ -1756,7 +1783,10 @@ struct MallGuardSwitchAI : public ScriptedAI
 CreatureAI* GetAI_MallGuardSwitchNPC(Creature* pCreature)
 {
 	return new MallGuardSwitchAI(pCreature);
-}
+};
+
+
+
 
 
 void AddSC_custom_creatures()
@@ -1814,67 +1844,67 @@ void AddSC_custom_creatures()
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsBlacksmithingNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionBlacksmithingNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	//newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsLeatherworkingNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionLeatherworkingNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+	//newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsTailoringNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionTailoringNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+//	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsEnginerringNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionEngineeringNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+//	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsEnchantingNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionEnchantingNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+//	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsHerbalismNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionHerbalismNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+//	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsSkinningNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionSkinningNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+//	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsMiningNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionMiningNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+//	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsFirstAidNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionFirstAidNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+//	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsFishingNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionFishingNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+//	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
 	newscript->Name = "custom_ProfessionsCookingNPC";
 	newscript->pGossipHello = &GossipHello_ProfessionCookingNPC;
-	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
+//	newscript->pGossipSelect = &GossipSelect_ProfessionNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
@@ -1885,9 +1915,9 @@ void AddSC_custom_creatures()
 
 	newscript = new Script;
 	newscript->Name = "custom_StevenGuardNPC"; 
-	//newscript->GetAI = &GetAI_StevenGuardNPC;
 	newscript->pGossipHello = &GossipHello_StevenGuardNPC;
 	newscript->pGossipSelect = &GossipSelect_StevenGuardNPC;
+	//newscript->GetAI = &GetAI_StevenGuardNPC;
 	newscript->RegisterSelf(true);
 
 	newscript = new Script;
