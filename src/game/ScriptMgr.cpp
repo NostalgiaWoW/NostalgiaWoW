@@ -1124,7 +1124,8 @@ bool ScriptMgr::OnGossipSelect(Player* pPlayer, Player* otherPlayer, uint32 send
             if (script && script->pPlrGossipSelect)
             {
                 pPlayer->PlayerTalkClass->ClearMenus();
-                script->pPlrGossipSelect(pPlayer, otherPlayer, sender, action);
+                if (script->pPlrGossipSelect(pPlayer, otherPlayer, sender, action))
+                    break;
             }
         }
     }
