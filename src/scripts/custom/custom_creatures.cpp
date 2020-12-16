@@ -56,9 +56,9 @@ bool GossipHello_ArenaPortalPhaseNPC(Player* player, Creature* _Creature)
 bool GossipHello_BoatTeleportNPC(Player* player, Creature* _Creature)
 {
 	//player->ADD_GOSSIP_ITEM(2, "Adventurer Ship (Quests Available)", GOSSIP_SENDER_MAIN, 91);
-	player->ADD_GOSSIP_ITEM(2, "Warrior's Ship (Epic Gear Vendors)", GOSSIP_SENDER_MAIN, 92);
-	player->ADD_GOSSIP_ITEM(2, "Apprentice's Ship (Blue Gear Vendors)", GOSSIP_SENDER_MAIN, 93);
-	player->ADD_GOSSIP_ITEM(2, "Training Ship (Class Trainers)", GOSSIP_SENDER_MAIN, 94);
+	player->ADD_GOSSIP_ITEM(2, "Epic Gear Vendors", GOSSIP_SENDER_MAIN, 92);
+	player->ADD_GOSSIP_ITEM(2, "Blue Gear Vendors", GOSSIP_SENDER_MAIN, 93);
+	player->ADD_GOSSIP_ITEM(2, "Class Trainers", GOSSIP_SENDER_MAIN, 94);
 
 	player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
 	return true;
