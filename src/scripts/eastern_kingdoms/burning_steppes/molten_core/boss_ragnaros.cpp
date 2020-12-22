@@ -61,7 +61,7 @@ enum
 
     GO_LAVA_BURST             = 178088,
 
-    MAX_ADDS_IN_SUBMERGE      = 8
+    MAX_ADDS_IN_SUBMERGE      = 5
 };
 
 // Lava Burst locations
@@ -143,10 +143,10 @@ struct boss_ragnarosAI : ScriptedAI
     void Reset() override
     {
         m_uiMagmaBlastTimer         = 2000;
-        m_uiWrathOfRagnarosTimer    = urand(25000, 30000);
-        m_uiMightOfRagnarosTimer    = urand(10000, 15000);
+        m_uiWrathOfRagnarosTimer    = urand(20000, 25000);
+        m_uiMightOfRagnarosTimer    = urand(8000, 13000);
         m_uiRestoreTargetTimer      = 0;
-        m_uiLavaBurstTimer          = urand(10000, 15000);
+        m_uiLavaBurstTimer          = urand(8000, 13000);
         m_uiLavaBurstSecondaryTimer = 0;
         m_uiLavaBurstTertiaryTimer  = 0;
 
@@ -245,7 +245,7 @@ struct boss_ragnarosAI : ScriptedAI
         if (m_uiLavaBurstTimer < diff)
         {
             DoLavaBurst();
-            m_uiLavaBurstTimer = urand (15000, 20000);
+            m_uiLavaBurstTimer = urand (12000, 18000);
             m_uiLavaBurstSecondaryTimer = urand (2000, 4000);
         }
         else
@@ -473,7 +473,7 @@ struct boss_ragnarosAI : ScriptedAI
         {
             if (DoCastSpellIfCan(m_creature, SPELL_WRATH_OF_RAGNAROS) == CAST_OK)
             {
-                m_uiWrathOfRagnarosTimer = urand(25000, 30000);
+                m_uiWrathOfRagnarosTimer = urand(20000, 25000);
                 DoScriptText(SAY_WRATH, m_creature);
             }
         }
@@ -500,7 +500,7 @@ struct boss_ragnarosAI : ScriptedAI
                     {
                         m_creature->SetInFront(pTarget);
                         m_creature->SetTargetGuid(pTarget->GetObjectGuid());  // Ragnaros faces targets he casts Might of Ragnaros on
-                        m_uiMightOfRagnarosTimer = urand(9000, 14000);
+                        m_uiMightOfRagnarosTimer = urand(7000, 12000);
                         m_uiRestoreTargetTimer = 800;
                         if (urand(0, 1))
                             DoScriptText(SAY_HAND, m_creature);

@@ -57,9 +57,9 @@ struct boss_sulfuronAI : public ScriptedAI
 
     void Reset()
     {
-        Darkstrike_Timer        = 10000;                     //These times are probably wrong
-        DemoralizingShout_Timer = 15000;
-        Inspire_Timer           = 13000;
+        Darkstrike_Timer        = 8000;                     //These times are probably wrong
+        DemoralizingShout_Timer = 12000;
+        Inspire_Timer           = 10000;
         Knockdown_Timer         = 6000;
         Flamespear_Timer        = 2000;
 
@@ -89,7 +89,7 @@ struct boss_sulfuronAI : public ScriptedAI
         if (DemoralizingShout_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DEMORALIZINGSHOUT) == CAST_OK)
-                DemoralizingShout_Timer = urand(15000, 20000);
+                DemoralizingShout_Timer = urand(12000, 18000);
         }
         else DemoralizingShout_Timer -= diff;
 
@@ -112,7 +112,7 @@ struct boss_sulfuronAI : public ScriptedAI
             }
 
             if (DoCastSpellIfCan(m_creature, SPELL_INSPIRE) == CAST_OK)
-                Inspire_Timer = urand(20000, 26000);
+                Inspire_Timer = urand(18000, 24000);
         }
         else Inspire_Timer -= diff;
 
@@ -120,7 +120,7 @@ struct boss_sulfuronAI : public ScriptedAI
         if (Knockdown_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_KNOCKDOWN) == CAST_OK)
-                Knockdown_Timer = urand(12000, 15000);
+                Knockdown_Timer = urand(10000, 13000);
         }
         else Knockdown_Timer -= diff;
 
@@ -130,7 +130,7 @@ struct boss_sulfuronAI : public ScriptedAI
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 if (DoCastSpellIfCan(target, SPELL_FLAMESPEAR) == CAST_OK)
-                    Flamespear_Timer = urand(12000, 16000);
+                    Flamespear_Timer = urand(10000, 14000);
             }
         }
         else Flamespear_Timer -= diff;
@@ -139,7 +139,7 @@ struct boss_sulfuronAI : public ScriptedAI
         if (Darkstrike_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DARKSTRIKE) == CAST_OK)
-                Darkstrike_Timer = urand(15000, 18000);
+                Darkstrike_Timer = urand(13000, 15000);
         }
         else Darkstrike_Timer -= diff;
 
@@ -164,10 +164,10 @@ struct mob_flamewaker_priestAI : public ScriptedAI
 
     void Reset()
     {
-        Heal_Timer           = urand(10000, 15000);
+        Heal_Timer           = urand(8000, 12000);
         ShadowWordPain_Timer = 2000;
-        Immolate_Timer       = urand(2500, 12000);
-        DarkStrike_Timer     = urand(6000, 8000);
+        Immolate_Timer       = urand(2500, 10000);
+        DarkStrike_Timer     = urand(5000, 7000);
     }
 
     void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
@@ -189,7 +189,7 @@ struct mob_flamewaker_priestAI : public ScriptedAI
                 return;
 
             if (DoCastSpellIfCan(pUnit, SPELL_HEAL) == CAST_OK)
-                Heal_Timer = urand(5000, 10000);
+                Heal_Timer = urand(4000, 8000);
         }
         else Heal_Timer -= diff;
 
@@ -197,7 +197,7 @@ struct mob_flamewaker_priestAI : public ScriptedAI
         if (ShadowWordPain_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SHADOWWORDPAIN) == CAST_OK)
-                ShadowWordPain_Timer = urand(18000, 26000);
+                ShadowWordPain_Timer = urand(15000, 23000);
         }
         else ShadowWordPain_Timer -= diff;
 
@@ -205,7 +205,7 @@ struct mob_flamewaker_priestAI : public ScriptedAI
         if (Immolate_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_IMMOLATE) == CAST_OK)
-                Immolate_Timer = urand(15000, 25000);
+                Immolate_Timer = urand(12000, 22000);
         }
         else Immolate_Timer -= diff;
 

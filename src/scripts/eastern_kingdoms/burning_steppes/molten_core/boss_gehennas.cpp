@@ -44,9 +44,9 @@ struct boss_gehennasAI : public ScriptedAI
 
     void Reset()
     {
-        ShadowBolt_Timer = 5000;
-        RainOfFire_Timer = 7000;
-        GehennasCurse_Timer = 8000;
+        ShadowBolt_Timer = 2000;
+        RainOfFire_Timer = 3000;
+        GehennasCurse_Timer = 5000;
 
         if (m_pInstance && m_creature->isAlive())
             m_pInstance->SetData(TYPE_GEHENNAS, NOT_STARTED);
@@ -76,7 +76,7 @@ struct boss_gehennasAI : public ScriptedAI
             if (Unit* bTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
             {
                 if (DoCastSpellIfCan(bTarget, SPELL_SHADOWBOLT) == CAST_OK)
-                    ShadowBolt_Timer = 2000 + rand() % 3000;
+                    ShadowBolt_Timer = 750 + rand() % 1500;
             }
         }
         else ShadowBolt_Timer -= diff;
@@ -87,7 +87,7 @@ struct boss_gehennasAI : public ScriptedAI
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 if (DoCastSpellIfCan(target, SPELL_RAINOFFIRE) == CAST_OK)
-                    RainOfFire_Timer = urand(8000, 10000);
+                    RainOfFire_Timer = urand(3000, 4000);
             }
         }
         else RainOfFire_Timer -= diff;
@@ -96,7 +96,7 @@ struct boss_gehennasAI : public ScriptedAI
         if (GehennasCurse_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_GEHENNASCURSE, CAST_AURA_NOT_PRESENT) == CAST_OK)
-                GehennasCurse_Timer = urand(22000, 30000);
+                GehennasCurse_Timer = urand(9000, 13000);
         }
         else GehennasCurse_Timer -= diff;
 

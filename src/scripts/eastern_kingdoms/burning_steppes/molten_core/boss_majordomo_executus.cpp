@@ -102,12 +102,12 @@ struct boss_majordomoAI : public ScriptedAI
     void Reset()
     {
         m_creature->SetDefaultMovementType(IDLE_MOTION_TYPE);
-        Reflection_Timer =  30000;
-        Blastwave_Timer = 10000;
+        Reflection_Timer =  25000;
+        Blastwave_Timer = 8000;
         for (int i = 0; i < 2; i++)
-            TPDomo_Timer[i] = 10000 + rand() % 20000;
+            TPDomo_Timer[i] = 8000 + rand() % 18000;
         AddSpawn = false;
-        AddsAlive = 8;
+        AddsAlive = 6;
         Immune = 0;
 
         while (Creature* Add = m_creature->FindNearestCreature(11663, 250.0f, true))
@@ -393,7 +393,7 @@ struct boss_majordomoAI : public ScriptedAI
 
             if (m_creature->getVictim())
                 m_creature->CastSpell(m_creature, Reflect, true);
-            Reflection_Timer = 30000;
+            Reflection_Timer = 25000;
         }
         else Reflection_Timer -= diff;
 
@@ -401,7 +401,7 @@ struct boss_majordomoAI : public ScriptedAI
         if (Blastwave_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_BLASTWAVE) == CAST_OK)
-                Blastwave_Timer = 10000;
+                Blastwave_Timer = 8000;
         }
         else
             Blastwave_Timer -= diff;
@@ -416,7 +416,7 @@ struct boss_majordomoAI : public ScriptedAI
                 if (uTarget && uTarget->IsPlayer() && DoCastSpellIfCan(uTarget, SPELL_TELEPORT) == CAST_OK)
                 {
                     DoResetThreat();
-                    TPDomo_Timer[i] = 20000 + rand() % 10000;
+                    TPDomo_Timer[i] = 18000 + rand() % 10000;
                 }
             }
             else

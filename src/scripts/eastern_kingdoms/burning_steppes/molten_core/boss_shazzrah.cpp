@@ -52,10 +52,10 @@ struct boss_shazzrahAI : public ScriptedAI
     void Reset()
     {
         ArcaneExplosion_Timer = 2000;
-        ShazzrahCurse_Timer = 10000;
+        ShazzrahCurse_Timer = 8000;
         DeadenMagic_Timer = 5000;
-        Countspell_Timer = 15000;
-        Blink_Timer = urand(25000, 30000);
+        Countspell_Timer = 12000;
+        Blink_Timer = urand(20000, 28000);
 
         if (m_pInstance && m_creature->isAlive())
             m_pInstance->SetData(TYPE_SHAZZRAH, NOT_STARTED);
@@ -90,7 +90,7 @@ struct boss_shazzrahAI : public ScriptedAI
         if (ShazzrahCurse_Timer < diff)
         {
 			if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SHAZZRAHCURSE, CAST_AURA_NOT_PRESENT) == CAST_OK)
-				ShazzrahCurse_Timer = 20000;
+				ShazzrahCurse_Timer = 15000;
         }
         else ShazzrahCurse_Timer -= diff;
 
@@ -98,7 +98,7 @@ struct boss_shazzrahAI : public ScriptedAI
         if (DeadenMagic_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_DEADENMAGIC) == CAST_OK)
-                DeadenMagic_Timer = urand(7000, 14000);
+                DeadenMagic_Timer = urand(5000, 12000);
         }
         else DeadenMagic_Timer -= diff;
 
@@ -106,7 +106,7 @@ struct boss_shazzrahAI : public ScriptedAI
         if (Countspell_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_COUNTERSPELL) == CAST_OK)
-                Countspell_Timer = urand(16000, 18000);
+                Countspell_Timer = urand(14000, 16000);
         }
         else Countspell_Timer -= diff;
 
@@ -125,7 +125,7 @@ struct boss_shazzrahAI : public ScriptedAI
                     m_creature->Attack(pTarget, true);
                 }
 
-                Blink_Timer = urand(25000, 35000);
+                Blink_Timer = urand(22000, 30000);
             }
         }
         else Blink_Timer -= diff;

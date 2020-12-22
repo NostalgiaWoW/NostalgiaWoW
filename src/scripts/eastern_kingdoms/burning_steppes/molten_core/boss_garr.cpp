@@ -46,10 +46,10 @@ struct boss_garrAI : ScriptedAI
 
     void Reset() override
     {
-        m_uiAntiMagicPulseTimer = 25000;                       //These times are probably wrong
-        m_uiMagmaShacklesTimer  = 15000;
+        m_uiAntiMagicPulseTimer = 15000;                       //These times are probably wrong
+        m_uiMagmaShacklesTimer  = 10000;
         m_uiCheckAddsTimer      = 2000;
-        m_uiExplodeTimer        = urand(3000, 6000);
+        m_uiExplodeTimer        = urand(2000, 4000);
 
         if (m_pInstance && m_creature->isAlive())
             m_pInstance->SetData(TYPE_GARR, NOT_STARTED);
@@ -138,7 +138,7 @@ struct boss_garrAI : ScriptedAI
         if (m_uiAntiMagicPulseTimer < diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_ANTIMAGICPULSE) == CAST_OK)
-                m_uiAntiMagicPulseTimer = urand(10000, 15000);
+                m_uiAntiMagicPulseTimer = urand(5000, 10000);
         }
         else
             m_uiAntiMagicPulseTimer -= diff;
@@ -146,7 +146,7 @@ struct boss_garrAI : ScriptedAI
         if (m_uiMagmaShacklesTimer < diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_MAGMASHACKLES) == CAST_OK)
-                m_uiMagmaShacklesTimer = urand(8000, 12000);
+                m_uiMagmaShacklesTimer = urand(6000, 10000);
         }
         else
             m_uiMagmaShacklesTimer -= diff;
@@ -156,7 +156,7 @@ struct boss_garrAI : ScriptedAI
             if (m_uiExplodeTimer < diff)
             {
                 if (DoExplodeFiresworn())
-                    m_uiExplodeTimer = urand(10000, 20000);
+                    m_uiExplodeTimer = urand(8000, 18000);
             }
             else
                 m_uiExplodeTimer -= diff;
