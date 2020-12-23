@@ -1706,7 +1706,6 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 		if (!pTarget)
 			{
 			_Creature->MonsterSay("Let's give their corpses a minute to cool off before we light em up again."); 
-			_Creature->SetOrientation(1.02);
 			player->CLOSE_GOSSIP_MENU();
 			}
 		else
@@ -1734,6 +1733,7 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 				_Creature->SetOrientation(1.02);
 			}
 		}  player->CLOSE_GOSSIP_MENU();
+		   _Creature->SetOrientation(1.02);
 		
 		break;
 
