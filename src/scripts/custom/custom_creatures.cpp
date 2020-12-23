@@ -1691,6 +1691,7 @@ bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
 bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 action)
 {
 	Unit* pTarget = _Creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
+	float cOrientation = _Creature->GetOrientation();
 
 	switch (action)
 	{
@@ -1701,7 +1702,6 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 		break;
 
 	case 201:
-		float cOrientation = _Creature->GetOrientation();
 		
 		if (!pTarget)
 			{
@@ -1715,6 +1715,7 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 			{
 				_Creature->MonsterSay("Come back when you've got enough gold.");
 				_Creature->SetOrientation(cOrientation);
+
 				player->CLOSE_GOSSIP_MENU();
 				return false;
 			}
