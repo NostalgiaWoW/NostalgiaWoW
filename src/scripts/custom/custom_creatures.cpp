@@ -1714,7 +1714,7 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 			if (player->GetMoney() < 1000000)
 			{
 				_Creature->MonsterSay("Come back when you've got enough gold.");
-				_Creature->SetOrientation(cOrientation);
+				_Creature->SetOrientation(1.02);
 
 				player->CLOSE_GOSSIP_MENU();
 				return false;
@@ -1730,7 +1730,7 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 				_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
 
 				_Creature->m_Events.AddEvent(new StevenGuardEvent(player, _Creature), _Creature->m_Events.CalculateTime(1500));
-				_Creature->SetOrientation(cOrientation);
+				_Creature->SetOrientation(1.02);
 			}
 		}  player->CLOSE_GOSSIP_MENU();
 		
