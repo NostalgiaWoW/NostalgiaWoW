@@ -1714,6 +1714,7 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 			if (player->GetMoney() < 1000000)
 			{
 				_Creature->MonsterSay("Come back when you've got enough gold.");
+				_Creature->SetOrientation(cOrientation);
 				player->CLOSE_GOSSIP_MENU();
 				return false;
 			}
@@ -1775,8 +1776,6 @@ CreatureAI* GetAI_MallGuardSwitchNPC(Creature* pCreature)
 {
 	return new MallGuardSwitchAI(pCreature);
 };
-
-
 
 
 
