@@ -1691,18 +1691,17 @@ bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
 bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 action)
 {
 	Unit* pTarget = _Creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
-	float cOrientation = _Creature->GetOrientation();
 
 	switch (action)
 	{
 	case 200:
-
+		float cOrientation = _Creature->GetOrientation();
 		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Here's 100g - torch 'em.", GOSSIP_SENDER_MAIN, 201);
 		player->SEND_GOSSIP_MENU(120002, _Creature->GetGUID());
 		break;
 
 	case 201:
-		
+		float cOrientation = _Creature->GetOrientation();
 		if (!pTarget)
 			{
 			_Creature->MonsterSay("Let's give their corpses a minute to cool off before we light em up again."); 
@@ -1714,7 +1713,6 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 			if (player->GetMoney() < 1000000)
 			{
 				_Creature->MonsterSay("Come back when you've got enough gold.");
-				_Creature->SetOrientation(1.02);
 
 				player->CLOSE_GOSSIP_MENU();
 				return false;
@@ -1730,10 +1728,10 @@ bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 ac
 				_Creature->CastSpell(pTarget, SPELL_THROW_LIQUID_FIRE, false);
 
 				_Creature->m_Events.AddEvent(new StevenGuardEvent(player, _Creature), _Creature->m_Events.CalculateTime(1500));
-				_Creature->SetOrientation(1.02);
 			}
-		}  player->CLOSE_GOSSIP_MENU();
-		   _Creature->SetOrientation(1.02);
+		}  
+		player->CLOSE_GOSSIP_MENU();
+	    _Creature->SetOrientation(cOrientation);
 		
 		break;
 
