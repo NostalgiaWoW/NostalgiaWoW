@@ -59,8 +59,9 @@ struct PvPArena
     float Radius;
     float Position_x;
     float Position_y;
+	float Position_z;
     uint32 MapId;   
-    std::array<Position, 2> TeamPositions;
+    std::array<Position, 3> TeamPositions;
     uint32 GateEntry;
     std::array<uint32, 2> GateGuids;
 };

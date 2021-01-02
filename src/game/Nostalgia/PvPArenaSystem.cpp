@@ -27,13 +27,13 @@ void ArenaGame::Start()
         for (auto& arenaPlayer : arenaTeam.Group)
         {
             auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
-            float z_arena = m_map->GetHeight(m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, 0.0f);
+            float z_arena = m_map->GetHeight(m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, m_arena->TeamPositions[i].z);
             if (player)
             {
                 player->SaveRecallPosition();
                 player->GetPosition(arenaPlayer.OldPosition);
                 
-                player->TeleportTo(m_arena->MapId, m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, z_arena, 0.0f);
+                player->TeleportTo(m_arena->MapId, m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, m_arena->TeamPositions[i].z, 0.0f);
                 player->ScheduleGenericDelayedAction([](Player* target) 
                     {
                         target->AddAura(AURA_ROOT);
@@ -315,9 +315,9 @@ void PvPArenaSystem::LoadFromDB()
 
     do {
         auto fields = result->Fetch();
-        PvPArena arena = { fields[0].GetUInt32(), static_cast<ArenaType>(fields[1].GetUInt32()), fields[2].GetFloat(), fields[3].GetFloat(), fields[4].GetFloat(), fields[5].GetUInt32(),
-            {  Position({fields[6].GetFloat(), fields[7].GetFloat(), 0.0f, 0.0f}), Position({fields[8].GetFloat(), fields[9].GetFloat(), 0.0f, 0.0f})   },
-            fields[10].GetUInt32(), {fields[11].GetUInt32(), fields[12].GetUInt32()} };
+        PvPArena arena = { fields[0].GetUInt32(), static_cast<ArenaType>(fields[1].GetUInt32()), fields[2].GetFloat(), fields[3].GetFloat(), fields[4].GetFloat(), fields[5].GetFloat(), fields[6].GetUInt32(),
+            {  Position({fields[7].GetFloat(), fields[8].GetFloat(), fields[9].GetFloat() , 0.0f}), Position({fields[10].GetFloat(), fields[11].GetFloat(), fields[12].GetFloat(), 0.0f})   },
+            fields[13].GetUInt32(), {fields[14].GetUInt32(), fields[15].GetUInt32()} };
         auto res = m_arenas.insert({ arena.Type, std::move(arena) });
         m_freeArenas.insert({ res->first, std::ref(res->second) });
     } while (result->NextRow());
