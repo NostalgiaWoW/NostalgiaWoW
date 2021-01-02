@@ -45,17 +45,21 @@ uint32 handleRecords(Player* pPlayer, uint32 amount, int result)
         currentInfo.betCount = 0;
     currentInfo.betCount++;
 
-    if (currentInfo.betCount == 3 && currentInfo.lastBet == amount)
-    {
-        if (result > 75)
-            newAmount = amount * 3;
+	if (currentInfo.betCount == 3 && currentInfo.lastBet == amount)
+	{
+		if (result > 75)
+			newAmount = amount * 3;
+		else if (result <= 75)
+			newAmount = 0;
 
-        currentInfo.betCount = 0;
-    }
-    else if (result > 50)
-        newAmount = amount * 2;
-    else
-        currentInfo.betCount = 0;
+		currentInfo.betCount = 0;
+	}
+	else if (result > 55)
+		newAmount = amount * 2;
+	else if (result <= 55) {
+		newAmount = 0;
+		currentInfo.betCount = 0;
+	}
 
     currentInfo.lastBet = amount;
     currentInfo.timestamp = currentTime;
