@@ -1691,17 +1691,17 @@ bool GossipHello_StevenGuardNPC(Player* player, Creature* _Creature)
 bool GossipDefault_StevenGuardNPC(Player* player, Creature* _Creature, uint32 action)
 {
 	Unit* pTarget = _Creature->FindNearestCreature(NPC_PRISONER, 150.0f, true);
-
+	float cOrientation;
 	switch (action)
 	{
 	case 200:
-		float cOrientation = _Creature->GetOrientation();
+		cOrientation = _Creature->GetOrientation();
 		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Here's 100g - torch 'em.", GOSSIP_SENDER_MAIN, 201);
 		player->SEND_GOSSIP_MENU(120002, _Creature->GetGUID());
 		break;
 
 	case 201:
-		float cOrientation = _Creature->GetOrientation();
+		cOrientation = _Creature->GetOrientation();
 		if (!pTarget)
 			{
 			_Creature->MonsterSay("Let's give their corpses a minute to cool off before we light em up again."); 
