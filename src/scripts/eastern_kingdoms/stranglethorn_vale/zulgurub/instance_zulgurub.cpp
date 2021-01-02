@@ -44,6 +44,7 @@ void instance_zulgurub::Initialize()
     m_uiHakkarGUID    = 0;
     m_uiMarliGUID     = 0;
     m_uiGahzrankaGUID = 0;
+	m_uiJeklikGUID	  = 0;
 }
 
 // each time High Priest dies lower Hakkar's HP
@@ -70,7 +71,10 @@ void instance_zulgurub::OnCreatureCreate(Creature* pCreature)
     uint64 nullGuid = 0;
     switch (pCreature->GetEntry())
     {
-        case NPC_LORKHAN:
+		case NPC_JEKLIK:
+			HandleLoadCreature(TYPE_JEKLIK, m_uiJeklikGUID, pCreature);
+			break;
+		case NPC_LORKHAN:
             HandleLoadCreature(TYPE_LORKHAN, m_uiLorKhanGUID, pCreature);
             break;
         case NPC_ZATH:

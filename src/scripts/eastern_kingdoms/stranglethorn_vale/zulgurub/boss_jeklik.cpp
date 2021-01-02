@@ -31,7 +31,7 @@ UPDATE creature_template SET InhabitType=4 WHERE entry=14965;
 enum
 {
     // Datas : HP : 333,125 (+20% = 399750), MP : 26,200. Troll form : 550-1000 melee. Bat form : 800-1200 on warrior.
-    NPC_JEKLIK                  = 14517,
+    // NPC_JEKLIK                  = 14517, moved to .h
 
     // Emotes
     // ------
@@ -159,6 +159,8 @@ struct boss_jeklikAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_JEKLIK, DONE);
+
+		m_creature->SetRespawnDelay(432000);
         //ScriptedAI::JustDied(Killer);
     }
 

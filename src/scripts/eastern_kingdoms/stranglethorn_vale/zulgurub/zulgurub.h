@@ -7,22 +7,23 @@
 
 enum
 {
-    ZULGURUB_MAX_ENCOUNTER  = 11,
+	ZULGURUB_MAX_ENCOUNTER = 11,
 
-    // Bosses
-    NPC_LORKHAN             = 11347,
-    NPC_ZATH                = 11348,
-    NPC_THEKAL              = 14509,
-    NPC_JINDO               = 11380,
-    NPC_HAKKAR              = 14834,
-    NPC_VENOXIS             = 14507,
-    NPC_ARLOKK              = 14515,
-    NPC_MARLI               = 14510,
-    NPC_RAZZASHI_SKITTERER  = 14880,
-    NPC_RAZZASHI_VENOMBROOD = 14532,
-    NPC_HAKARI_SHADOWCASTER = 11338,
-    NPC_RAZZASHI_BROODWIDOW = 11370,
-    NPC_GAHZRANKA           = 15114,
+	// Bosses
+	NPC_LORKHAN = 11347,
+	NPC_ZATH = 11348,
+	NPC_THEKAL = 14509,
+	NPC_JINDO = 11380,
+	NPC_HAKKAR = 14834,
+	NPC_VENOXIS = 14507,
+	NPC_ARLOKK = 14515,
+	NPC_MARLI = 14510,
+	NPC_RAZZASHI_SKITTERER = 14880,
+	NPC_RAZZASHI_VENOMBROOD = 14532,
+	NPC_HAKARI_SHADOWCASTER = 11338,
+	NPC_RAZZASHI_BROODWIDOW = 11370,
+	NPC_GAHZRANKA = 15114,
+	NPC_JEKLIK	= 14517,
 
     TYPE_ARLOKK             = 1,
     TYPE_JEKLIK             = 2,
@@ -84,6 +85,7 @@ class instance_zulgurub : public ScriptedInstance
         uint64 m_uiJindoGUID;
         uint64 m_uiHakkarGUID;
         uint64 m_uiGahzrankaGUID;
+		uint64 m_uiJeklikGUID;
 
         uint64 m_uiMarliGUID;
                 std::list<uint64> m_lMarliTrashGUIDList;
