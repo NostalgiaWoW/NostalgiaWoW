@@ -18778,6 +18778,9 @@ void Player::learnDefaultSpells()
         else                                                // but send in normal spell in game learn case
             learnSpell(tspell, true);
     }
+
+	addSpell(33389, true, true, true, false);
+	addSpell(33392, true, true, true, false);
 }
 
 void Player::learnQuestRewardedSpells(Quest const* quest)
