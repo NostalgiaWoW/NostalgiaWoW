@@ -4340,8 +4340,19 @@ void Aura::HandlePeriodicHeal(bool apply, bool /*Real*/)
             return;
 
         Unit *caster = GetCaster();
+		SpellEntry const* spellProto = GetSpellProto();
         if (!caster)
             return;
+
+		switch (GetId())
+		{
+		case 24427:                                     // Diamond Flask
+			m_modifier.m_amount = caster->SpellHealingBonusDone(target, GetSpellProto(), (m_modifier.m_amount) + caster->SpellBaseHealingBonusDone(GetSpellSchoolMask(spellProto)), DOT, GetStackAmount());
+			return;
+		
+		default:
+			break;
+		}
 
         m_modifier.m_amount = caster->SpellHealingBonusDone(target, GetSpellProto(), m_modifier.m_amount, DOT, GetStackAmount());
     }
