@@ -8,6 +8,10 @@
 #include <mutex>
 
 #define AURA_ROOT 23973
+#define START_FIREWORK0 1201200
+#define START_FIREWORK1 1201201
+#define START_FIREWORK2 1201202
+#define START_FIREWORK3 1201203
 
 template <typename Itr, typename F>
 void DoForAll(Itr begin, Itr end, F f)
@@ -21,35 +25,90 @@ void DoForAll(Itr begin, Itr end, F f)
 
 void ArenaGame::Start()
 {
-    for (uint32 i = 0; i < 2; ++i)
-    {
-        auto& arenaTeam = m_teams[i];
-        for (auto& arenaPlayer : arenaTeam.Group)
-        {
-            auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
-            float z_arena = m_map->GetHeight(m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, m_arena->TeamPositions[i].z);
-            if (player)
-            {
-                player->SaveRecallPosition();
-                player->GetPosition(arenaPlayer.OldPosition);
-                
-                player->TeleportTo(m_arena->MapId, m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, m_arena->TeamPositions[i].z, 0.0f);
-                player->ScheduleGenericDelayedAction([](Player* target) 
-                    {
-                        target->AddAura(AURA_ROOT);
-                        target->ApplyLegitReplenishment(true);
-                    });
-            }
-            else
-            {
-                //offline in queue.
-                arenaPlayer.IsAlive = false;
-                CheckEarlyConditions();
-            }
-        }
-    }
-    m_status = ArenaStatus::Starting;
-    m_events.ScheduleEvent(EVENT_ARENA_STARTING_IN_30, 5000);
+
+	for (uint32 i = 0; i < 2; ++i)
+	{
+		auto& arenaTeam = m_teams[i];
+
+		for (auto& arenaPlayer : arenaTeam.Group)
+		{
+			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
+			Player* loopPlayer = player;
+
+			if (player)
+			{
+				QueryResult* delResult = CharacterDatabase.PQuery("SELECT * FROM `character_aura_saved` WHERE `guid` = %u", loopPlayer->GetGUIDLow());
+				
+				if (delResult)
+				CharacterDatabase.PExecute("DELETE FROM `character_aura_saved` WHERE `guid` = %u", player->GetGUIDLow());
+
+				QueryResult* result = CharacterDatabase.PQuery("SELECT * FROM `character_aura` WHERE `guid` = %u", loopPlayer->GetGUIDLow());
+
+				if (result)
+				{
+					uint32 guid;
+					uint32 spell;
+					uint32 remaintime;
+					BarGoLink bar(result->GetRowCount());
+
+					do
+					{
+						bar.step();
+						Field* fields = result->Fetch();
+
+						guid = fields[0].GetInt32();
+						//uint32 caster_guid = fields[1].GetInt32();
+						//uint32 item_guid = fields[2].GetInt32();
+						spell = fields[3].GetInt32();
+						//uint32 stackcount = fields[4].GetInt32();
+						//uint32 remaincharges = fields[5].GetInt32();
+						//uint32 basepoints0 = fields[6].GetInt32();
+						//uint32 basepoints1 = fields[7].GetInt32();
+						//uint32 periodictime0 = fields[8].GetInt32();
+						//uint32 periodictime1 = fields[9].GetInt32();
+						//uint32 periodictime2 = fields[10].GetInt32();
+						//uint32 maxduration = fields[11].GetInt32();
+						remaintime = fields[12].GetInt32();
+						//uint32 effIndexMask = fields[13].GetInt32();
+
+					} while (result->NextRow());
+				
+					CharacterDatabase.PExecute("INSERT INTO `character_aura_saved` (`guid`, `spell`, `remaintime`) VALUES (%u, %u, %u)", guid, spell, remaintime);
+					delete result;
+				}
+			}
+		}
+	}
+
+	for (uint32 i = 0; i < 2; ++i)
+	{
+		auto& arenaTeam = m_teams[i];
+
+		for (auto& arenaPlayer : arenaTeam.Group)
+		{
+			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
+			float z_arena = m_map->GetHeight(m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, m_arena->TeamPositions[i].z);
+			if (player)
+			{
+				player->SaveRecallPosition();
+				player->GetPosition(arenaPlayer.OldPosition);
+				player->TeleportTo(m_arena->MapId, m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, m_arena->TeamPositions[i].z, 0.0f);
+				player->ScheduleGenericDelayedAction([](Player* target)
+					{
+						target->ApplyLegitReplenishment(true);
+					});
+			}
+			else
+			{
+				//offline in queue.
+				arenaPlayer.IsAlive = false;
+				CheckEarlyConditions();
+			}
+		}
+	}
+
+	m_status = ArenaStatus::Starting;
+	m_events.ScheduleEvent(EVENT_ARENA_STARTING_IN_30, 5000);
 }
 
 void ArenaGame::Update(uint32 diff)
@@ -107,6 +166,9 @@ void ArenaGame::Update(uint32 diff)
                                         target->SetFFAPvP(false);
                                     });
                                 player->TeleportTo(arenaPlayer.OldPosition);
+								
+								if (player->HasAura(AURA_ROOT))
+									player->RemoveAurasDueToSpell(AURA_ROOT);
                             }
                             else
                             {
@@ -164,13 +226,30 @@ void ArenaGame::EventArenaActive()
     DoForAllPlayers([](ObjectGuid playerGuid, const TeamInfo& playerTeam, const ArenaPlayer& arenaPlayer)
         {
             Player* player = sObjectMgr.GetPlayer(playerGuid);
+			// Fireworks launching for start of arena. Could be put into an array but I'm lazy.
+			Unit* firework = player->FindNearestCreature(START_FIREWORK0, 50);
+			Unit* firework1 = player->FindNearestCreature(START_FIREWORK1, 200);
+			Unit* firework2 = player->FindNearestCreature(START_FIREWORK2, 200);
+			Unit* firework3 = player->FindNearestCreature(START_FIREWORK3, 200);
+
+
             if (player)
             {
-                player->RemoveAurasDueToSpell(AURA_ROOT);
+				if (firework)
+					firework->CastSpell(firework, 11542, true);
+				if (firework1)
+					firework1->CastSpell(firework1, 11542, true);
+				if (firework2)
+					firework2->CastSpell(firework2, 11542, true);
+				if (firework3)
+					firework3->CastSpell(firework3, 11542, true);
+               
+				player->RemoveAurasDueToSpell(AURA_ROOT);
                 player->ApplyLegitReplenishment(true);
                 player->GetSession()->SendAreaTriggerMessage("Arena Started!");
                 player->SetFFAPvP(true);
             }
+
         });
 
 
@@ -240,10 +319,52 @@ void ArenaGame::PlayerDied(Player* killer, Player* killed, bool disconnected)
 
 void ArenaGame::EndGame(OutcomeResult result)
 {
-    if (result == OutcomeResult::Team1Wins)
-        sWorld.SendServerMessage(SERVER_MSG_CUSTOM, "Team 1 won!");
-    else if (result == OutcomeResult::Team2Wins)
-        sWorld.SendServerMessage(SERVER_MSG_CUSTOM, "Team 2 won!");
+
+	const auto& team1 = m_teams[0];
+	const auto& team2 = m_teams[1];
+
+	if (result == OutcomeResult::Team1Wins)
+	{
+		sWorld.SendServerMessage(SERVER_MSG_CUSTOM, "Team 1 won!");
+
+		for (const auto& arenaPlayer : team1.Group) // Rewards for winner
+		{
+			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
+			player->AddItem(80000, 1);
+			player->AddItem(80001, 4);
+			player->AddItem(80004, 1);
+			break;
+		}
+
+		for (const auto& arenaPlayer : team2.Group) // Rewards for loser
+		{
+			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
+			player->AddItem(80001, 2);
+			break;
+		}
+
+	}
+	else if (result == OutcomeResult::Team2Wins)
+	{
+		sWorld.SendServerMessage(SERVER_MSG_CUSTOM, "Team 2 won!");
+
+		for (const auto& arenaPlayer : team2.Group) // Rewards for winner
+		{
+			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
+			player->AddItem(80000, 1);
+			player->AddItem(80001, 4);
+			player->AddItem(80004, 1);
+			break;
+		}
+
+		for (const auto& arenaPlayer : team1.Group) // Rewards for loser
+		{
+			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
+			player->AddItem(80001, 2);
+			break;
+		}
+	}
+
 
     {
 
