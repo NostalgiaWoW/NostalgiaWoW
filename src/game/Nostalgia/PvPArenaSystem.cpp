@@ -26,59 +26,60 @@ void DoForAll(Itr begin, Itr end, F f)
 void ArenaGame::Start()
 {
 
-	for (uint32 i = 0; i < 2; ++i)
-	{
-		auto& arenaTeam = m_teams[i];
+	//for (uint32 i = 0; i < 2; ++i)
+	//{
+	//	auto& arenaTeam = m_teams[i];
 
-		for (auto& arenaPlayer : arenaTeam.Group)
-		{
-			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
-			Player* loopPlayer = player;
+	//	for (auto& arenaPlayer : arenaTeam.Group)
+	//	{
+	//		auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
 
-			if (player)
-			{
-				QueryResult* delResult = CharacterDatabase.PQuery("SELECT * FROM `character_aura_saved` WHERE `guid` = %u", loopPlayer->GetGUIDLow());
-				
-				if (delResult)
-				CharacterDatabase.PExecute("DELETE FROM `character_aura_saved` WHERE `guid` = %u", player->GetGUIDLow());
+	//		if (player)
+	//		{
+	//			QueryResult* delResult = CharacterDatabase.PQuery("SELECT * FROM `character_aura_saved` WHERE `guid` = %u", player->GetGUIDLow());
+	//			
+	//			if (delResult)
+	//				CharacterDatabase.PExecute("DELETE FROM `character_aura_saved` WHERE `guid` = %u", player->GetGUIDLow());
+	//			
+	//			delete delResult;
 
-				QueryResult* result = CharacterDatabase.PQuery("SELECT * FROM `character_aura` WHERE `guid` = %u", loopPlayer->GetGUIDLow());
+	//			QueryResult* result = CharacterDatabase.PQuery("SELECT * FROM `character_aura` WHERE `guid` = %u", player->GetGUIDLow());
 
-				if (result)
-				{
-					uint32 guid;
-					uint32 spell;
-					uint32 remaintime;
-					BarGoLink bar(result->GetRowCount());
+	//			if (result)
+	//			{
+	//				uint32 guid;
+	//				uint32 spell;
+	//				uint32 remaintime;
+	//				BarGoLink bar(result->GetRowCount());
 
-					do
-					{
-						bar.step();
-						Field* fields = result->Fetch();
+	//				do
+	//				{
+	//					bar.step();
+	//					Field* fields = result->Fetch();
 
-						guid = fields[0].GetInt32();
-						//uint32 caster_guid = fields[1].GetInt32();
-						//uint32 item_guid = fields[2].GetInt32();
-						spell = fields[3].GetInt32();
-						//uint32 stackcount = fields[4].GetInt32();
-						//uint32 remaincharges = fields[5].GetInt32();
-						//uint32 basepoints0 = fields[6].GetInt32();
-						//uint32 basepoints1 = fields[7].GetInt32();
-						//uint32 periodictime0 = fields[8].GetInt32();
-						//uint32 periodictime1 = fields[9].GetInt32();
-						//uint32 periodictime2 = fields[10].GetInt32();
-						//uint32 maxduration = fields[11].GetInt32();
-						remaintime = fields[12].GetInt32();
-						//uint32 effIndexMask = fields[13].GetInt32();
+	//					guid = fields[0].GetInt32();
+	//					//uint32 caster_guid = fields[1].GetInt32();
+	//					//uint32 item_guid = fields[2].GetInt32();
+	//					spell = fields[3].GetInt32();
+	//					//uint32 stackcount = fields[4].GetInt32();
+	//					//uint32 remaincharges = fields[5].GetInt32();
+	//					//uint32 basepoints0 = fields[6].GetInt32();
+	//					//uint32 basepoints1 = fields[7].GetInt32();
+	//					//uint32 periodictime0 = fields[8].GetInt32();
+	//					//uint32 periodictime1 = fields[9].GetInt32();
+	//					//uint32 periodictime2 = fields[10].GetInt32();
+	//					//uint32 maxduration = fields[11].GetInt32();
+	//					remaintime = fields[12].GetInt32();
+	//					//uint32 effIndexMask = fields[13].GetInt32();
 
-					} while (result->NextRow());
-				
-					CharacterDatabase.PExecute("INSERT INTO `character_aura_saved` (`guid`, `spell`, `remaintime`) VALUES (%u, %u, %u)", guid, spell, remaintime);
-					delete result;
-				}
-			}
-		}
-	}
+	//				} while (result->NextRow());
+	//			
+	//				CharacterDatabase.PExecute("INSERT INTO `character_aura_saved` (`guid`, `spell`, `remaintime`) VALUES (%u, %u, %u)", guid, spell, remaintime);
+	//				delete result;
+	//			}
+	//		}
+	//	}
+	//}
 
 	for (uint32 i = 0; i < 2; ++i)
 	{
