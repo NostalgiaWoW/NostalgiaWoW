@@ -4,7 +4,7 @@
 #include "Chat.h"
 #include "GossipDef.h"
 #include "ScriptedGossip.h"
-#include "PLayer.h"
+#include "Player.h"
 #include "SpellAuras.h"
 #include <sstream>
 #include <mutex>
