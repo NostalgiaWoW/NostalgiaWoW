@@ -69,6 +69,7 @@
 #include "MasterPlayer.h"
 #include "XPLog.h"
 #include "custom/event_arenas.h"
+#include "Nostalgia/PvPArenaSystem.h"
 
 
 /* Nostalrius */
@@ -19509,7 +19510,7 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
     else
     {
         // Add PvP tokens on honorable kill
-        if (isHonorOrXPTarget(pVictim))
+        if (isHonorOrXPTarget(pVictim) && m_session->GetPlayer()->GetAreaId() != 2401)
         {
             AddItem(PVP_TOKEN, 1);
         }
