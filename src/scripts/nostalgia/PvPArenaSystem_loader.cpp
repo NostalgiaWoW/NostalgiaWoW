@@ -27,8 +27,6 @@ bool OnPlayerGossipSelect(Player* player, Player* otherPlayer, uint32 sender, ui
     if (sender != PvPArenaSystem::SenderId && sender != PvPArenaSystem::ConfirmationSenderId)
         return false;
 
-	sLog.outError("OnPlayerGossipSelect_loader, sender: %u, action: %u", sender, action);
-
     if (sender == PvPArenaSystem::SenderId)
     {
         player->PlayerTalkClass->CloseGossip();

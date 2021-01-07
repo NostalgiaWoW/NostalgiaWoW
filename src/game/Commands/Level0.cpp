@@ -40,7 +40,13 @@
 bool registerPlayerToBg(WorldSession * sess, BattleGroundTypeId bgid)
 {
     Player* pl = sess->GetPlayer();
-    if (!pl->GetBGAccessByLevel(bgid))
+	//if (bgid == BATTLEGROUND_TEST)
+	//{
+	//	sess->SendBattlegGroundList(pl->GetObjectGuid(), bgid);
+	//	return true;
+	//}
+
+	if (!pl->GetBGAccessByLevel(bgid))
         return false;
     sess->SendBattlegGroundList(pl->GetObjectGuid(), bgid);
     return true;
@@ -76,6 +82,23 @@ bool ChatHandler::HandleGoArathiCommand(char *args)
     }
 
     return registerPlayerToBg(m_session, BattleGroundTypeId(BATTLEGROUND_AB));
+}
+
+bool ChatHandler::HandleGoTestBGCommand(char* args)
+{
+
+	Player* pPlayer = m_session->GetPlayer();
+
+	if (!pPlayer)
+		return false;
+
+	if (pPlayer->isInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || pPlayer->HasSpellCooldown(20939) || pPlayer->HasSpellCooldown(26013) || (pPlayer->getDeathState() == CORPSE) || (pPlayer->getLevel() < 10))
+	{
+		PSendSysMessage("You can not queue yet!");
+		return false;
+	}
+
+	return registerPlayerToBg(m_session, BATTLEGROUND_ARENA);
 }
 bool ChatHandler::HandleGoAlteracCommand(char *args)
 {

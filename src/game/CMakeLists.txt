@@ -86,6 +86,8 @@ set(game_SRCS
         AutoTesting/Tests/Warlock.cpp
         Battlegrounds/BattleGround.cpp
         Battlegrounds/BattleGroundAB.cpp
+		Battlegrounds/BattleGroundArena.cpp
+		Battlegrounds/BattleGroundArena.h
         Battlegrounds/BattleGroundAV.cpp
         Battlegrounds/BattleGroundMgr.cpp
         Battlegrounds/BattleGroundWS.cpp

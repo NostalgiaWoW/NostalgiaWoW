@@ -478,6 +478,8 @@ enum Team
     TEAM_CROSSFACTION   = 1,
     HORDE               = 67,
     ALLIANCE            = 469,
+	TEAM1				= 500,
+	TEAM2				= 501
 };
 
 enum SpellEffects
@@ -2323,8 +2325,9 @@ enum BattleGroundTypeId
     BATTLEGROUND_AV            = 1,
     BATTLEGROUND_WS            = 2,
     BATTLEGROUND_AB            = 3,
+	BATTLEGROUND_ARENA		   = 4,
 };
-#define MAX_BATTLEGROUND_TYPE_ID 4
+#define MAX_BATTLEGROUND_TYPE_ID 5
 
 inline BattleGroundTypeId GetBattleGroundTypeIdByMapId(uint32 mapId)
 {
@@ -2332,7 +2335,8 @@ inline BattleGroundTypeId GetBattleGroundTypeIdByMapId(uint32 mapId)
     {
         case 30:    return BATTLEGROUND_AV;
         case 489:   return BATTLEGROUND_WS;
-        case 529:   return BATTLEGROUND_AB;
+        //case 529:   return BATTLEGROUND_AB;
+		case 529:		return BATTLEGROUND_ARENA; 
         default:    return BATTLEGROUND_TYPE_NONE;
     }
 }
@@ -2344,6 +2348,7 @@ inline uint32 GetBattleGrounMapIdByTypeId(BattleGroundTypeId bgTypeId)
         case BATTLEGROUND_AV:   return 30;
         case BATTLEGROUND_WS:   return 489;
         case BATTLEGROUND_AB:   return 529;
+		case BATTLEGROUND_ARENA:   return 529;
         default:                return 0;   //none
     }
 

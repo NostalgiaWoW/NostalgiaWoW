@@ -151,8 +151,9 @@ enum BattleGroundQueueTypeId
     BATTLEGROUND_QUEUE_AV       = 1,
     BATTLEGROUND_QUEUE_WS       = 2,
     BATTLEGROUND_QUEUE_AB       = 3,
+	BATTLEGROUND_QUEUE_ARENA	= 4,
 };
-#define MAX_BATTLEGROUND_QUEUE_TYPES 4
+#define MAX_BATTLEGROUND_QUEUE_TYPES 5
 
 enum BattleGroundBracketId                                  // bracketId for level ranges
 {
@@ -182,7 +183,10 @@ enum ScoreType
     SCORE_GRAVEYARDS_DEFENDED   = 12,
     SCORE_TOWERS_ASSAULTED      = 13,
     SCORE_TOWERS_DEFENDED       = 14,
-    SCORE_SECONDARY_OBJECTIVES  = 15
+    SCORE_SECONDARY_OBJECTIVES  = 15,
+	//ARENA
+	SCORE_KILLING_KILLS			= 16,
+	SCORE_KILLING_DEATHS		= 17
 };
 
 enum BattleGroundWinner

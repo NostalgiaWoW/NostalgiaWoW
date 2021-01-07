@@ -180,7 +180,8 @@ enum class QueueResult
     NoGroup,
     MemberCount,
     NoLeader,
-    AlreadyInQueue
+    AlreadyInQueue,
+	ResSickness
 };
 
 struct ArenaTotal

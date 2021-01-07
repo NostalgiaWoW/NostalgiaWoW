@@ -26,6 +26,7 @@
 #include "BattleGroundAV.h"
 #include "BattleGroundAB.h"
 #include "BattleGroundWS.h"
+#include "BattleGroundArena.h"
 #include "MapManager.h"
 #include "Map.h"
 #include "ObjectMgr.h"
@@ -1228,6 +1229,9 @@ BattleGround * BattleGroundMgr::CreateNewBattleGround(BattleGroundTypeId bgTypeI
         case BATTLEGROUND_AB:
             bg = new BattleGroundAB(*(BattleGroundAB*)bg_template);
             break;
+		case BATTLEGROUND_ARENA:
+			bg = new BattleGroundArena(*(BattleGroundArena*)bg_template);
+			break;
         default:
             //error, but it is handled few lines above
             return 0;
@@ -1340,9 +1344,17 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         float HStartLoc[4];
 
         uint32 start1 = fields[9].GetUInt32();
-
-        WorldSafeLocsEntry const* start = sWorldSafeLocsStore.LookupEntry(start1);
-        if (start)
+		WorldSafeLocsEntry const* start = sWorldSafeLocsStore.LookupEntry(start1);
+		
+		if (bgTypeID_ == 4) // custom bg
+		{
+			sLog.outError("ENTERED BG TYPE 4");
+			AStartLoc[0] = 120.467;
+			AStartLoc[1] = -12.426;
+			AStartLoc[2] = 18.677;
+			AStartLoc[3] = fields[10].GetFloat();
+		}
+        else if (start)
         {
             AStartLoc[0] = start->x;
             AStartLoc[1] = start->y;
@@ -1356,9 +1368,18 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         }
 
         uint32 start2 = fields[11].GetUInt32();
+		start = sWorldSafeLocsStore.LookupEntry(start2);
 
-        start = sWorldSafeLocsStore.LookupEntry(start2);
-        if (start)
+		if (bgTypeID_ == 4) // custom bg
+		{
+			sLog.outError("ENTERED BG TYPE 4.");
+			HStartLoc[0] = 135.53;
+			HStartLoc[1] = -12.442;
+			HStartLoc[2] = 18.67;
+			HStartLoc[3] = fields[10].GetFloat();
+		}
+       
+		else if (start)
         {
             HStartLoc[0] = start->x;
             HStartLoc[1] = start->y;
@@ -1370,13 +1391,24 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
             sLog.outErrorDb("Table `battleground_template` for id %u have non-existed WorldSafeLocs.dbc id %u in field `HordeStartLoc`. BG not created.", bgTypeID, start2);
             continue;
         }
+		
+			uint32 mapId = GetBattleGrounMapIdByTypeId(bgTypeID);
 
-        uint32 mapId = GetBattleGrounMapIdByTypeId(bgTypeID);
+			if (bgTypeID_ == 4)
+			{
+				sLog.outError("ENTERED BG TYPE 4");
+				mapId = 44;
+			}
+
         char const* name;
 
-        if (MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId))
-            name = mapEntry->name;
-        else
+
+		if (MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId))
+		{
+			name = mapEntry->name;
+			sLog.outError("Map name: %s", name);
+		}
+		else
         {
             sLog.outErrorDb("Table `battleground_template` for id %u associated with nonexistent map id %u.", bgTypeID, mapId);
             continue;
@@ -1403,7 +1435,7 @@ void BattleGroundMgr::BuildBattleGroundListPacket(WorldPacket *data, ObjectGuid 
 
     uint32 PlayerLevel = plr->getLevel();
 
-    uint32 mapId = GetBattleGrounMapIdByTypeId(bgTypeId);
+	uint32 mapId = GetBattleGrounMapIdByTypeId(bgTypeId);
 
     data->Initialize(SMSG_BATTLEFIELD_LIST);
     *data << guid;                                          // battlemaster guid
@@ -1462,6 +1494,8 @@ BattleGroundQueueTypeId BattleGroundMgr::BGQueueTypeId(BattleGroundTypeId bgType
             return BATTLEGROUND_QUEUE_AB;
         case BATTLEGROUND_AV:
             return BATTLEGROUND_QUEUE_AV;
+		case BATTLEGROUND_ARENA:
+			return BATTLEGROUND_QUEUE_ARENA;
         default:
             return BATTLEGROUND_QUEUE_NONE;
     }
@@ -1477,6 +1511,8 @@ BattleGroundTypeId BattleGroundMgr::BGTemplateId(BattleGroundQueueTypeId bgQueue
             return BATTLEGROUND_AB;
         case BATTLEGROUND_QUEUE_AV:
             return BATTLEGROUND_AV;
+		case BATTLEGROUND_QUEUE_ARENA:
+			return BATTLEGROUND_ARENA;
         default:
             return BattleGroundTypeId(0);                   // used for unknown template (it exist and do nothing)
     }

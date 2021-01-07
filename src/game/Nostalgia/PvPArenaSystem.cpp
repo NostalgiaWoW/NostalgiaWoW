@@ -775,10 +775,16 @@ QueueResult PvPArenaSystem::Queue(Player* player, ArenaType type)
     info.Type = type;
     info.WaitingConfirmation = false;
 
+	if (type == ArenaType::OnePlayer && player->HasAura(15007))
+		return QueueResult::ResSickness;
+
     if (type != ArenaType::OnePlayer)
     {
         if (!player->GetGroup())
             return QueueResult::NoGroup;
+
+		if (player->HasAura(15007))
+			return QueueResult::ResSickness;
 
         auto group = player->GetGroup();
 
@@ -1058,6 +1064,8 @@ std::string PvPArenaSystem::QueueResultToString(QueueResult result)
         return "You\'re already in queue";
     case QueueResult::MemberCount:
         return "Your group doesn\'t match the required members for this queue";
+	case QueueResult::ResSickness:
+		return "You cannot queue while you have Resurrection Sickness";
     default:
         return "Error";
     }

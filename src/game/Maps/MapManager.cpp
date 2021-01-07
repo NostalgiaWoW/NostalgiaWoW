@@ -677,7 +677,9 @@ BattleGroundMap* MapManager::CreateBattleGroundMap(uint32 id, uint32 InstanceId,
     DEBUG_LOG("MapInstanced::CreateBattleGroundMap: instance:%d for map:%d and bgType:%d created.", InstanceId, id, bg->GetTypeID());
 
     BattleGroundMap *map = new BattleGroundMap(id, i_gridCleanUpDelay, InstanceId);
-    MANGOS_ASSERT(map->IsBattleGround());
+    if (id != 44) // custom arena bg
+	MANGOS_ASSERT(map->IsBattleGround());
+
     map->SetBG(bg);
     bg->SetBgMap(map);
 
