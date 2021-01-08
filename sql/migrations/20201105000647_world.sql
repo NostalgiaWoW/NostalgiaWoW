@@ -15,7 +15,7 @@ replace into `creature_template` (`entry`, `KillCredit1`, `KillCredit2`, `modeli
 values
 (120000,'0','0','7209','0','0','0','Gazrik Goldenspark', 'Gambling Master', '0', '50', '50', '4000', '5000','200','300','200','35','35','3','0','0','1','1','687','967','0','226','1','1000','1000','0','0','0','0','0','0','0','0','0','0','200','0','8','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','','0','1','0','0','1','0','0','0','0','0','2','npc_gambling');
 
-replace into npc_text (ID, text0_1) values (120000, 'So you want to gamble, little $c!$B$BTell me how much and I\'ll throw a dice, if the roll is above 50, I will double the bet. If lower than 50, it\'s gone forever. If you win three times in a row using the same amount, the reward is tripled, but only if the 3rd roll is above 75, if below 75 on the 3rd roll, gold will be gone too.');
+replace into npc_text (ID, text0_1) values (120000, 'So you want to gamble, little $c!$B$BTell me how much and I\'ll throw a dice, if the roll is above 55, I will double the bet. If lower than 56, it\'s gone forever. If you win three times in a row using the same amount, the reward is tripled, but only if the 3rd roll is above 75, if below 76 on the 3rd roll, gold will be gone too.');
 
 -- End of migration.
 END IF;
