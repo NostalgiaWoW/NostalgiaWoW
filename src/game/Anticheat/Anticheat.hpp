@@ -197,7 +197,7 @@ class NullSessionAnticheat : public SessionAnticheatInterface
 };
 
 #ifdef USE_ANTICHEAT
-#include "module/libanticheat.hpp"
+#include "Anticheat/module/libanticheat.hpp"
 #else
 class NullAnticheatLib : public AnticheatLibInterface
 {
