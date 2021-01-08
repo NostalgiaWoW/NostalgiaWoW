@@ -57,7 +57,7 @@ bool GossipHello_BoatTeleportNPC(Player* player, Creature* _Creature)
 {
 	//player->ADD_GOSSIP_ITEM(2, "Adventurer Ship (Quests Available)", GOSSIP_SENDER_MAIN, 91);
 	player->ADD_GOSSIP_ITEM(2, "Epic Gear Vendors", GOSSIP_SENDER_MAIN, 92);
-	player->ADD_GOSSIP_ITEM(2, "Blue Gear Vendors", GOSSIP_SENDER_MAIN, 93);
+	player->ADD_GOSSIP_ITEM(2, "Rare Gear Vendors", GOSSIP_SENDER_MAIN, 93);
 	player->ADD_GOSSIP_ITEM(2, "Class Trainers", GOSSIP_SENDER_MAIN, 94);
 
 	player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
@@ -117,7 +117,7 @@ bool GossipHello_TeleportNPC(Player *player, Creature *_Creature)
 		player->ADD_GOSSIP_ITEM(5, "Nostalgia WoW Mall", GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Profession Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
 		player->ADD_GOSSIP_ITEM(5, "Duel Zone (NOT DONE)", GOSSIP_SENDER_MAIN, 90);
-		player->ADD_GOSSIP_ITEM(5, "Pet Zone", GOSSIP_SENDER_MAIN, 90);
+		player->ADD_GOSSIP_ITEM(5, "Pet Zone", GOSSIP_SENDER_MAIN, 91);
 		player->ADD_GOSSIP_ITEM(5, "Major Cities", GOSSIP_SENDER_MAIN, 2);
         //player->ADD_GOSSIP_ITEM(5, "Starting Areas"       , GOSSIP_SENDER_MAIN, 4);
         //player->ADD_GOSSIP_ITEM(5, "Instances"            , GOSSIP_SENDER_MAIN, 5);
@@ -278,6 +278,10 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
 		case 90: // Mall
 			player->CLOSE_GOSSIP_MENU();
 			player->TeleportTo(0, -1847.80, -4244.382, 2.13, 1.05f);
+			break;
+		case 91: // Pet Zone
+			player->CLOSE_GOSSIP_MENU();
+			player->TeleportTo(1, -10736.09, 2505.689, 6.136, 4.800f);
 			break;
 
 // ----### CITIES ###----
