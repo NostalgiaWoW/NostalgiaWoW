@@ -4818,8 +4818,8 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
 
     if (int32(getLevel()) >= startLevel)
     {
-        // set resurrection sickness
-        CastSpell(this, SPELL_ID_PASSIVE_RESURRECTION_SICKNESS, true);
+        // set resurrection sickness - disabled on Nostalgia WoW
+        //CastSpell(this, SPELL_ID_PASSIVE_RESURRECTION_SICKNESS, true);
 
         // not full duration
         if (int32(getLevel()) < startLevel + 9)
