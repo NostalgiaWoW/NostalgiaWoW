@@ -181,7 +181,9 @@ enum class QueueResult
     MemberCount,
     NoLeader,
     AlreadyInQueue,
-	ResSickness
+	ResSickness,
+	BGSickness,
+	AFK
 };
 
 struct ArenaTotal
@@ -220,6 +222,7 @@ public:
     void HandlePvPKill(Player* killer, Player* killed);
     void HandleWorldUpdate(uint32 diff);
     void HandleLogout(Player* player);
+	//void HandleAFK(Player* player); // One day my sweet prince. One day.
     bool HandleRequestRepop(Player* player);
     bool HandleGroupInvite(Player* player);
     bool HandleGroupRemovePlayer(Player* player);

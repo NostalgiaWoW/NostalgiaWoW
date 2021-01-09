@@ -40,9 +40,9 @@ void ArenaGame::Start()
 			{
 				QueryResult* result = CharacterDatabase.PQuery("SELECT * FROM `character_aura` WHERE `guid` = %u", player->GetGUIDLow());
 
-				do
+				if (result)
 				{
-					if (result)
+					do
 					{
 						uint32 guid;
 						uint32 spell;
@@ -70,11 +70,10 @@ void ArenaGame::Start()
 						CharacterDatabase.PExecute("INSERT INTO `character_aura_saved` (`guid`, `spell`, `remaintime`) VALUES (%u, %u, %u)", guid, spell, remaintime);
 
 						player->RemoveAurasDueToSpell(spell);
-					}
-					
-				} while (result->NextRow());
-				  delete result;
-				}
+					} while (result->NextRow());
+				}delete result;
+				
+			 }
 			}
 		}
 
@@ -85,7 +84,6 @@ void ArenaGame::Start()
 		for (auto& arenaPlayer : arenaTeam.Group)
 		{
 			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
-			float z_arena = m_map->GetHeight(m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, m_arena->TeamPositions[i].z);
 			if (player)
 			{
 				player->SaveRecallPosition();
@@ -593,6 +591,17 @@ void PvPArenaSystem::HandleLogout(Player* player)
 
 }
 
+//void PvPArenaSystem::HandleAFK(Player* player)
+//{
+//	auto guid = player->GetGroup() ? player->GetGroup()->GetLeaderGuid() : player->GetObjectGuid();
+//
+//	std::lock_guard<std::recursive_mutex> g(m_queueLock);
+//	auto findQueued = m_queuedPlayers.find(guid) != m_queuedPlayers.end();
+//
+//	if (player->isAFK())
+//	LeaveQueue(player, true);
+//}
+
 void PvPArenaSystem::LeaveQueue(Player* player, bool disconnected)
 {
     auto guid = player->GetObjectGuid();
@@ -775,8 +784,13 @@ QueueResult PvPArenaSystem::Queue(Player* player, ArenaType type)
     info.Type = type;
     info.WaitingConfirmation = false;
 
-	if (type == ArenaType::OnePlayer && player->HasAura(15007))
-		return QueueResult::ResSickness;
+	if (type == ArenaType::OnePlayer)
+	{
+		if (player->HasAura(15007))
+			return QueueResult::ResSickness;
+		if (player->HasAura(26013))
+			return QueueResult::BGSickness;
+	}
 
     if (type != ArenaType::OnePlayer)
     {
@@ -785,6 +799,9 @@ QueueResult PvPArenaSystem::Queue(Player* player, ArenaType type)
 
 		if (player->HasAura(15007))
 			return QueueResult::ResSickness;
+
+		if (player->HasAura(26013))
+			return QueueResult::BGSickness;
 
         auto group = player->GetGroup();
 
@@ -818,7 +835,12 @@ void PvPArenaSystem::SetupConfirmation(ConfirmationInfo* info)
         for (const auto& guidPair : party->Group)
         {
             auto player = sObjectMgr.GetPlayer(guidPair.first);
-            if (player)
+
+			if (player->isAFK())
+			{
+				LeaveQueue(player);
+			}
+            else if (player)
             {
                 player->PlayerTalkClass->CloseGossip();
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "I\'m ready", ConfirmationSenderId, info->Arena->Id);
@@ -977,6 +999,7 @@ void PvPArenaSystem::ScheduleQueueUpdate()
     for (auto itr = m_queuedPlayers.begin(); itr != m_queuedPlayers.end(); ++itr)
     {
         queuedPlayers[itr->second.Type].push_back(itr);
+
     }
 
     for (auto& typePair : queuedPlayers)
@@ -1066,6 +1089,10 @@ std::string PvPArenaSystem::QueueResultToString(QueueResult result)
         return "Your group doesn\'t match the required members for this queue";
 	case QueueResult::ResSickness:
 		return "You cannot queue while you have Resurrection Sickness";
+	case QueueResult::AFK:
+		return "You have gone AFK and have been removed from the Arena queue.";
+	case QueueResult::BGSickness:
+		return "You cannot queue while you have Deserter.";
     default:
         return "Error";
     }
