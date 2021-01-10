@@ -18,6 +18,7 @@
 #include "custom.h"
 #include "transmog.h"
 #include "Utilities/EventProcessor.h"
+#include "BattleGroundMgr.h"
 
 template <typename Functor>
 void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
@@ -1750,6 +1751,133 @@ bool GossipSelect_StevenGuardNPC(Player* player, Creature* _Creature, uint32 sen
 }
 
 
+bool GossipHello_BGMarksNPC(Player* player, Creature* _Creature)
+{
+		  /*BATTLEGROUND_AV = 1,
+			BATTLEGROUND_WS = 2,
+			BATTLEGROUND_AB = 3,*/
+
+	player->PlayerTalkClass->ClearMenus();
+	if (bool isBGWeekend = BattleGroundMgr::IsBGWeekend(BATTLEGROUND_WS))
+	{
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "[Weekend Bonus] I'd like to trade in 10 WSG Marks of Honor for 2,000g.", GOSSIP_SENDER_MAIN, 206);
+	} 
+	else
+	{
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'd like to trade in 10 WSG Marks of Honor for 1,500g.", GOSSIP_SENDER_MAIN, 207);
+	}
+	if (bool isBGWeekend = BattleGroundMgr::IsBGWeekend(BATTLEGROUND_AB))
+	{
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "[Weekend Bonus] I'd like to trade in 10 AB Marks of Honor for 2,400g.", GOSSIP_SENDER_MAIN, 208);
+	}
+	else
+	{
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'd like to trade in 10 AB Marks of Honor for 1,800g.", GOSSIP_SENDER_MAIN, 209);
+	}
+	if (bool isBGWeekend = BattleGroundMgr::IsBGWeekend(BATTLEGROUND_AV))
+	{
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "[Weekend Bonus] I'd like to trade in 10 AV Marks of Honor for 5,000g.", GOSSIP_SENDER_MAIN, 210);
+	}
+	else
+	{
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'd like to trade in 10 AV Marks of Honor for 3,500g.", GOSSIP_SENDER_MAIN, 211);
+	}
+	player->SEND_GOSSIP_MENU(120004, _Creature->GetGUID());
+	return true;
+}
+
+
+bool GossipDefault_BGMarksNPC(Player* player, Creature* _Creature, uint32 action)
+{
+	
+	switch (action)
+	{
+	case 206:
+		if (player->HasItemCount(20558, 10))
+		{
+				player->ModifyMoney(20000000);
+				player->RemoveItems(20558, 10);
+				player->CLOSE_GOSSIP_MENU();
+				_Creature->PMonsterSay("Well done, %s. You bring us all honor.", player->GetName());
+				_Creature->HandleEmote(EMOTE_ONESHOT_BOW);
+			break;
+		}
+
+	case 207:
+		if (player->HasItemCount(20558, 10))
+		{
+			player->ModifyMoney(15000000);
+			player->RemoveItems(20558, 10);
+			player->CLOSE_GOSSIP_MENU();
+			_Creature->PMonsterSay("Well done, %s. You bring us all honor.", player->GetName());
+			_Creature->HandleEmote(EMOTE_ONESHOT_BOW);
+			break;
+		}
+
+	case 208:
+		if (player->HasItemCount(20559, 10))
+		{
+			player->ModifyMoney(24000000);
+			player->RemoveItems(20559, 10);
+			player->CLOSE_GOSSIP_MENU();
+			_Creature->PMonsterSay("Well done, %s. You bring us all honor.", player->GetName());
+			_Creature->HandleEmote(EMOTE_ONESHOT_BOW);
+			break;
+		}
+
+	case 209:
+		if (player->HasItemCount(20558, 10))
+		{
+			player->ModifyMoney(18000000);
+			player->RemoveItems(20559, 10);
+			player->CLOSE_GOSSIP_MENU();
+			_Creature->PMonsterSay("Well done, %s. You bring us all honor.", player->GetName());
+			_Creature->HandleEmote(EMOTE_ONESHOT_BOW);
+			break;
+		}
+
+	case 210:
+		if (player->HasItemCount(20560, 10))
+		{
+			player->ModifyMoney(50000000);
+			player->RemoveItems(20560, 10);
+			player->CLOSE_GOSSIP_MENU();
+			_Creature->PMonsterSay("Well done, %s. You bring us all honor.", player->GetName());
+			_Creature->HandleEmote(EMOTE_ONESHOT_BOW);
+			break;
+		}
+
+	case 211:
+		if (player->HasItemCount(20560, 10))
+		{
+			player->ModifyMoney(35000000);
+			player->RemoveItems(20560, 10);
+			player->CLOSE_GOSSIP_MENU();
+			_Creature->PMonsterSay("Well done, %s. You bring us all honor.", player->GetName());
+			_Creature->HandleEmote(EMOTE_ONESHOT_BOW);
+			break;
+		}
+	default:
+		_Creature->PMonsterSay("Hah! Who you tryin' to fool? Come back when you have more marks.");
+		player->CLOSE_GOSSIP_MENU();
+		_Creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+	}
+	
+	return true;
+}
+
+bool GossipSelect_BGMarksNPC(Player* player, Creature* _Creature, uint32 sender, uint32 action)
+{
+	// Main menu
+	if (sender == GOSSIP_SENDER_MAIN)
+		GossipDefault_BGMarksNPC(player, _Creature, action);
+
+	return true;
+
+}
+
+
+
 struct MallGuardSwitchAI : public ScriptedAI
 {
 
@@ -1772,10 +1900,12 @@ struct MallGuardSwitchAI : public ScriptedAI
 	}
 };
 
+
 CreatureAI* GetAI_MallGuardSwitchNPC(Creature* pCreature)
 {
 	return new MallGuardSwitchAI(pCreature);
 };
+
 
 
 
@@ -1913,6 +2043,13 @@ void AddSC_custom_creatures()
 	newscript = new Script;
 	newscript->Name = "custom_MallGuardSwitchNPC";
 	newscript->GetAI = &GetAI_MallGuardSwitchNPC;
+	newscript->RegisterSelf(true);
+
+	newscript = new Script;
+	newscript->Name = "custom_BGMarksNPC";
+	newscript->pGossipHello = &GossipHello_BGMarksNPC;
+	newscript->pGossipSelect = &GossipSelect_BGMarksNPC; 
+	//newscript->GetAI = &GetAI_StevenGuardNPC;
 	newscript->RegisterSelf(true);
 
 }
