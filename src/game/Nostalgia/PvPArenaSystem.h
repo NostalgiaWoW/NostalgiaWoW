@@ -117,8 +117,6 @@ public:
     {
         m_teams[0] = team1;
         m_teams[1] = team2;
-
-        m_map = sMapMgr.FindMap(arena->MapId);
     }
 
     void Start();

@@ -89,9 +89,13 @@ void ArenaGame::Start()
 				player->SaveRecallPosition();
 				player->GetPosition(arenaPlayer.OldPosition);
 				player->TeleportTo(m_arena->MapId, m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, m_arena->TeamPositions[i].z, 0.0f);
-				player->ScheduleGenericDelayedAction([](Player* target)
+				player->ScheduleGenericDelayedAction([this](Player* target)
 					{
 						target->ApplyLegitReplenishment(true);
+
+                        //we have to save the map pointer from a player because of nostalrius instancing we cant always use 0 for continents
+                        if (!m_map)
+                            m_map = target->GetMap();
 					});
 			}
 			else
@@ -290,7 +294,7 @@ void ArenaGame::EventArenaActive()
 
 void ArenaGame::ToggleDoors(bool open)
 {
-    Map* map = sMapMgr.FindMap(m_arena->MapId);
+    Map* map = m_map;
     if (map)
     {
         auto gate1 = map->GetGameObject(ObjectGuid{ HIGHGUID_GAMEOBJECT, m_arena->GateEntry, m_arena->GateGuids[0] });
