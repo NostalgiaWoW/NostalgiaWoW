@@ -37,7 +37,7 @@
 #include "SpellMgr.h"
 #include "PoolManager.h"
 #include "GameEventMgr.h"
-#include "Anticheat/Anticheat.hpp"
+#include "Anticheat.hpp"
 
 // Supported shift-links (client generated and server side)
 // |color|Harea:area_id|h[name]|h|r
