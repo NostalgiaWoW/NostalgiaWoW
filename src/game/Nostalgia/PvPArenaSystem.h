@@ -216,6 +216,8 @@ public:
     static const uint32 LeaveQueueAction = 9000;
 
     void LoadFromDB();
+	bool GetPvPStats(Player* player);
+	bool GetTopStats(Player* player);
     void HandlePlayerRelocation(Player* player, const Position& newPos);
     void HandlePvPKill(Player* killer, Player* killed);
     void HandleWorldUpdate(uint32 diff);
