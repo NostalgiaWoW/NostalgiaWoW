@@ -2266,8 +2266,9 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
         // The true magic damage resist cap is therefore actually ~68-70% because of this mechanic.
         // http://web.archive.org/web/20110808083353/http://elitistjerks.com/f15/t10712-resisting_magical_damage_its_relation_resistance_levels/p4/
         
-		if (spellProto->IsBinary() && ran < resist100 + resist75)
-			resistCnt = 0.75f;
+		if (spellProto)
+			if (spellProto->IsBinary() && ran < resist100 + resist75)
+				resistCnt = 0.75f;
 		else if (ran < resist100 + resist75)
             resistCnt = 0.75f;
         else if (ran < resist100 + resist75 + resist50)
