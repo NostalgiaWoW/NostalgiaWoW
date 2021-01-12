@@ -66,7 +66,7 @@ ChatCommand * ChatHandler::getCommandTable()
 {
 #ifdef USE_ANTICHEAT
     //Private table, must be in module
-#include "Anticheat/module/AnticheatChatCommands.h"
+#include "module/AnticheatChatCommands.h"
 #else
     //Public table
     static ChatCommand anticheatCommandTable[] =

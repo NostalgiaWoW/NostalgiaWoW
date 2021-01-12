@@ -962,7 +962,7 @@ class MANGOS_DLL_SPEC ChatHandler
 
         //Giperion Elysium: Anticheat commands
 #ifdef USE_ANTICHEAT
-#include "Anticheat/module/AnticheatChatCommandsFunctions.h"
+#include "module/AnticheatChatCommandsFunctions.h"
 #else
         bool HandleAnticheatInfoCommand(char* args);
 #endif
