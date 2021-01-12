@@ -73,7 +73,7 @@ endif()
 option(DEBUG "Debug mode" 0)
 option(USE_STD_MALLOC "Use standard malloc instead of TBB" 0)
 option(TBB_DEBUG "Use TBB debug libraries" 0)
-option(USE_ANTICHEAT "Use anticheat" 1)
+option(USE_ANTICHEAT "Use anticheat" 0)
 option(SCRIPTS "Compile scripts" 1)
 option(USE_EXTRACTORS "Compile extractors" 0)
 
