@@ -38,7 +38,7 @@ void ArenaGame::Start()
 
 			if (player)
 			{
-				QueryResult* result = CharacterDatabase.PQuery("SELECT * FROM `character_aura` WHERE `guid` = %u", player->GetGUIDLow());
+				auto result = CharacterDatabase.PQuery("SELECT * FROM `character_aura` WHERE `guid` = %u", player->GetGUIDLow());
 
 				if (result)
 				{
@@ -1110,16 +1110,16 @@ bool PvPArenaSystem::GetPvPStats(Player* player)
 	uint32 guid = player->GetGUIDLow();
 
 	// check for any stats to avoid null pointer
-	QueryResult* guidResult = WorldDatabase.PQuery("SELECT `Id` FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
+	auto guidResult = WorldDatabase.PQuerySafe("SELECT `Id` FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
 
-	QueryResult* wResult = WorldDatabase.PQuery("SELECT SUM(`Won`) FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
-	Field* wins = wResult->Fetch();
-	QueryResult* lResult = WorldDatabase.PQuery("SELECT SUM(`Lost`) FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
-	Field* losses = lResult->Fetch();
-	QueryResult* kResult = WorldDatabase.PQuery("SELECT SUM(`Kills`) FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
-	Field* kills = kResult->Fetch();
-	QueryResult* dResult = WorldDatabase.PQuery("SELECT SUM(`Died`) FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
-	Field* deaths = dResult->Fetch();
+	auto wResult = WorldDatabase.PQuerySafe("SELECT SUM(`Won`) FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
+	auto wins = wResult->Fetch();
+	auto lResult = WorldDatabase.PQuerySafe("SELECT SUM(`Lost`) FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
+	auto losses = lResult->Fetch();
+	auto kResult = WorldDatabase.PQuerySafe("SELECT SUM(`Kills`) FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
+	auto kills = kResult->Fetch();
+	auto dResult = WorldDatabase.PQuerySafe("SELECT SUM(`Died`) FROM `pvp_arena_system_stats` WHERE `PlayerLowGuid` = '%u'", guid);
+	auto deaths = dResult->Fetch();
 
 
 	if (!guidResult)
@@ -1187,7 +1187,7 @@ bool PvPArenaSystem::GetPvPStats(Player* player)
 bool PvPArenaSystem::GetTopStats(Player* player)
 {
 // ARENA KILLS
-QueryResult* guidResultKills = WorldDatabase.PQuery("SELECT playerlowguid FROM `pvp_arena_system_stats` GROUP BY `playerlowguid` ORDER BY SUM(`kills`) DESC LIMIT 5");
+auto guidResultKills = WorldDatabase.QuerySafe("SELECT playerlowguid, SUM(kills) FROM `pvp_arena_system_stats` GROUP BY `playerlowguid` ORDER BY SUM(`kills`) DESC");
 
 if (guidResultKills) {
 
@@ -1197,56 +1197,70 @@ if (guidResultKills) {
 	std::string fourth;
 	std::string fifth;
 
+	uint32 firstKills;
+	uint32 secondKills;
+	uint32 thirdKills;
+	uint32 fourthKills;
+	uint32 fifthKills;
 
-	BarGoLink bar(guidResultKills->GetRowCount());
 	do
 	{
-		bar.step();
-		Field* fields = guidResultKills->Fetch();
+		auto fields = guidResultKills->Fetch();
 		uint32 guid = fields[0].GetInt32();
+		uint32 killCount = fields[1].GetUInt32();
 
-		QueryResult* nameResult = CharacterDatabase.PQuery("SELECT `name` FROM `characters` WHERE `guid` = %u", guid);
-		Field* nameFields = nameResult->Fetch();
-		std::string name = nameFields[0].GetCppString();
+		auto nameResult = CharacterDatabase.PQuerySafe("SELECT `name` FROM `characters` WHERE `guid` = %u", guid);
+		if (!nameResult)
+			continue;
+		else
+		{
+			auto nameFields = nameResult->Fetch();
+			std::string name = nameFields[0].GetCppString();
 
-		if (first == "") {
-			first = name;
-		}
-		else if (second == "") {
-			second = name;
-		}
-		else if (third == "") {
-			third = name;
-		}
-		else if (fourth == "") {
-			fourth = name;
-		}
-		else if (fifth == "") {
-			fifth = name;
+			if (first == "") {
+				first = name;
+				firstKills = killCount;
+			}
+			else if (second == "") {
+				second = name;
+				secondKills = killCount;
+			}
+			else if (third == "") {
+				third = name;
+				thirdKills = killCount;
+			}
+			else if (fourth == "") {
+				fourth = name;
+				fourthKills = killCount;
+			}
+			else if (fifth == "") {
+				fifth = name;
+				fifthKills = killCount;
+			}
 		}
 
 	} while (guidResultKills->NextRow());
-	delete guidResultKills;
+
 
 	// String out to gossip window
 	std::stringstream strstreamFirstKills;
-	strstreamFirstKills << "1st: " << first;
+	strstreamFirstKills << "1st: " << first << " | Kills: " << firstKills;
 	std::string formattedMessage1 = strstreamFirstKills.str();
 
 	std::stringstream strstreamSecondKills;
-	strstreamSecondKills << "2nd: " << second;
+	strstreamSecondKills << "2nd: " << second << " | Kills: " << secondKills;
 	std::string formattedMessage2 = strstreamSecondKills.str();
 
 	std::stringstream strstreamthirdkills;
-	strstreamthirdkills << "3rd: " << third;
+	strstreamthirdkills << "3rd: " << third << " | Kills: " << thirdKills;
 	std::string formattedMessage3 = strstreamthirdkills.str();
 
 	std::stringstream strstreamfourthkills;
-	strstreamfourthkills << "4th: " << fourth;
+	strstreamfourthkills << "4th: " << fourth << " | Kills: " << fourthKills;
 	std::string formattedMessage4 = strstreamfourthkills.str();
 
 	std::stringstream strstreamfifthkills;
-	strstreamfifthkills << "5th: " << fifth;
+	strstreamfifthkills << "5th: " << fifth << " | Kills: " << fifthKills;
 	std::string formattedMessage5 = strstreamfifthkills.str();
 
 	player->PlayerTalkClass->ClearMenus();
@@ -1269,7 +1283,7 @@ else {
 }
 
 //ARENA WINS
-QueryResult* guidResultWins = WorldDatabase.PQuery("SELECT playerlowguid FROM `pvp_arena_system_stats` GROUP BY `playerlowguid` ORDER BY SUM(`Won`) DESC LIMIT 5");
+auto guidResultWins = WorldDatabase.QuerySafe("SELECT playerlowguid FROM `pvp_arena_system_stats` GROUP BY `playerlowguid` ORDER BY SUM(`Won`) DESC LIMIT 5");
 
 if (guidResultWins) {
 
@@ -1287,7 +1301,7 @@ if (guidResultWins) {
 		Field* fields = guidResultWins->Fetch();
 		uint32 guid = fields[0].GetInt32();
 
-		QueryResult* nameResult = CharacterDatabase.PQuery("SELECT `name` FROM `characters` WHERE `guid` = %u", guid);
+		auto nameResult = CharacterDatabase.PQuerySafe("SELECT `name` FROM `characters` WHERE `guid` = %u", guid);
 		Field* nameFields = nameResult->Fetch();
 		std::string name = nameFields[0].GetCppString();
 
@@ -1308,7 +1322,6 @@ if (guidResultWins) {
 		}
 
 	} while (guidResultWins->NextRow());
-	delete guidResultWins;
 
 	// String out to gossip window
 	std::stringstream strstreamFirstKills;
