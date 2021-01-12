@@ -68,7 +68,7 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->resetTalents();
+        pPlayer->resetTalents(true);
         pPlayer->AddAura(27880);
         pGo->Despawn();
         pGo->UpdateObjectVisibility();
