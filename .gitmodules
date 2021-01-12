@@ -1,3 +1,3 @@
 [submodule "anticheat"]
-	path = src/game/Anticheat/module
+	path = src/game/module
 	url = https://github.com/NostalgiaWoW/anticheat
