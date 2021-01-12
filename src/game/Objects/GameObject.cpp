@@ -40,7 +40,7 @@
 #include "BattleGround.h"
 #include "BattleGroundAV.h"
 #include "Util.h"
-#include "Anticheat/SuspiciousStatisticMgr.h"
+#include "SuspiciousStatisticMgr.h"
 
 #include "GameObjectAI.h"
 #include "ScriptMgr.h"

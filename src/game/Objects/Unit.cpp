@@ -63,7 +63,7 @@
 #include "Chat.h"
 #include "CreatureLinkingMgr.h"
 #include "InstanceStatistics.h"
-#include "Anticheat/SuspiciousStatisticMgr.h"
+#include "SuspiciousStatisticMgr.h"
 
 #include <math.h>
 #include <stdarg.h>

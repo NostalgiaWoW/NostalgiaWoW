@@ -32,7 +32,7 @@
 #include "WaypointMovementGenerator.h"
 #include "MapPersistentStateMgr.h"
 #include "ObjectMgr.h"
-#include "Anticheat/SuspiciousStatisticMgr.h"
+#include "SuspiciousStatisticMgr.h"
 
 #include "World.h"
 #include "Anticheat.hpp"

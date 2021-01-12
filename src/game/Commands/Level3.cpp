@@ -60,7 +60,7 @@
 #include "QuestDef.h"
 #include "Anticheat.hpp"
 #include "ChatHookMgr.h"
-#include "Anticheat/SuspiciousStatisticMgr.h"
+#include "SuspiciousStatisticMgr.h"
 
 #include <regex>
 
