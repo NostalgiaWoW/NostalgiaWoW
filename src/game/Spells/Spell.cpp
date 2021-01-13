@@ -1299,9 +1299,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 
 		}
 
-
-
-
         // Send log damage message to client
         caster->SendSpellNonMeleeDamageLog(&damageInfo);
 
