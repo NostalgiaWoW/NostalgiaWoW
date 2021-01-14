@@ -215,7 +215,7 @@ struct mob_ancient_core_houndAI : public ScriptedAI
         if (m_uiConeOfFireTimer < uiDiff)
         {
             m_creature->CastSpell(m_creature, SPELL_CONE_OF_FIRE, false);
-            m_uiConeOfFireTimer = urand(6000, 8000);
+            m_uiConeOfFireTimer = urand(10000, 15000);
         }
         else m_uiConeOfFireTimer -= uiDiff;
 
@@ -424,8 +424,8 @@ struct mob_firelordAI : public ScriptedAI
 
     void Reset() override
     {
-        m_uiSummonLavaSpawnTimer  = urand(7500, 12500);
-        m_uiSoulBurnTimer         = urand(4000, 6000);
+        m_uiSummonLavaSpawnTimer  = urand(15000, 20500);
+        m_uiSoulBurnTimer         = urand(6000, 8000);
     }
 
     void Aggro(Unit* pWho) override
