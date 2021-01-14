@@ -1288,14 +1288,14 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 		// Onyxia Warder
 		if (m_spellInfo->Id == 20203 || m_spellInfo->Id == 19983) 
 		{
-				damageInfo.damage = damage* 0.5;
+				damageInfo.damage = damage* 0.4;
 
 		}
 		// MC
 		if (m_caster->GetEntry() == 12265 || m_caster->GetEntry() == 11673 || m_caster->GetEntry() == 18944 || m_caster->GetEntry() == 18945 || m_caster->GetEntry() == 11669 || m_caster->GetEntry() == 11671
 			|| m_caster->GetEntry() == 11666)
 		{
-			damageInfo.damage = damage * 0.5;
+			damageInfo.damage = damage * 0.20;
 
 		}
 
