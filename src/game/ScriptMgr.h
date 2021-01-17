@@ -28,6 +28,7 @@
 #include <memory> //for shared_ptr
 //#include "ObjectMgr.h"
 
+
 struct AreaTriggerEntry;
 class Aura;
 class Creature;

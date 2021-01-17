@@ -514,28 +514,6 @@ bool ChatHandler::HandleInspectModCommand(char* args)
 
     return true;
 }
-// Deprecated. Put into ArenaCommand.
-//bool ChatHandler::HandleQueueArenaCommand(char* args)
-//{
-//    auto player = GetSession()->GetPlayer();
-//
-//    player->PlayerTalkClass->ClearMenus();
-//
-//    if (sPvPArenaSystem->IsInQueue(player))
-//    {
-//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Leave Queue", PvPArenaSystem::SenderId, 10);
-//    }
-//    else
-//    {
-//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "1v1", PvPArenaSystem::SenderId, 1);
-//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "2v2", PvPArenaSystem::SenderId, 2);
-//        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "3v3", PvPArenaSystem::SenderId, 3);
-//    }
-//
-//    player->SEND_GOSSIP_MENU(907, player->GetObjectGuid());
-//
-//    return true;
-//}
 
 bool ChatHandler::HandleArenaCommand(char* args)
 {
@@ -558,3 +536,92 @@ bool ChatHandler::HandleArenaCommand(char* args)
 	player->SEND_GOSSIP_MENU(877, player->GetObjectGuid());
 	return true;
 }
+
+
+bool ChatHandler::HandleBountyCommand(char* args)
+{
+
+	// Syntax: .bounty $TARGETPLAYER $PRICE
+	Player* target;
+	ObjectGuid target_guid;
+	std::string target_name;
+
+	auto player = GetSession()->GetPlayer();
+
+	if (!ExtractPlayerTarget(&args, &target, &target_guid, &target_name))
+		return false;
+
+	uint32 price = atoi(args);
+
+	if (!player || !price || !target)
+		return false;
+
+	if (!*args)
+	{
+		PSendSysMessage("Incorrect usage of the bounty command. Please try again using .bounty PLAYERNAME BOUNTYPRICE.");
+		return false;
+	}
+
+	QueryResult *result = CharacterDatabase.PQuery("SELECT posterGuid FROM bounty WHERE posterGuid = %u", player->GetGUIDLow());
+
+	if (result)
+	{
+		PSendSysMessage("You cannot post multiple bounties. Please wait until the bounty is concluded or cancelled.");
+		return false;
+	}
+
+	if (price < 1000)
+	{
+		PSendSysMessage("You must pay a minimum of 1000g to post a bounty!");
+		return false;
+	}
+
+	if (player->GetMoney() < (price * 10000))
+	{
+		PSendSysMessage("You don't have enough money for this bounty!");
+		return false;
+	}
+
+	if (!player->FindNearestGameObject(3100147, 3))
+	{
+		PSendSysMessage("You must be at a Bounty Board to post a bounty!");
+		return false;
+	}
+
+	// If all checks are successful
+	else {
+
+		uint32 targetZone = target->GetZoneId();
+		uint32 targetArea = target->GetAreaId();
+
+		const auto* zoneEntry = AreaEntry::GetById(targetZone);
+		const auto* areaEntry = AreaEntry::GetById(targetArea);
+
+		std::string zoneName = "<unknown>";
+		std::string areaName = "<unknown>";
+
+		if (zoneEntry)
+		{
+			zoneName = zoneEntry->Name;
+			sObjectMgr.GetAreaLocaleString(zoneEntry->Id, GetSessionDbLocaleIndex(), &zoneName);
+		}
+
+		if (areaEntry)
+		{
+			areaName = areaEntry->Name;
+			sObjectMgr.GetAreaLocaleString(areaEntry->Id, GetSessionDbLocaleIndex(), &areaName);
+		}
+		
+
+		CharacterDatabase.PQuery("INSERT INTO bounty (`posterGuid`, `posterName`, `targetGuid`, `targetName`, `bountyPrice`, `timePosted`) VALUES (%u, '%s', %u, '%s', %u, CURRENT_TIMESTAMP)", player->GetGUIDLow(), player->GetName(), target->GetGUIDLow(), target->GetName(), price);
+		PSendSysMessage("Bounty issued. '%s' will be hunted down by Azeroth's most capable bounty hunters. %ug has been taken as payment.", target->GetName(), price);
+
+		player->ModifyMoney(price * -10000);
+		sWorld.SendWorldText(LANG_BOUNTY_POSTED, player->GetName(), price, target->GetName(), areaName.c_str(), zoneName.c_str());
+
+	}
+	return true;
+
+}
+
+

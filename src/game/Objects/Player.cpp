@@ -19443,6 +19443,19 @@ bool Player::isHonorOrXPTarget(Unit* pVictim) const
 }
 
 #define PVP_TOKEN 80000
+#define BOUNTY_HEAD_HUMAN_MALE 6011143
+#define BOUNTY_HEAD_HUMAN_FEMALE 6011147
+#define BOUNTY_HEAD_ORC_MALE  6011144
+#define BOUNTY_HEAD_ORC_FEMALE 6011154
+#define BOUNTY_HEAD_DWARF 6011145
+#define BOUNTY_HEAD_TROLL 6011146
+#define BOUNTY_HEAD_UNDEAD 6011148
+#define BOUNTY_HEAD_NELF_MALE 6011149
+#define BOUNTY_HEAD_NELF_FEMALE 6011153
+#define BOUNTY_HEAD_TAUREN 6011150
+#define BOUNTY_HEAD_GNOME_MALE 6011151
+#define BOUNTY_HEAD_GNOME_FEMALE 6011152
+
 void Player::RewardSinglePlayerAtKill(Unit* pVictim)
 {
     bool PvP = pVictim->isCharmedOwnedByPlayerOrPlayer();
@@ -19515,6 +19528,61 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
             AddItem(PVP_TOKEN, 1);
         }
     }
+
+	QueryResult* result = CharacterDatabase.PQuery("SELECT targetGuid FROM bounty WHERE targetGuid = %u", pVictim->GetGUIDLow());
+
+	if (result)
+	{
+		uint32 race = pVictim->getRace();
+
+		switch (race)
+		{
+		case 1: //human
+			if (pVictim->getGender() == 0)
+				PAddItem(BOUNTY_HEAD_HUMAN_MALE, 1, nullptr, pVictim);
+			else
+				PAddItem(BOUNTY_HEAD_HUMAN_FEMALE, 1, nullptr, pVictim);
+			break;
+
+		case 2: //orc
+			if (pVictim->getGender() == 0)
+				PAddItem(BOUNTY_HEAD_ORC_MALE, 1, nullptr, pVictim);
+			else
+				PAddItem(BOUNTY_HEAD_ORC_FEMALE, 1, nullptr, pVictim);
+			break;
+
+		case 3: //dwarf
+			PAddItem(BOUNTY_HEAD_DWARF, 1, nullptr, pVictim);
+			break;
+
+		case 4: //nelf
+			if (pVictim->getGender() == 0)
+				PAddItem(BOUNTY_HEAD_NELF_MALE, 1, nullptr, pVictim);
+			else
+				PAddItem(BOUNTY_HEAD_NELF_FEMALE, 1, nullptr, pVictim);
+			break;
+
+		case 5: //undead
+			PAddItem(BOUNTY_HEAD_UNDEAD, 1, nullptr, pVictim);
+			break;
+
+		case 6: //tauren
+			PAddItem(BOUNTY_HEAD_TAUREN, 1, nullptr, pVictim);
+			break;
+
+		case 7: //gnome
+			if (pVictim->getGender() == 0)
+				PAddItem(BOUNTY_HEAD_GNOME_MALE, 1, nullptr, pVictim);
+			else
+				PAddItem(BOUNTY_HEAD_GNOME_FEMALE, 1, nullptr, pVictim);
+			break;
+
+		case 8: //troll
+			PAddItem(BOUNTY_HEAD_TROLL, 1, nullptr, pVictim);
+			break;
+		}
+	}
+	
 }
 
 void Player::RewardPlayerAndGroupAtEvent(uint32 creature_id, WorldObject* pRewardSource)
@@ -21277,11 +21345,49 @@ Item* Player::AddItem(uint32 itemId, uint32 count, uint32* noSpaceForCount)
     }
 
     Item* item = StoreNewItem(dest, itemId, true, Item::GenerateItemRandomPropertyId(itemId));
-    if (item)
+  
+	if (item)
         SendNewItem(item, count, true, false);
     else
         return NULL;
+
     return item;
+}
+
+Item* Player::PAddItem(uint32 itemId, uint32 count, uint32* noSpaceForCount, Unit* pVictim)
+{
+	uint32 _noSpaceForCount = 0;
+	ItemPosCountVec dest;
+	InventoryResult msg = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemId, count, &_noSpaceForCount);
+	if (msg != EQUIP_ERR_OK)
+		count = _noSpaceForCount;
+
+	if (noSpaceForCount)
+		*noSpaceForCount = _noSpaceForCount;
+
+	if (count == 0 || dest.empty())
+	{
+		// -- TODO: Send to mailbox if no space
+		ChatHandler(this).PSendSysMessage("You don't have any space in your bags.");
+		return NULL;
+	}
+
+	Item* item = StoreNewItem(dest, itemId, true, Item::GenerateItemRandomPropertyId(itemId));
+
+	if (item)
+		if (itemId == BOUNTY_HEAD_HUMAN_MALE || itemId == BOUNTY_HEAD_HUMAN_FEMALE || itemId == BOUNTY_HEAD_ORC_MALE || itemId == BOUNTY_HEAD_ORC_FEMALE || itemId == BOUNTY_HEAD_DWARF 
+			|| itemId == BOUNTY_HEAD_TROLL || itemId == BOUNTY_HEAD_UNDEAD || itemId == BOUNTY_HEAD_NELF_MALE || itemId == BOUNTY_HEAD_NELF_FEMALE || itemId == BOUNTY_HEAD_TAUREN 
+			|| itemId == BOUNTY_HEAD_GNOME_MALE || itemId == BOUNTY_HEAD_GNOME_FEMALE)
+		{
+			item->SetGuidValue(ITEM_FIELD_CREATOR, pVictim->GetGUIDLow());
+		}
+
+	if (item)
+		SendNewItem(item, count, true, false);
+	else
+		return NULL;
+
+	return item;
 }
 
 void Player::SendDestroyGroupMembers(bool includingSelf)

@@ -284,6 +284,7 @@ void AddSC_boss_bc_event_dreadlord();
 void AddSC_boss_halloween_zombie();
 void AddSC_shop();
 void AddSC_shop_features();
+void AddSC_gOb_bounties();
 void AddSC_inspect_gossip();
 void AddSC_npc_gambling();
 void AddSC_PvPArenaSystem_Loader();
@@ -567,6 +568,7 @@ void AddScripts()
 
     AddSC_shop();
     AddSC_shop_features();
+	AddSC_gOb_bounties();
     AddSC_inspect_gossip();
     AddSC_npc_gambling();
     AddSC_PvPArenaSystem_Loader();

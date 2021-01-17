@@ -96,7 +96,10 @@ enum MangosStrings
     LANG_UNSTUCK_UNAVAILABLE            = 67,
     LANG_UNSTUCK_ALIVE                  = 68,
     LANG_UNSTUCK_DEAD                   = 69,
-    // Room for more level 0              70-99 not used
+	LANG_BOUNTY_POSTED					= 70,
+	LANG_BOUNTY_CANCELLED				= 71,
+	LANG_BOUNTY_REWARDED				= 72,
+    // Room for more level 0              73-99 not used
 
     // level 1 chat
     LANG_GLOBAL_NOTIFY                  = 100,

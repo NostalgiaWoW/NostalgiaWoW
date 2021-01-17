@@ -1199,6 +1199,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "inspect",        SEC_PLAYER,         false, &ChatHandler::HandleInspectModCommand,                  "", nullptr },
 		{ NODE, "arena",		  SEC_PLAYER,         false, &ChatHandler::HandleArenaCommand,                  "", nullptr },
         { MSTR, "balance",        SEC_BASIC_ADMIN,    true, &ChatHandler::HandleBalanceCommand,              "", nullptr },
+		{ NODE, "bounty",		  SEC_PLAYER,         false, &ChatHandler::HandleBountyCommand,                  "", nullptr },
         { MSTR, nullptr,       0,                  false, nullptr,                                           "", nullptr }
     };
 

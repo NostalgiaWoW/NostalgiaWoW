@@ -1107,7 +1107,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         /*********************************************************/
 
         Item* AddItem(uint32 itemId, uint32 count = 1, uint32* noSpaceForCount = nullptr);
-
+		Item* PAddItem(uint32 itemId, uint32 count, uint32* noSpaceForCount, Unit* pVictim);
         void InterruptSpellsWithCastItem(Item* item);
         void SetVirtualItemSlot( uint8 i, Item* item);
         void SetSheath( SheathState sheathed );             // overwrite Unit version
