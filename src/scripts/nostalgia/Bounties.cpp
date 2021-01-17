@@ -195,7 +195,6 @@ Bounty GetHead(Player* player)
 {
 	QueryResult* result = CharacterDatabase.PQuery("SELECT itemEntry, creatorGuid FROM item_instance WHERE itemEntry BETWEEN 6001143 AND 6001154 AND owner_guid = %u", player->GetGUIDLow());
 
-	Bounty default;
 
 	if (result)
 	{
@@ -209,8 +208,6 @@ Bounty GetHead(Player* player)
 		return result;
 
 	}
-	else
-		return default;
 
 }
 
