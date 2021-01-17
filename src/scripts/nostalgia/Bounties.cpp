@@ -236,7 +236,7 @@ void GetBountys(Player* player, GameObject* pGo)
 	}
 	else
 	{
-		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "ERROR", GOSSIP_SENDER_MAIN, 0);
+		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "NO BOUNTIES POSTED!", GOSSIP_SENDER_MAIN, 0);
 		player->SEND_GOSSIP_MENU(90400, pGo->GetGUID());
 	}
 		player->SEND_GOSSIP_MENU(90400, pGo->GetGUID());
