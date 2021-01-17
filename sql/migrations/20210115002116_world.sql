@@ -53,26 +53,48 @@ INSERT INTO `item_loot_template` VALUES (6001121, 13964, 100, 0, 1, 1, 0);
 INSERT INTO `item_loot_template` VALUES (6001121, 10796, 100, 0, 1, 1, 0);
 INSERT INTO `item_loot_template` VALUES (6001121, 13938, 100, 0, 1, 1, 0);
 
+-- Both
+INSERT INTO `item_template` VALUES (6001143, 0, 15, 0, 'Pre-Raid BiS Priest', 14006, 1, 4, 1, 0, 0, 0, 16, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 'Pre-raid BiS gear!', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1);
+
+INSERT INTO `item_loot_template` VALUES (6001143, 13102, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 18723, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 13013, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 18510, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 14154, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 11766, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 10787, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 18327, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 18386, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 18507, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 16058, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 13178, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 18469, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 18371, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 11923, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 18523, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001143, 18483, 100, 0, 1, 1, 0);
+
 -- Alliance
 INSERT INTO `item_template` VALUES (6001122, 0, 15, 0, 'Pre-Raid BiS Priest', 14006, 1, 4, 1, 0, 0, 0, 16, 77, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 'Pre-raid BiS gear!', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1);
 
-INSERT INTO `item_loot_template` VALUES (6001122, 13102, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 18723, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 13013, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 18510, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 14154, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 10504, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 18691, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 14112, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 13386, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 14136, 100, 0, 1, 1, 0);
 INSERT INTO `item_loot_template` VALUES (6001122, 11766, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 10787, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 18327, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 18386, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 18507, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 16058, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 13178, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 18469, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 18407, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 11662, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 13170, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 18735, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 12543, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 13001, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 12930, 100, 0, 1, 1, 0);
 INSERT INTO `item_loot_template` VALUES (6001122, 18371, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 11923, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 18523, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001122, 18483, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 13349, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 10796, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001122, 13396, 100, 0, 1, 1, 0);
+
 
 -- Horde
 INSERT INTO `item_template` VALUES (6001123, 0, 15, 0, 'Pre-Raid BiS Priest', 14006, 1, 4, 1, 0, 0, 0, 16, 178, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 'Pre-raid BiS gear!', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1);
@@ -119,45 +141,42 @@ INSERT INTO `item_loot_template` VALUES (6001124, 18534, 100, 0, 1, 1, 0);
 INSERT INTO `item_template` VALUES (6001125, 0, 15, 0, 'Pre-Raid BiS Shaman 2', 14006, 1, 4, 1, 0, 0, 0, 64, 178, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 'Pre-raid BiS gear!', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1);
 
 
-INSERT INTO `item_loot_template` VALUES (6001125, 10504, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 18691, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 14112, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 13216, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 18723, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 18757, 100, 0, 1, 1, 0);
 INSERT INTO `item_loot_template` VALUES (6001125, 13386, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 14136, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 11766, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 18407, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 11662, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 13170, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 18735, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 12543, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 13001, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 12930, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 13346, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 13969, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 18527, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 14553, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 18386, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 13954, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 16058, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 13178, 100, 0, 1, 1, 0);
 INSERT INTO `item_loot_template` VALUES (6001125, 18371, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 13349, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 10796, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001125, 13396, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 11923, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001125, 18523, 100, 0, 1, 1, 0);
+
 
 -- Horde
 INSERT INTO `item_template` VALUES (6001126, 0, 15, 0, 'Pre-Raid BiS Shaman 3', 14006, 1, 4, 1, 0, 0, 0, 64, 178, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 'Pre-raid BiS gear!', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1);
 
 
-INSERT INTO `item_loot_template` VALUES (6001126, 10504, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 18691, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 14112, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 13386, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 14136, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 11766, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 18407, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 11662, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 13170, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 18735, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 12543, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 13001, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 12930, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 18371, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 13349, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 10796, 100, 0, 1, 1, 0);
-INSERT INTO `item_loot_template` VALUES (6001126, 13396, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 12587, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 15411, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 12927, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 13340, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 11726, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 13211, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 13957, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 22232, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 15062, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 14616, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 13098, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 18500, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 13965, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 11815, 100, 0, 1, 1, 0);
+INSERT INTO `item_loot_template` VALUES (6001126, 12784, 100, 0, 1, 1, 0);
 
 
 INSERT INTO `item_template` VALUES (6001127, 0, 15, 0, 'Pre-Raid BiS Warrior 1', 14006, 1, 4, 1, 0, 0, 0, 1, 253, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 'Pre-raid BiS gear!', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 1);
@@ -511,7 +530,8 @@ INSERT INTO `npc_vendor` VALUES
 (1201275, 6001139, 0, 0, 0),
 (1201275, 6001140, 0, 0, 0),
 (1201275, 6001141, 0, 0, 0),
-(1201275, 6001142, 0, 0, 0);
+(1201275, 6001142, 0, 0, 0),
+(1201275, 6001143, 0, 0, 0); 
 
 
 
