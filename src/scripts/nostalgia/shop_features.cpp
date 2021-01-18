@@ -24,14 +24,17 @@ bool ItemUseSpell_shop_mailbox(Player* pPlayer, Item* pItem, const SpellCastTarg
 
     GameObject* other_mailbox = pPlayer->FindNearestGameObject(144112, 50.0F);
 
+
     if (other_mailbox)
         other_mailbox->SetRespawnTime(1);
 
     float dis{ 2.0F };
     float x, y, z;
+	Map const* map = pPlayer->GetMap();
     pPlayer->GetSafePosition(x, y, z);
     x += dis * cos(pPlayer->GetOrientation());
     y += dis * sin(pPlayer->GetOrientation());
+	z = map->GetHeight(pPlayer->GetPositionX(), pPlayer->GetPositionY(), MAX_HEIGHT);
 
     pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
     pPlayer->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
@@ -46,9 +49,11 @@ bool ItemUseSpell_shop_brainwashing_device(Player* pPlayer, Item* pItem, const S
     {
         float dis{ 2.0F };
         float x, y, z;
+		Map const* map = pPlayer->GetMap();
         pPlayer->GetSafePosition(x, y, z);
         x += dis * cos(pPlayer->GetOrientation());
         y += dis * sin(pPlayer->GetOrientation());
+		z = map->GetHeight(pPlayer->GetPositionX(), pPlayer->GetPositionY(), MAX_HEIGHT);
         pPlayer->SummonGameObject(1000333, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
         return true;
     }
