@@ -626,9 +626,9 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 		}
 	}
 
-    if (pOther->GetTeam() != _player->GetTeam() && _player->GetAreaId() != 2401)
+    if (pOther->GetTeam() != _player->GetTeam() && _player->GetAreaId() != 2401 && pOther->GetGroup() != _player->GetGroup())
     {
-        SendTradeStatus(TRADE_STATUS_WRONG_FACTION);
+		SendTradeStatus(TRADE_STATUS_WRONG_FACTION);
         return;
     }
 
