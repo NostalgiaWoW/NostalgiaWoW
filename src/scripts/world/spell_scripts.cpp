@@ -49,7 +49,13 @@ enum
     // target blazerunner
     SPELL_BLAZERUNNER_DISPELL           = 14247,
     NPC_BLAZERUNNER                     = 9376,
-    SPELL_BLAZERUNNER_AURA              = 13913
+    SPELL_BLAZERUNNER_AURA              = 13913,
+
+	// murloc suit
+	MURLOC_STORMCALLER = 6011155,
+	MURLOC_NIGHTCRAWLER = 6011156,
+	MURLOC_COASTRUNNER = 6011157,
+	MURLOC_TIDEHUNTER = 6011158
 };
 
 bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget)
@@ -84,20 +90,36 @@ bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellE
     return false;
 }
 
-bool ItemUseSpell_shop_morph_demon(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_morph_murloc(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (!pPlayer)
-        return false;
+	if (!pPlayer)
+		return false;
 
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
+	if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
+	{
+		pPlayer->DeMorph();
+		ChatHandler(pPlayer).SendSysMessage("You slip out of your murloc suit.");
+		return false;
+	}
 
-    pPlayer->SetDisplayId(11658);
-    ChatHandler(pPlayer).SendSysMessage("The energy of Varimathras flows through you! This effect will remain until logout.");
-    return false;
+	switch (pItem->GetEntry())
+	{
+		case MURLOC_STORMCALLER:
+			pPlayer->SetDisplayId(4920);
+			break;
+		case MURLOC_NIGHTCRAWLER:
+			pPlayer->SetDisplayId(652);
+			break;
+		case MURLOC_COASTRUNNER:
+			pPlayer->SetDisplayId(757);
+			break;
+		case MURLOC_TIDEHUNTER:
+			pPlayer->SetDisplayId(1079);
+			break;
+	}
+		ChatHandler(pPlayer).SendSysMessage("You hop into your water tight, breatheable murloc suit. Snazzy.");
+
+	return false;
 }
 
 void AddSC_spell_scripts()
@@ -113,7 +135,7 @@ void AddSC_morph_demon()
 {
     Script *newscript;
     newscript = new Script;
-    newscript->Name = "item_morph_demon";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_demon;
+    newscript->Name = "item_morph_murloc";
+    newscript->pItemUseSpell = &ItemUseSpell_morph_murloc;
     newscript->RegisterSelf();
 }
