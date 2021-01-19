@@ -167,7 +167,7 @@ uint32 BountyPayout(Player* player)
 
 {
 	// Get bounty hunter's collected heads
-	QueryResult* result = CharacterDatabase.PQuery("SELECT creatorGuid FROM item_instance WHERE itemEntry BETWEEN 6001143 AND 6001154 AND owner_guid = %u", player->GetGUIDLow());
+	QueryResult* result = CharacterDatabase.PQuery("SELECT creatorGuid FROM item_instance WHERE itemEntry BETWEEN 6011143 AND 6011154 AND owner_guid = %u", player->GetGUIDLow());
 
 	if (result)
 	{
@@ -193,7 +193,7 @@ uint32 BountyPayout(Player* player)
 
 Bounty GetHead(Player* player)
 {
-	QueryResult* result = CharacterDatabase.PQuery("SELECT itemEntry, creatorGuid FROM item_instance WHERE itemEntry BETWEEN 6001143 AND 6001154 AND owner_guid = %u", player->GetGUIDLow());
+	QueryResult* result = CharacterDatabase.PQuery("SELECT itemEntry, creatorGuid FROM item_instance WHERE itemEntry BETWEEN 6011143 AND 6011154 AND owner_guid = %u", player->GetGUIDLow());
 
 
 	if (result)
