@@ -298,6 +298,17 @@ uint32 DungeonResetScheduler::GetMaxResetTimeFor(MapEntry const* temp)
     if (!temp)
         return 0;
 
+	uint32 mapid = temp->id;
+	if (mapid)
+	{
+		if (mapid == 309 || mapid == 409 || mapid == 469 || mapid == 249)
+			return 86400; //24 hours?
+
+		else if (mapid == 533 || mapid == 531 || mapid == 509)
+			return 172800; //48 hours?
+
+	}
+	else
     return temp->resetDelay * DAY;
 }
 
@@ -398,10 +409,11 @@ void DungeonResetScheduler::LoadResetTimes()
             // update the reset time if the hour in the configs changes
             uint64 oldresettime = fields[1].GetUInt64();
             uint64 newresettime = (oldresettime / DAY) * DAY + diff;
+
             if (oldresettime != newresettime)
                 CharacterDatabase.DirectPExecute("UPDATE instance_reset SET resettime = '" UI64FMTD "' WHERE mapid = '%u'", newresettime, mapid);
-
-            SetResetTimeFor(mapid, newresettime);
+		
+			SetResetTimeFor(mapid, newresettime);
         }
         while (result->NextRow());
         delete result;
