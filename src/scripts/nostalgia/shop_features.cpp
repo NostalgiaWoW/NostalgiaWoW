@@ -34,8 +34,13 @@ bool ItemUseSpell_shop_mailbox(Player* pPlayer, Item* pItem, const SpellCastTarg
     pPlayer->GetSafePosition(x, y, z);
     x += dis * cos(pPlayer->GetOrientation());
     y += dis * sin(pPlayer->GetOrientation());
-	z = map->GetHeight(pPlayer->GetPositionX(), pPlayer->GetPositionY(), MAX_HEIGHT);
-
+	
+	if (other_mailbox)
+	{
+		z = other_mailbox->GetPositionZ(); // get z of original to avoid multi hopping
+	}
+	else
+		z = map->GetHeight(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ());
     pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
     pPlayer->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
     return true;
@@ -46,8 +51,10 @@ bool ItemUseSpell_shop_brainwashing_device(Player* pPlayer, Item* pItem, const S
 	GameObject* other_device = pPlayer->FindNearestGameObject(1000333, 50.0F);
 
 	if (other_device)
+	{
 		other_device->SetRespawnTime(1);
-	
+	}
+
 	if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
         ChatHandler(pPlayer).PSendSysMessage("Warning! Failsafe system shutting device down!");
 
@@ -59,7 +66,14 @@ bool ItemUseSpell_shop_brainwashing_device(Player* pPlayer, Item* pItem, const S
         pPlayer->GetSafePosition(x, y, z);
         x += dis * cos(pPlayer->GetOrientation());
         y += dis * sin(pPlayer->GetOrientation());
-		z = map->GetHeight(pPlayer->GetPositionX(), pPlayer->GetPositionY(), MAX_HEIGHT);
+		
+		if (other_device)
+		{
+			z = other_device->GetPositionZ(); // get z of original to avoid multi hopping
+		}
+		else
+			z = map->GetHeight(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ());
+
         pPlayer->SummonGameObject(1000333, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
         return true;
     }
