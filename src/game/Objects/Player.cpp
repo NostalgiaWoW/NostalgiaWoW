@@ -974,8 +974,7 @@ int32 Player::getMaxTimer(MirrorTimerType timer)
         case BREATH_TIMER:
         {
             if (!isAlive() || HasAuraType(SPELL_AURA_WATER_BREATHING) ||
-                    GetSession()->GetSecurity() >= (AccountTypes)sWorld.getConfig(CONFIG_UINT32_TIMERBAR_BREATH_GMLEVEL) || GetDisplayId() == 4920 || GetDisplayId() == 652 
-			  	 || GetDisplayId() == 757 || GetDisplayId() == 1079)
+                    GetSession()->GetSecurity() >= (AccountTypes)sWorld.getConfig(CONFIG_UINT32_TIMERBAR_BREATH_GMLEVEL));
                 return DISABLED_MIRROR_TIMER;
             int32 UnderWaterTime = sWorld.getConfig(CONFIG_UINT32_TIMERBAR_BREATH_MAX) * IN_MILLISECONDS;
             AuraList const& mModWaterBreathing = GetAurasByType(SPELL_AURA_MOD_WATER_BREATHING);
@@ -2745,11 +2744,6 @@ void Player::SetInWater(bool apply)
     RemoveAurasWithInterruptFlags(apply ? AURA_INTERRUPT_FLAG_NOT_ABOVEWATER : AURA_INTERRUPT_FLAG_NOT_UNDERWATER);
 
     getHostileRefManager().updateThreatTables();
-
-	if (m_isInWater && (player->GetDisplayId() == 4920 || player->GetDisplayId() == 652 || player->GetDisplayId() == 757 || player->GetDisplayId() == 1079)) // Muloc suits for Nostalgia WoW
-		SetSpeedRate(MOVE_SWIM, 2.0, true);
-	else
-		SetSpeedRate(MOVE_SWIM, 1.0, true);
 }
 
 struct SetGameMasterOnHelper
