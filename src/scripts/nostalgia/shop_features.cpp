@@ -43,8 +43,14 @@ bool ItemUseSpell_shop_mailbox(Player* pPlayer, Item* pItem, const SpellCastTarg
 
 bool ItemUseSpell_shop_brainwashing_device(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+	GameObject* other_device = pPlayer->FindNearestGameObject(1000333, 50.0F);
+
+	if (other_device)
+		other_device->SetRespawnTime(1);
+	
+	if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
         ChatHandler(pPlayer).PSendSysMessage("Warning! Failsafe system shutting device down!");
+
     else
     {
         float dis{ 2.0F };
