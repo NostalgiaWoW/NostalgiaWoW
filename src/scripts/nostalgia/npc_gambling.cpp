@@ -132,9 +132,11 @@ bool GossipSelect_npc_gambling(Player* pPlayer, Creature* pCreature, uint32 uiSe
         else
             pPlayer->HandleEmote(EMOTE_ONESHOT_CHEER);
     }
-    else
-        pPlayer->HandleEmote(EMOTE_ONESHOT_CRY);
-
+	else
+	{
+		pPlayer->HandleEmote(EMOTE_ONESHOT_CRY);
+		CharacterDatabase.PExecute("UPDATE gambling_bank SET bank = bank+%u", amount);
+	}
     pPlayer->PlayerTalkClass->CloseGossip();
     return true;
 }
