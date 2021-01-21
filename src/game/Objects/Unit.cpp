@@ -2225,21 +2225,21 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
         // and almost never more than 25% resists. How this should work exactly is somewhat a guess.
         // Kalgan post-2.0 dot nerf: "Previously, dots in general were 1/10th as likely to be resisted as normal spells."
         // http://web.archive.org/web/20080601184008/http://forums.worldofwarcraft.com/thread.html?topicId=65457765&pageNo=18&sid=1#348
-        //if (damagetype == DOT && spellProto)
-        //{
-        //    switch (spellProto->Id)
-        //    {
-        //        // NOSTALRIUS: Some DoTs follow normal resist rules. Need to find which ones, why and how.
-        //        // We have a video proof for the following ones.
-        //        case 23461:     // Vaelastrasz's Flame Breath
-        //        case 24818:     // Nightmare Dragon's Noxious Breath
-        //        case 25812:     // Lord Kri's Toxic Volley
-        //        case 28531:     // Sapphiron's Frost Aura
-        //            break;
-        //        default:
-        //            resistanceChance *= 0.1f;
-        //    }
-        //}
+        if (damagetype == DOT && spellProto)
+        {
+            switch (spellProto->Id)
+            {
+                // NOSTALRIUS: Some DoTs follow normal resist rules. Need to find which ones, why and how.
+                // We have a video proof for the following ones.
+                case 23461:     // Vaelastrasz's Flame Breath
+                case 24818:     // Nightmare Dragon's Noxious Breath
+                case 25812:     // Lord Kri's Toxic Volley
+                case 28531:     // Sapphiron's Frost Aura
+                    break;
+                default:
+                    resistanceChance *= 0.1f;
+            }
+        }
 
         ResistanceValues* prev = nullptr;
         ResistanceValues* next = nullptr;
@@ -2266,10 +2266,7 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
         // The true magic damage resist cap is therefore actually ~68-70% because of this mechanic.
         // http://web.archive.org/web/20110808083353/http://elitistjerks.com/f15/t10712-resisting_magical_damage_its_relation_resistance_levels/p4/
         
-		if (spellProto)
-			if (spellProto->IsBinary() && ran < resist100 + resist75)
-				resistCnt = 0.75f;
-		else if (ran < resist100 + resist75)
+		if (ran < resist100 + resist75)
             resistCnt = 0.75f;
         else if (ran < resist100 + resist75 + resist50)
             resistCnt = 0.5f;
@@ -3117,15 +3114,6 @@ int32 Unit::MagicSpellHitChance(Unit *pVictim, SpellEntry const *spell, Spell* s
        modHitChance *= (1 - resistModHitChance);
        DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "x %f : HitChance = %f", (1 - resistModHitChance), modHitChance);
     } 
-
-	else {
-		float resistModHitChance = GetSpellResistChance(pVictim, schoolMask, false);
-		modHitChance *= (1 - resistModHitChance);
-		if (modHitChance < 0) {
-			modHitChance = 0.24f;
-		}
-	
-	}
 
     int32 HitChance = modHitChance * 100;
     if (HitChance <  100) HitChance =  100;
