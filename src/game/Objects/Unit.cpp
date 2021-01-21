@@ -2209,9 +2209,9 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
 
     // NOSTALRIUS: Sorts binaires ne sont pas résistés.
     if (canResist && spellProto && spellProto->IsBinary())
-        canResist = true;
+        canResist = false;
     else if (spellProto && spellProto->AttributesEx4 & SPELL_ATTR_EX4_IGNORE_RESISTANCES)
-        canResist = true;
+        canResist = false;
 
     DEBUG_UNIT_IF(spellProto, this, DEBUG_SPELL_COMPUTE_RESISTS, "%s : Binary [%s]. Partial resists %s", spellProto->SpellName[2], spellProto->IsBinary() ? "YES" : "NO", canResist ? "possible" : "impossible");
 
@@ -3113,6 +3113,7 @@ int32 Unit::MagicSpellHitChance(Unit *pVictim, SpellEntry const *spell, Spell* s
 
     // Nostalrius: sorts binaires.
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (spell->IsBinary())
     {
       //Get base victim resistance for school
@@ -3138,6 +3139,15 @@ int32 Unit::MagicSpellHitChance(Unit *pVictim, SpellEntry const *spell, Spell* s
        // DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "x %f : HitChance = %f", (1 - resistModHitChance), modHitChance);
     //} // Commented out for Nostalgia WoW. Not blizzlike.
 >>>>>>> parent of ed7c8ff... Changes to Resistances
+=======
+    if (spell->IsBinary())
+    {
+        // Get base victim resistance for school
+        float resistModHitChance = GetSpellResistChance(pVictim, schoolMask, false);
+        modHitChance *= (1 - resistModHitChance);
+        DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "x %f : HitChance = %f", (1 - resistModHitChance), modHitChance);
+    }
+>>>>>>> parent of 27b7d4a... [Core] Remove Binary Spell mechanic
 
     int32 HitChance = modHitChance * 100;
     if (HitChance <  100) HitChance =  100;
