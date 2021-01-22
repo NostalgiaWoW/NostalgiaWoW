@@ -968,7 +968,7 @@ int32 Player::getMaxTimer(MirrorTimerType timer)
     switch (timer)
     {
         case FATIGUE_TIMER:
-            if (GetSession()->GetSecurity() >= (AccountTypes)sWorld.getConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_GMLEVEL) || GetZoneId() == 45)
+            if (GetSession()->GetSecurity() >= (AccountTypes)sWorld.getConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_GMLEVEL))
                 return DISABLED_MIRROR_TIMER;
             return sWorld.getConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_MAX) * IN_MILLISECONDS;
         case BREATH_TIMER:
@@ -6725,13 +6725,12 @@ void Player::UpdateArea(uint32 newArea)
     }
 
     if (!isGameMaster())
-    {           // Force faction change at shop mall
+    {           // Force faction change at shop mall & island
         
-            if (areaEntry->Id == 2401)
+            if (areaEntry->Id == 2401 || areaEntry->Id == 2317)
                 setFaction(35);
             else if (getFaction() == 35)
                 setFactionForRace(getRace());
-            
     }
 
 
