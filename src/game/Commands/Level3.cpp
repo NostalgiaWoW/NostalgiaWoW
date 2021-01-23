@@ -6185,7 +6185,7 @@ bool ChatHandler::HandleMassReviveCommand(char* args)
 	{
 		Player* pl = itr->getSource();
 
-		if (!pl || pl == m_session->GetPlayer() || !pl->GetSession())
+		if (!pl || pl == m_session->GetPlayer() || !pl->GetSession() || pl->isAlive())
 			continue;
 
 		if (needReportToTarget(pl))
@@ -6213,6 +6213,7 @@ bool ChatHandler::HandleMassReviveCommand(char* args)
 
 		DoAfterTime(pl, 5.75 * IN_MILLISECONDS, [player = pl]() { player->CastSpell(player, 24240, true); });
 		DoAfterTime(pl, 6 * IN_MILLISECONDS, [player = pl]() { player->ResurrectPlayer(0.5f); });
+		gm->CastStop();
 	}
 
 	return true;
