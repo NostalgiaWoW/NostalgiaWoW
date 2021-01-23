@@ -1065,6 +1065,7 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand commandTable[] =
     {
+		{ NODE, "mass",         SEC_ADMINISTRATOR,  true, nullptr,                                              "", massCommandTable },
         { NODE, "easter",         SEC_ADMINISTRATOR,  true, nullptr,                                              "", easterCommandTable },
         { NODE, "sanction",       SEC_ADMINISTRATOR,  true, nullptr,                                            "", sanctionCommandTable },
         { NODE, "suspicious",     SEC_ADMINISTRATOR,  true, nullptr,                                          "", suspiciousCommandTable },
