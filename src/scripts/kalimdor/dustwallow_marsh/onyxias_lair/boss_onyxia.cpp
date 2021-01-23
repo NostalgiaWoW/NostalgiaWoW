@@ -445,12 +445,12 @@ struct boss_onyxiaAI : public ScriptedAI
         if (m_uiMovementTimer < uiDiff)
         {
             m_uiMovementTimer = urand(15000, 25000);
-            m_uiFireballTimer = 5000;
+            m_uiFireballTimer = 10000;
             if (DoMovement())
             {
                 // casting Deep Breath
                 m_uiMovementTimer = urand(20000, 25000);
-                m_uiFireballTimer = 10000;
+                m_uiFireballTimer = 15000;
             }
         }
         else
@@ -474,7 +474,7 @@ struct boss_onyxiaAI : public ScriptedAI
 
         if (m_uiFireballTimer < uiDiff)
         {
-            if (m_uiMovementTimer > 3500 && m_creature->IsStopped() && !m_bDeepBreathIsCasting)
+            if (m_uiMovementTimer > 5000 && m_creature->IsStopped() && !m_bDeepBreathIsCasting)
             {
                 if (Unit* pTarget = m_creature->getVictim())
                 {
@@ -482,7 +482,7 @@ struct boss_onyxiaAI : public ScriptedAI
                     {
                         if (m_creature->getThreatManager().getThreat(pTarget))
                             m_creature->getThreatManager().modifyThreatPercent(pTarget, -100);
-                        m_uiFireballTimer = 3000;
+                        m_uiFireballTimer = 4500;
                     }
                 }
             }
@@ -508,7 +508,7 @@ struct boss_onyxiaAI : public ScriptedAI
                 m_bIsSummoningWhelps = false;
                 m_uiSummonCount = 0;
                 m_uiWhelpsToSummon = 2 + irand(0, 1);
-                m_uiSummonWhelpsTimer = 32000;
+                m_uiSummonWhelpsTimer = 40000;
             }
         }
         else
