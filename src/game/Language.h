@@ -1111,6 +1111,9 @@ enum MangosStrings
     LANG_CHARACTER_REVIVED_ONLINE       = 5031,
     LANG_CHARACTER_REVIVED_OFFLINE      = 5032,
     LANG_GM_ANNOUNCE_COLOR              = 6615,
+	LANG_GM_MASS_REVIVE				    = 6616,
+	LANG_GM_MASS_REVIVE_DECLINE		    = 6617,
+	LANG_GM_MASS_REVIVED_BY				= 6618,
 
     // Use for not-in-offcial-sources patches
     //                                    10000-10999

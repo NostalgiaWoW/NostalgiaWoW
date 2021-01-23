@@ -1057,6 +1057,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, nullptr,                0,                      false, nullptr,                                             "", nullptr }
     };
 
+	static ChatCommand massCommandTable[] =
+	{
+		{ NODE, "revive",			  SEC_GAMEMASTER,	false, &ChatHandler::HandleMassReviveCommand,					"", nullptr },
+		 { MSTR, nullptr,                0,                      false, nullptr,                                             "", nullptr }
+	};
+
     static ChatCommand commandTable[] =
     {
         { NODE, "easter",         SEC_ADMINISTRATOR,  true, nullptr,                                              "", easterCommandTable },

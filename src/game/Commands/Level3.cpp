@@ -68,6 +68,12 @@
 #include "tbb/scalable_allocator.h"
 #endif
 
+template <typename Functor>
+void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+{
+	player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+}
+
 bool ChatHandler::HandleReloadAllCommand(char* /*args*/)
 {
     HandleReloadSkillFishingBaseLevelCommand((char*)"");
@@ -6155,6 +6161,61 @@ bool ChatHandler::HandleRespawnCommand(char* /*args*/)
     MaNGOS::WorldObjectWorker<MaNGOS::RespawnDo> worker(u_do);
     Cell::VisitGridObjects(pl, worker, pl->GetMap()->GetVisibilityDistance());
     return true;
+}
+
+bool ChatHandler::HandleMassReviveCommand(char* args)
+{
+
+	Player* target;
+	if (!ExtractPlayerTarget(&args, &target))
+		return false;
+
+	Group* grp = target->GetGroup();
+
+	if (!grp)
+	{
+		PSendSysMessage(LANG_GM_MASS_REVIVE_DECLINE);
+		SetSentErrorMessage(true);
+		return false;
+	}
+
+	Player* gm = m_session->GetPlayer();
+
+	for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+	{
+		Player* pl = itr->getSource();
+
+		if (!pl || pl == m_session->GetPlayer() || !pl->GetSession())
+			continue;
+
+		if (needReportToTarget(pl))
+			ChatHandler(pl).PSendSysMessage(LANG_GM_MASS_REVIVED_BY);
+
+		float x = pl->GetPositionX();
+		float y = pl->GetPositionY();
+		float z = pl->GetPositionZ();
+
+		uint32 rndomC(urand(1, 2));
+		uint32 rndm;
+
+		switch (rndomC)
+		{
+		case 1:
+			rndm = 13540;
+			break;
+		case 2:
+			rndm = 29423;
+			break;
+		}
+
+		gm->CastSpell(gm, rndm, true);
+		GameObject* pGo = pl->SummonGameObject(9877610, x, y, z - .5, 0, 0, 0, 0, 0, 8);
+
+		DoAfterTime(pl, 5.75 * IN_MILLISECONDS, [player = pl]() { player->CastSpell(player, 24240, true); });
+		DoAfterTime(pl, 6 * IN_MILLISECONDS, [player = pl]() { player->ResurrectPlayer(0.5f); });
+	}
+
+	return true;
 }
 
 bool ChatHandler::HandleGMFlyCommand(char* args)

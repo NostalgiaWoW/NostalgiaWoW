@@ -455,7 +455,7 @@ struct mob_firelordAI : public ScriptedAI
         // Soul Burn
         if (m_uiSoulBurnTimer < uiDiff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_FARTHEST, 0, nullptr, SELECT_FLAG_PLAYER))
             {
                 if (DoCastSpellIfCan(pTarget, SPELL_SOULBURN, CAST_TRIGGERED) == CAST_OK)
                     m_uiSoulBurnTimer = urand(3000, 4000);

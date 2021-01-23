@@ -937,6 +937,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleMaxSkillCommand(char* args);
         bool HandleSetSkillCommand(char* args);
         bool HandleRespawnCommand(char* args);
+		bool HandleMassReviveCommand(char* args);
         bool HandleComeToMeCommand(char* args);
         bool HandleCombatListCommand(char* args);
         bool HandleCombatStopCommand(char* args);
