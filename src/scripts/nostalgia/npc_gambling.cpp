@@ -6,6 +6,9 @@
 #define OPT2 "250 gold coins."
 #define OPT3 "500 gold coins."
 #define OPT4 "1000 gold coins."
+#define OPT5 "Enter lottery draw - 50g."
+
+#define MAX_TICKETS 5
 
 #define COIN_SOUND 1204
 
@@ -74,6 +77,7 @@ bool GossipHello_npc_gambling(Player* pPlayer, Creature* pCreature)
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT4, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT5, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
 
     pPlayer->SEND_GOSSIP_MENU(GAMBLING_TEXT, pCreature->GetGUID());
     return true;
@@ -97,48 +101,79 @@ bool GossipSelect_npc_gambling(Player* pPlayer, Creature* pCreature, uint32 uiSe
         case GOSSIP_ACTION_INFO_DEF + 4:
             amount = 10000000;
             break;
+		case GOSSIP_ACTION_INFO_DEF + 5:
+		{
+			uint32 pGuid = pPlayer->GetGUIDLow();
+
+			QueryResult* result = CharacterDatabase.PQuery("SELECT COUNT(pGuid) FROM `lottery` WHERE pGuid = %u", pGuid);
+
+			if (result)
+			{
+				Field* fetch = result->Fetch();
+				uint32 count = fetch[0].GetUInt32();
+
+				if (count >= MAX_TICKETS)
+				{
+					pCreature->PMonsterSay("You can only purchase a maximum of %u tickets.", MAX_TICKETS);
+					pPlayer->PlayerTalkClass->CloseGossip();
+					amount = 1;
+					break;
+				}
+			}
+			pPlayer->ModifyMoney(-500000);
+			pCreature->PMonsterSay("You've been entered into the draw. Good luck!");
+			CharacterDatabase.PExecute("INSERT INTO `lottery` (pGuid) VALUES (%u)", pGuid);
+			amount = 1;
+			break;
+		}
         default:
             return true;
     }
 
-    if (pPlayer->GetMoney() < amount)
-    {
-        pPlayer->GetSession()->SendNotification("You don't have enough money!");
-        pPlayer->PlayerTalkClass->CloseGossip();
-        return true;
-    }
-
-    pPlayer->ModifyMoney(amount * -1);
-
-    pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
-    pCreature->PlayDirectSound(COIN_SOUND, pPlayer); // Coin sound
-
-    int result = irand(1, 100);
-    pCreature->PMonsterEmote("Gazrik Goldenspark rolls a dice for %s... %i!", nullptr, false,
-                             pPlayer->GetName(),
-                             result);
-
-    uint32 amountToAward = handleRecords(pPlayer, amount, result);
-    if (amountToAward > 0)
-    {
-        pPlayer->ModifyMoney(amountToAward);
-		pCreature->MonsterSay("Winner!");
-
-        if (amountToAward >= amount * 3)
-        {
-			pCreature->MonsterSay("You're on a streak!");
-            pPlayer->SendSpellGo(pPlayer, SPELL_FIREWORK);
-        }
-        else
-            pPlayer->HandleEmote(EMOTE_ONESHOT_CHEER);
-    }
-	else
+	if (amount > 1)
 	{
-		pPlayer->HandleEmote(EMOTE_ONESHOT_CRY);
-		CharacterDatabase.PExecute("UPDATE gambling_bank SET bank = bank+%u", amount);
+		if (pPlayer->GetMoney() < amount)
+		{
+			pPlayer->GetSession()->SendNotification("You don't have enough money!");
+			pPlayer->PlayerTalkClass->CloseGossip();
+			return true;
+		}
+
+		pPlayer->ModifyMoney(amount * -1);
+
+		pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+		pCreature->PlayDirectSound(COIN_SOUND, pPlayer); // Coin sound
+
+		int result = irand(1, 100);
+		pCreature->PMonsterEmote("Gazrik Goldenspark rolls a dice for %s... %i!", nullptr, false,
+			pPlayer->GetName(),
+			result);
+
+		uint32 amountToAward = handleRecords(pPlayer, amount, result);
+		if (amountToAward > 0)
+		{
+			pPlayer->ModifyMoney(amountToAward);
+			pCreature->MonsterSay("Winner!");
+
+			if (amountToAward >= amount * 3)
+			{
+				pCreature->MonsterSay("You're on a streak!");
+				pPlayer->SendSpellGo(pPlayer, SPELL_FIREWORK);
+			}
+			else
+				pPlayer->HandleEmote(EMOTE_ONESHOT_CHEER);
+			CharacterDatabase.PExecute("UPDATE `gambling_bank` SET bank = bank-%u", amount); //win removes from bank
+		}
+		else
+		{
+			pPlayer->HandleEmote(EMOTE_ONESHOT_CRY);
+			CharacterDatabase.PExecute("UPDATE `gambling_bank` SET bank = bank+%u", amount); // lose adds to bank
+		}
+		pPlayer->PlayerTalkClass->CloseGossip();
+		return true;
 	}
-    pPlayer->PlayerTalkClass->CloseGossip();
-    return true;
+	else
+		return true;
 }
 
 void AddSC_npc_gambling()
