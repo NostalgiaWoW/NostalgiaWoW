@@ -1286,18 +1286,12 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 		// Specifically for Nostalgia WoW to Override new 5 man raid dungeons
 
 		// Onyxia Warder
-		if (m_spellInfo->Id == 20203 || m_spellInfo->Id == 19983) 
+		if (m_caster->GetMapId() == 249)
+			if (m_caster->GetTypeId() == TYPEID_UNIT)
 		{
-				damageInfo.damage = damage* 0.4;
-
+				damageInfo.damage = damage* 0.2;
 		}
-		// MC
-		/*if (m_caster->GetEntry() == 12265 || m_caster->GetEntry() == 11673 || m_caster->GetEntry() == 18944 || m_caster->GetEntry() == 18945 || m_caster->GetEntry() == 11669 || m_caster->GetEntry() == 11671
-			|| m_caster->GetEntry() == 11666 || m_caster->GetEntry() == 12118 || m_caster->GetEntry() == 11982 || m_caster->GetEntry() == 12259 || m_caster->GetEntry() == 11666 || m_caster->GetEntry() == 12057
-			|| m_caster->GetEntry() == 12056 || m_caster->GetEntry() == 12264 || m_caster->GetEntry() == 12098 || m_caster->GetEntry() == 11988 || m_caster->GetEntry() == 12018 || m_caster->GetEntry() == 11502
-			|| m_caster->GetEntry() == 12119 || m_caster->GetEntry() == 11666 || m_caster->GetEntry() == 11661 || m_caster->GetEntry() == 12099 || m_caster->GetEntry() == 11662 || m_caster->GetEntry() == 11672
-			|| m_caster->GetEntry() == 11664 || m_caster->GetEntry() == 11663 || m_caster->GetEntry() == 11658)*/
-		
+		// MC		
 		if (m_caster->GetMapId() == 409)
 			if (m_caster->GetTypeId() == TYPEID_UNIT)
 		{
