@@ -1296,9 +1296,9 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 			|| m_caster->GetEntry() == 11666 || m_caster->GetEntry() == 12118 || m_caster->GetEntry() == 11982 || m_caster->GetEntry() == 12259 || m_caster->GetEntry() == 11666 || m_caster->GetEntry() == 12057
 			|| m_caster->GetEntry() == 12056 || m_caster->GetEntry() == 12264 || m_caster->GetEntry() == 12098 || m_caster->GetEntry() == 11988 || m_caster->GetEntry() == 12018 || m_caster->GetEntry() == 11502
 			|| m_caster->GetEntry() == 12119 || m_caster->GetEntry() == 11666 || m_caster->GetEntry() == 11661 || m_caster->GetEntry() == 12099 || m_caster->GetEntry() == 11662 || m_caster->GetEntry() == 11672
-			|| m_caster->GetEntry() == 11664 || m_caster->GetEntry() == 11663)
+			|| m_caster->GetEntry() == 11664 || m_caster->GetEntry() == 11663 || m_caster->GetEntry() == 11658)
 		{
-			damageInfo.damage = damage * 0.025;
+			damageInfo.damage = damage * 0.005;
 
 		}
 
