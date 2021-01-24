@@ -59,8 +59,8 @@ struct boss_golemaggAI : public ScriptedAI
 
     void Reset()
     {
-        m_uiPyroblastTimer = 5 * IN_MILLISECONDS;            // These timers are probably wrong
-        m_uiEarthquakeTimer = 3 * IN_MILLISECONDS;
+        m_uiPyroblastTimer = 8 * IN_MILLISECONDS;            // These timers are probably wrong
+        m_uiEarthquakeTimer = 6 * IN_MILLISECONDS;
         TickTimer = 10000;
         m_bEnraged = false;
 
@@ -132,7 +132,7 @@ struct boss_golemaggAI : public ScriptedAI
             if (m_uiEarthquakeTimer < uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_EARTHQUAKE) == CAST_OK)
-                    m_uiEarthquakeTimer = 2.5 * IN_MILLISECONDS;
+                    m_uiEarthquakeTimer = 3.5 * IN_MILLISECONDS;
             }
             else
                 m_uiEarthquakeTimer -= uiDiff;
@@ -158,7 +158,7 @@ struct mob_core_ragerAI : public ScriptedAI
     void Reset()
     {
         TickTimer = 1000;
-        m_uiMangleTimer = 5 * IN_MILLISECONDS;               // These times are probably wrong
+        m_uiMangleTimer = 7 * IN_MILLISECONDS;               // These times are probably wrong
     }
 
     void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
@@ -190,7 +190,7 @@ struct mob_core_ragerAI : public ScriptedAI
         if (m_uiMangleTimer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_MANGLE) == CAST_OK)
-                m_uiMangleTimer = 8 * IN_MILLISECONDS;
+                m_uiMangleTimer = 10 * IN_MILLISECONDS;
         }
         else
             m_uiMangleTimer -= uiDiff;

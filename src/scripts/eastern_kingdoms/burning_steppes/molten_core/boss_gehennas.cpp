@@ -44,8 +44,8 @@ struct boss_gehennasAI : public ScriptedAI
 
     void Reset()
     {
-        ShadowBolt_Timer = 2000;
-        RainOfFire_Timer = 3000;
+        ShadowBolt_Timer = 4000;
+        RainOfFire_Timer = 6000;
         GehennasCurse_Timer = 5000;
 
         if (m_pInstance && m_creature->isAlive())
@@ -87,7 +87,7 @@ struct boss_gehennasAI : public ScriptedAI
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 if (DoCastSpellIfCan(target, SPELL_RAINOFFIRE) == CAST_OK)
-                    RainOfFire_Timer = urand(3000, 4000);
+                    RainOfFire_Timer = urand(6000, 10000);
             }
         }
         else RainOfFire_Timer -= diff;

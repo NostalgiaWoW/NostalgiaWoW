@@ -1292,14 +1292,16 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 
 		}
 		// MC
-		if (m_caster->GetEntry() == 12265 || m_caster->GetEntry() == 11673 || m_caster->GetEntry() == 18944 || m_caster->GetEntry() == 18945 || m_caster->GetEntry() == 11669 || m_caster->GetEntry() == 11671
+		/*if (m_caster->GetEntry() == 12265 || m_caster->GetEntry() == 11673 || m_caster->GetEntry() == 18944 || m_caster->GetEntry() == 18945 || m_caster->GetEntry() == 11669 || m_caster->GetEntry() == 11671
 			|| m_caster->GetEntry() == 11666 || m_caster->GetEntry() == 12118 || m_caster->GetEntry() == 11982 || m_caster->GetEntry() == 12259 || m_caster->GetEntry() == 11666 || m_caster->GetEntry() == 12057
 			|| m_caster->GetEntry() == 12056 || m_caster->GetEntry() == 12264 || m_caster->GetEntry() == 12098 || m_caster->GetEntry() == 11988 || m_caster->GetEntry() == 12018 || m_caster->GetEntry() == 11502
 			|| m_caster->GetEntry() == 12119 || m_caster->GetEntry() == 11666 || m_caster->GetEntry() == 11661 || m_caster->GetEntry() == 12099 || m_caster->GetEntry() == 11662 || m_caster->GetEntry() == 11672
-			|| m_caster->GetEntry() == 11664 || m_caster->GetEntry() == 11663 || m_caster->GetEntry() == 11658)
+			|| m_caster->GetEntry() == 11664 || m_caster->GetEntry() == 11663 || m_caster->GetEntry() == 11658)*/
+		
+		if (m_caster->GetMapId() == 409)
+			if (m_caster->GetTypeId() == TYPEID_UNIT)
 		{
-			damageInfo.damage = damage * 0.005;
-
+			damageInfo.damage = damage * 0.15;
 		}
 
         // Send log damage message to client

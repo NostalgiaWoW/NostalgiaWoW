@@ -57,11 +57,11 @@ struct boss_sulfuronAI : public ScriptedAI
 
     void Reset()
     {
-        Darkstrike_Timer        = 8000;                     //These times are probably wrong
-        DemoralizingShout_Timer = 12000;
-        Inspire_Timer           = 10000;
-        Knockdown_Timer         = 6000;
-        Flamespear_Timer        = 2000;
+        Darkstrike_Timer        = 15000;                     //These times are probably wrong
+        DemoralizingShout_Timer = 17000;
+        Inspire_Timer           = 25000;
+        Knockdown_Timer         = 11000;
+        Flamespear_Timer        = 5000;
 
         if (m_pInstance && m_creature->isAlive())
             m_pInstance->SetData(TYPE_SULFURON, NOT_STARTED);
@@ -89,7 +89,7 @@ struct boss_sulfuronAI : public ScriptedAI
         if (DemoralizingShout_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DEMORALIZINGSHOUT) == CAST_OK)
-                DemoralizingShout_Timer = urand(12000, 18000);
+                DemoralizingShout_Timer = urand(15000, 23000);
         }
         else DemoralizingShout_Timer -= diff;
 
@@ -120,7 +120,7 @@ struct boss_sulfuronAI : public ScriptedAI
         if (Knockdown_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_KNOCKDOWN) == CAST_OK)
-                Knockdown_Timer = urand(10000, 13000);
+                Knockdown_Timer = urand(12000, 18000);
         }
         else Knockdown_Timer -= diff;
 
@@ -130,7 +130,7 @@ struct boss_sulfuronAI : public ScriptedAI
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 if (DoCastSpellIfCan(target, SPELL_FLAMESPEAR) == CAST_OK)
-                    Flamespear_Timer = urand(10000, 14000);
+                    Flamespear_Timer = urand(12000, 19000);
             }
         }
         else Flamespear_Timer -= diff;
@@ -139,7 +139,7 @@ struct boss_sulfuronAI : public ScriptedAI
         if (Darkstrike_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DARKSTRIKE) == CAST_OK)
-                Darkstrike_Timer = urand(13000, 15000);
+                Darkstrike_Timer = urand(15000, 20000);
         }
         else Darkstrike_Timer -= diff;
 
@@ -164,10 +164,10 @@ struct mob_flamewaker_priestAI : public ScriptedAI
 
     void Reset()
     {
-        Heal_Timer           = urand(8000, 12000);
+        Heal_Timer           = urand(10000, 18000);
         ShadowWordPain_Timer = 2000;
-        Immolate_Timer       = urand(2500, 10000);
-        DarkStrike_Timer     = urand(5000, 7000);
+        Immolate_Timer       = urand(5000, 18000);
+        DarkStrike_Timer     = urand(8000, 10000);
     }
 
     void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
@@ -189,7 +189,7 @@ struct mob_flamewaker_priestAI : public ScriptedAI
                 return;
 
             if (DoCastSpellIfCan(pUnit, SPELL_HEAL) == CAST_OK)
-                Heal_Timer = urand(4000, 8000);
+                Heal_Timer = urand(8000, 15000);
         }
         else Heal_Timer -= diff;
 
@@ -197,7 +197,7 @@ struct mob_flamewaker_priestAI : public ScriptedAI
         if (ShadowWordPain_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SHADOWWORDPAIN) == CAST_OK)
-                ShadowWordPain_Timer = urand(15000, 23000);
+                ShadowWordPain_Timer = urand(25000, 33000);
         }
         else ShadowWordPain_Timer -= diff;
 
@@ -205,7 +205,7 @@ struct mob_flamewaker_priestAI : public ScriptedAI
         if (Immolate_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_IMMOLATE) == CAST_OK)
-                Immolate_Timer = urand(12000, 22000);
+                Immolate_Timer = urand(22000, 32000);
         }
         else Immolate_Timer -= diff;
 
@@ -213,7 +213,7 @@ struct mob_flamewaker_priestAI : public ScriptedAI
         if (DarkStrike_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DARKSTRIKE) == CAST_OK)
-                DarkStrike_Timer = urand(4000, 6000);
+                DarkStrike_Timer = urand(6000, 9000);
         }
         else DarkStrike_Timer -= diff;
 

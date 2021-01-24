@@ -66,12 +66,12 @@ struct boss_magmadarAI : public ScriptedAI
 
     void Reset()
     {
-        m_uiFrenzyTimer          = 15000;
-        m_uiPanicTimer           = 10000;
-        m_uiLavaBombTimer        = 9000;
+        m_uiFrenzyTimer          = 40000;
+        m_uiPanicTimer           = 30000;
+        m_uiLavaBombTimer        = 25000;
         m_uiLavaBombTriggerTimer = 0;
         m_uiLavaBreathTimer      = 20000;
-        m_uiMagmaSpitTimer       = 8000;
+        m_uiMagmaSpitTimer       = 10000;
         m_uiRestoreTargetTimer   = 0;
 
         if (!m_creature->HasAura(SPELL_MAGMASPIT))
@@ -181,7 +181,7 @@ struct boss_magmadarAI : public ScriptedAI
         if (m_uiMagmaSpitTimer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), 19450) == CAST_OK)
-                m_uiMagmaSpitTimer = urand(8000, 15000);
+                m_uiMagmaSpitTimer = urand(10000, 25000);
         }
         else
             m_uiMagmaSpitTimer -= diff;
@@ -189,7 +189,7 @@ struct boss_magmadarAI : public ScriptedAI
         if (m_uiLavaBreathTimer < diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_LAVA_BREATH) == CAST_OK)
-                m_uiLavaBreathTimer = urand(8000, 25000);
+                m_uiLavaBreathTimer = urand(10000, 35000);
         }
         else
             m_uiLavaBreathTimer -= diff;

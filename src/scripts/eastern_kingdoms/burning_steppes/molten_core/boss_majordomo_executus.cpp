@@ -102,8 +102,8 @@ struct boss_majordomoAI : public ScriptedAI
     void Reset()
     {
         m_creature->SetDefaultMovementType(IDLE_MOTION_TYPE);
-        Reflection_Timer =  25000;
-        Blastwave_Timer = 8000;
+        Reflection_Timer =  35000;
+        Blastwave_Timer = 25000;
         for (int i = 0; i < 2; i++)
             TPDomo_Timer[i] = 8000 + rand() % 18000;
         AddSpawn = false;
@@ -393,7 +393,7 @@ struct boss_majordomoAI : public ScriptedAI
 
             if (m_creature->getVictim())
                 m_creature->CastSpell(m_creature, Reflect, true);
-            Reflection_Timer = 25000;
+            Reflection_Timer = 35000;
         }
         else Reflection_Timer -= diff;
 
@@ -401,7 +401,7 @@ struct boss_majordomoAI : public ScriptedAI
         if (Blastwave_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_BLASTWAVE) == CAST_OK)
-                Blastwave_Timer = 8000;
+                Blastwave_Timer = 13000;
         }
         else
             Blastwave_Timer -= diff;

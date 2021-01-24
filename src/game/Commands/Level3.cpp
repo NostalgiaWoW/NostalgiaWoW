@@ -4209,11 +4209,6 @@ bool ChatHandler::HandleNpcInfoCommand(char* /*args*/)
     if ((npcflags & UNIT_NPC_FLAG_TRAINER))
         SendSysMessage(LANG_NPCINFO_TRAINER);
 
-    PSendSysMessage(("MechanicImmuneMask: " + std::to_string(mechanicImmuneMask)).c_str());
-    for (uint8 i = 0; i < MECHANIC_MAX; ++i)
-        if ((mechanicImmuneMask << 1) & mechanicImmunes[i].flag)
-            PSendSysMessage(mechanicImmunes[i].text, mechanicImmunes[i].flag);
-
     ShowNpcOrGoSpawnInformation<Creature>(target->GetGUIDLow());
     return true;
 }
