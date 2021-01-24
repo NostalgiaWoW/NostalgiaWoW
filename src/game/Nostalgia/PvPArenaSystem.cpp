@@ -6,6 +6,7 @@
 #include "ScriptedGossip.h"
 #include "Player.h"
 #include "SpellAuras.h"
+#include "Language.h"
 #include <sstream>
 #include <mutex>
 
@@ -315,7 +316,9 @@ void ArenaGame::CheckWin()
     if (result == OutcomeResult::NoWinner)
         return;
 
-    EndGame(result);
+	auto type = m_arena->Type;
+
+    EndGame(result, type);
 }
 
 void ArenaGame::PlayerDied(Player* killer, Player* killed, bool disconnected)
@@ -349,15 +352,32 @@ void ArenaGame::PlayerDied(Player* killer, Player* killed, bool disconnected)
     CheckWin();
 }
 
-void ArenaGame::EndGame(OutcomeResult result)
+void ArenaGame::EndGame(OutcomeResult result, ArenaType type)
 {
-
 	const auto& team1 = m_teams[0];
 	const auto& team2 = m_teams[1];
 
+	const auto& teamLead1 = team1.Group[0];
+	const auto& teamLead2 = team2.Group[0];
+
+	auto player = sObjectMgr.GetPlayer(teamLead1.Guid);
+	auto name1 = player->GetName();
+
+	auto player2 = sObjectMgr.GetPlayer(teamLead2.Guid);
+	auto name2 = player2->GetName();
+
 	if (result == OutcomeResult::Team1Wins)
 	{
-		sWorld.SendServerMessage(SERVER_MSG_CUSTOM, "Team 1 won!");
+		switch (type)
+		{
+		case ArenaType::OnePlayer:
+			sWorld.SendWorldText(LANG_ARENA_TEAM1WIN, name1, name2);
+			break;
+
+		case ArenaType::TwoPlayers:
+			sWorld.SendWorldText(LANG_ARENA_TEAM2WIN, name1, name2);
+			break;
+		}
 
 		for (const auto& arenaPlayer : team1.Group) // Rewards for winner
 		{
@@ -378,7 +398,17 @@ void ArenaGame::EndGame(OutcomeResult result)
 	}
 	else if (result == OutcomeResult::Team2Wins)
 	{
-		sWorld.SendServerMessage(SERVER_MSG_CUSTOM, "Team 2 won!");
+
+		switch (type)
+		{
+		case ArenaType::OnePlayer:
+			sWorld.SendWorldText(LANG_ARENA_TEAM1WIN, name2, name1);
+			break;
+
+		case ArenaType::TwoPlayers:
+			sWorld.SendWorldText(LANG_ARENA_TEAM2WIN, name2, name1);
+			break;
+		}
 
 		for (const auto& arenaPlayer : team2.Group) // Rewards for winner
 		{
@@ -613,7 +643,7 @@ void PvPArenaSystem::LeaveQueue(Player* player, bool disconnected)
         guid = player->GetGroup()->GetLeaderGuid();
 
     std::ostringstream ss;
-    ss << "Left queue because " << player->GetName()
+    ss << "Arena cancelled because " << player->GetName()
         << disconnected ? " disconnected." : " left.";
 
     std::string message = ss.str();
@@ -790,10 +820,14 @@ QueueResult PvPArenaSystem::Queue(Player* player, ArenaType type)
 
 	if (type == ArenaType::OnePlayer)
 	{
+		auto group = player->GetGroup();
+
 		if (player->HasAura(15007))
 			return QueueResult::ResSickness;
 		if (player->HasAura(26013))
 			return QueueResult::BGSickness;
+		if (group)
+			return QueueResult::InGroup;
 	}
 
     if (type != ArenaType::OnePlayer)
@@ -1097,6 +1131,8 @@ std::string PvPArenaSystem::QueueResultToString(QueueResult result)
 		return "You have gone AFK and have been removed from the Arena queue.";
 	case QueueResult::BGSickness:
 		return "You cannot queue while you have Deserter.";
+	case QueueResult::InGroup:
+		return "You cannot queue for 1v1 while in a group.";
     default:
         return "Error";
     }
@@ -1141,8 +1177,12 @@ bool PvPArenaSystem::GetPvPStats(Player* player)
 
 		uint32 winsCalc = wins[0].GetUInt32();
 		uint32 lossCalc = losses[0].GetUInt32();
-
-		double winLossRatio = winsCalc / lossCalc;
+		double winLossRatio = 0;
+		
+		if (lossCalc == 0)
+			winLossRatio = winsCalc;
+		else
+			winLossRatio = winsCalc / lossCalc;
 
 		std::stringstream strstreamWins;
 		strstreamWins << "Wins: " << wins->GetUInt32();

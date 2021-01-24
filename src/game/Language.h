@@ -99,7 +99,9 @@ enum MangosStrings
 	LANG_BOUNTY_POSTED					= 70,
 	LANG_BOUNTY_CANCELLED				= 71,
 	LANG_BOUNTY_REWARDED				= 72,
-    // Room for more level 0              73-99 not used
+	LANG_ARENA_TEAM1WIN					= 73,
+	LANG_ARENA_TEAM2WIN					= 74,
+    // Room for more level 0              75-99 not used
 
     // level 1 chat
     LANG_GLOBAL_NOTIFY                  = 100,

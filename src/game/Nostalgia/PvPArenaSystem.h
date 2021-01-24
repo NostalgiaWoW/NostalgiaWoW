@@ -123,7 +123,7 @@ public:
     void CheckWin();
     void PlayerDied(Player* killer, Player* killed, bool disconnected = false);
     void Update(uint32 diff);
-    void EndGame(OutcomeResult result);
+    void EndGame(OutcomeResult result, ArenaType type);
     void EventArenaActive();
     void ToggleDoors(bool open);
     void AddSpectator(Player* player);
@@ -181,7 +181,8 @@ enum class QueueResult
     AlreadyInQueue,
 	ResSickness,
 	BGSickness,
-	AFK
+	AFK,
+	InGroup
 };
 
 struct ArenaTotal
