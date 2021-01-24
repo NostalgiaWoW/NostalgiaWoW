@@ -123,6 +123,7 @@ bool GossipSelect_npc_gambling(Player* pPlayer, Creature* pCreature, uint32 uiSe
 			pPlayer->ModifyMoney(-500000);
 			pCreature->PMonsterSay("You've been entered into the draw. Good luck!");
 			CharacterDatabase.PExecute("INSERT INTO `lottery` (pGuid) VALUES (%u)", pGuid);
+			CharacterDatabase.PExecute("UPDATE `gambling_bank` SET bank = bank+50");
 			amount = 1;
 			break;
 		}
