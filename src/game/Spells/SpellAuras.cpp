@@ -287,39 +287,39 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
 
     if (castItem)
     {
-        enum eCustomMounts
-        {
-            Zhewra = 55557,
-            ZhewraVisual = 3242,
+		enum eCustomMounts
+		{
+			Zhewra = 55557,
+			ZhewraVisual = 3242,
 
-            Rakshiri = 55558,
-            RakshiriVisual = 10200,
+			Rakshiri = 55558,
+			RakshiriVisual = 10200,
 
-            Tallstrider = 55559,
-            TallstriderVisual = 7711,
+			Tallstrider = 55559,
+			TallstriderVisual = 7711,
 
-            Hippogryph = 55560,
-            HippogryphVisual = 5300,
-			
+			Hippogryph = 55560,
+			HippogryphVisual = 5300,
+
 			SnowHippogryph = 55581,
-            SnowHippogryphVisual = 5347,
+			SnowHippogryphVisual = 5347,
 
-            ObsidianRaptor = 55563,
-            ObsidianRaptorVisual = 7703,
+			ObsidianRaptor = 55563,
+			ObsidianRaptorVisual = 7703,
 
-            WhiteSaber = 55564,
-            WhiteSaberVisual = 8882,
+			WhiteSaber = 55564,
+			WhiteSaberVisual = 8882,
 
-            ShadowStag = 55565,
-            ShadowStagVisual = 3817,
+			ShadowStag = 55565,
+			ShadowStagVisual = 3817,
 
-            WhiteUnicorn = 55571,
-            WhiteUnicornVisual = 55571,
+			WhiteUnicorn = 55571,
+			WhiteUnicornVisual = 55571,
 
-            WhiteWolf = 55566,
-            WhiteWolfVisual = 10981,
+			WhiteWolf = 55566,
+			WhiteWolfVisual = 10981,
 
-			ShadowCharger= 8583,
+			ShadowCharger = 8583,
 			ShadowChargerVisual = 3865,
 
 			BatLord = 55610,
@@ -333,6 +333,22 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
 
 			WildRazorbeak = 55575,
 			WildRazorbeakVisual = 2657,
+
+			VioletWarRaptor = 6011200,
+			VioletWarRaptorVisual = 1201300,
+
+			ObsidianWarRaptor = 6011201,
+			ObsidianWarRaptorVisual = 1201301,
+
+			RedWarRaptor = 6011202,
+			RedWarRaptorVisual = 1201302,
+
+			RedBlackWarRaptor = 6011204,
+			RedBlackWarRaptorVisual = 1201303,
+
+			IvoryWarRaptor = 6011203,
+			IvoryWarRaptorVisual = 1201304,
+
         };
 
         switch (castItem->GetEntry())
@@ -361,7 +377,7 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
             else if (eff == EFFECT_INDEX_0)
                 miscValue = damage = HippogryphVisual;
             break;
-			 case SnowHippogryph:
+		case SnowHippogryph:
             if (eff == EFFECT_INDEX_1)
                 damage = 100;
             else if (eff == EFFECT_INDEX_0)
@@ -440,7 +456,50 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
 			break;
 		}
 
+		case VioletWarRaptor:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = VioletWarRaptorVisual;
+			break;
+		}
 
+		case ObsidianWarRaptor:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = ObsidianWarRaptorVisual;
+			break;
+		}
+
+		case RedWarRaptor:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = RedWarRaptorVisual;
+			break;
+		}
+
+		case RedBlackWarRaptor:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = RedBlackWarRaptorVisual;
+			break;
+		}
+
+		case IvoryWarRaptor:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = IvoryWarRaptorVisual;
+			break;
+		}
         }
     }
 
