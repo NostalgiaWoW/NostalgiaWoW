@@ -1167,6 +1167,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, "whispers",       SEC_MODERATOR,      false, &ChatHandler::HandleWhispersCommand,            "", nullptr },
         { MSTR, "wr",             SEC_PLAYER,         false, &ChatHandler::HandleWhisperRestrictionCommand,  "", nullptr },
         { MSTR, "pinfo",          SEC_GAMEMASTER,     true,  &ChatHandler::HandlePInfoCommand,               "", nullptr },
+		{ NODE, "morphscan",      SEC_GAMEMASTER,     false, &ChatHandler::HandleMorphScannerCommand,  "", nullptr },
         { MSTR, "accinfo",        SEC_GAMEMASTER,     true,  &ChatHandler::HandleAccInfoCommand,             "", nullptr },
         { MSTR, "groupinfo",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleGroupInfoCommand,           "", nullptr },
         { MSTR, "pbcast",         SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePBCastStatsCommand,         "", pbcastCommandTable },

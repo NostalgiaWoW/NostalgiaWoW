@@ -2472,6 +2472,22 @@ bool ChatHandler::HandleModifyMorphCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleMorphScannerCommand(char* args)
+{
+	Player*	target = m_session->GetPlayer();
+
+	uint32 dId = target->GetDisplayId();
+	target->SetDisplayId(dId + 1);
+
+	uint32 nId = target->GetDisplayId();
+
+	PSendSysMessage("Now showing DisplayID: %u ", nId);
+
+
+
+	return true;
+}
+
 //kick player
 bool ChatHandler::HandleKickPlayerCommand(char *args)
 {

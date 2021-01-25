@@ -9902,6 +9902,7 @@ void Unit::UpdateModelData()
 {
     CreatureDisplayInfoEntry const* displayEntry = sCreatureDisplayInfoStore.LookupEntry(GetDisplayId());
     CreatureModelInfo const* modelInfo = sObjectMgr.GetCreatureModelInfo(GetDisplayId());
+	Player* player = (Player*)this;
     if (modelInfo && displayEntry && modelInfo->bounding_radius && modelInfo->combat_reach && displayEntry->scale)
     {
         // we expect values in database to be relative to scale = 1.0
@@ -9915,9 +9916,10 @@ void Unit::UpdateModelData()
     }
     else
     {
-        sLog.outError("UpdateModelData : pas / mauvaises infos pour le displayid %u de '%s'", GetDisplayId(), GetGuidStr().c_str());
+        sLog.outError("UpdateModelData : no / bad info for displayid %u for '%s'", GetDisplayId(), GetGuidStr().c_str());
         SetFloatValue(UNIT_FIELD_COMBATREACH, 1.5f);
         SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, 1.5f);
+
     }
 }
 
