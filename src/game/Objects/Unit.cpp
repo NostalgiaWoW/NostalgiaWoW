@@ -1567,6 +1567,7 @@ void Unit::CalculateSpellDamage(SpellNonMeleeDamage *damageInfo, int32 damage, S
     }
     else
         damage = 0;
+
     damageInfo->damage = damage;
 }
 
@@ -1922,6 +1923,10 @@ void Unit::CalculateMeleeDamage(Unit *pVictim, uint32 damage, CalcDamageInfo *da
     }
     else
         damageInfo->totalDamage = 0;
+
+
+
+
 }
 
 void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
@@ -2283,6 +2288,7 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
         *resist = 0;
 
     int32 RemainingDamage = damage - *resist;
+
 		
     // Need remove expired auras after
     bool existExpired = false;
@@ -2441,7 +2447,22 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
 		pCaster->DealDamage(caster, splitted, &cleanDamage, DOT, schoolMask, (*i)->GetSpellProto(), false);
 	}
 
-
+	if (spellProto) // Spell edits for Nostalgia WoW
+		switch (spellProto->Id)
+		{
+		case 19717: // Rain of Fire Gehennas
+			RemainingDamage = 300;
+			break;
+		case 19702: // Impending Doom
+			RemainingDamage = 500;
+			break;
+		case 19428: // Conflaguration
+			RemainingDamage = 113;
+			break;
+		case 19450: // Magma Spit
+			RemainingDamage = 30;
+			break;
+		}
     *absorb = damage - RemainingDamage - *resist;
 
 }
