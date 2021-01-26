@@ -2483,8 +2483,6 @@ bool ChatHandler::HandleMorphScannerCommand(char* args)
 
 	PSendSysMessage("Now showing DisplayID: %u ", nId);
 
-
-
 	return true;
 }
 

@@ -1285,7 +1285,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 
 		// Specifically for Nostalgia WoW to Override new 5 man raid dungeons
 
-		// Onyxia Warder
+		// Onyxia
 		if (m_caster->GetMapId() == 249)
 			if (m_caster->GetTypeId() == TYPEID_UNIT)
 		{
@@ -1295,7 +1295,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 		if (m_caster->GetMapId() == 409)
 			if (m_caster->GetTypeId() == TYPEID_UNIT)
 		{
-			damageInfo.damage = damage * 0.15;
+			damageInfo.damage = damage * 0.075;
 		}
 
         // Send log damage message to client
