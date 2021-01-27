@@ -1289,13 +1289,13 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 		if (m_caster->GetMapId() == 249)
 			if (m_caster->GetTypeId() == TYPEID_UNIT)
 		{
-				damageInfo.damage = damage* 0.2;
+				damageInfo.damage = damage* 0.2f;
 		}
 		// MC		
-		if (m_caster->GetMapId() == 409)
+		if (m_caster->GetMapId() == 409 && !m_spellInfo->Id == 13880 && !m_spellInfo->Id == 20229)
 			if (m_caster->GetTypeId() == TYPEID_UNIT)
 		{
-			damageInfo.damage = damage * 0.075;
+			damageInfo.damage = damage * 0.075f;
 		}
 
         // Send log damage message to client

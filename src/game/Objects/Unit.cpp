@@ -2451,7 +2451,7 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
 		switch (spellProto->Id)
 		{
 		case 19717: // Rain of Fire Gehennas
-			RemainingDamage = 300;
+			RemainingDamage = 400;
 			break;
 		case 19702: // Impending Doom
 			RemainingDamage = 500;
@@ -2460,7 +2460,16 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
 			RemainingDamage = 113;
 			break;
 		case 19450: // Magma Spit
-			RemainingDamage = 30;
+			RemainingDamage = 50;
+			break;
+		case 20475: // Living Bomb
+			RemainingDamage = 1500;
+			break;
+		case 20564: // Elemental Fire
+			RemainingDamage = 125;
+			break;
+		case 20565: // Magma Blast
+			RemainingDamage = 150;
 			break;
 		}
     *absorb = damage - RemainingDamage - *resist;
