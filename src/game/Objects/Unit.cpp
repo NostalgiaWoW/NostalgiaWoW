@@ -2451,7 +2451,7 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
 
 	if (spellProto)
 		if (pCaster->GetTypeId() == TYPEID_UNIT && pCaster->GetMapId() == 409 || pCaster->GetMapId() == 249)
-			RemainingDamage = RemainingDamage * 0.35;
+			RemainingDamage = RemainingDamage * 0.098f;
 			
 			
 		//switch (spellProto->Id)
