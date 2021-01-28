@@ -143,7 +143,7 @@ struct boss_ragnarosAI : ScriptedAI
     void Reset() override
     {
         m_uiMagmaBlastTimer         = 2000;
-        m_uiWrathOfRagnarosTimer    = urand(20000, 25000);
+        m_uiWrathOfRagnarosTimer    = 35000;
         m_uiMightOfRagnarosTimer    = urand(8000, 13000);
         m_uiRestoreTargetTimer      = 0;
         m_uiLavaBurstTimer          = urand(8000, 13000);
@@ -473,7 +473,7 @@ struct boss_ragnarosAI : ScriptedAI
         {
             if (DoCastSpellIfCan(m_creature, SPELL_WRATH_OF_RAGNAROS) == CAST_OK)
             {
-                m_uiWrathOfRagnarosTimer = urand(20000, 25000);
+                m_uiWrathOfRagnarosTimer = 35000;
                 DoScriptText(SAY_WRATH, m_creature);
             }
         }
