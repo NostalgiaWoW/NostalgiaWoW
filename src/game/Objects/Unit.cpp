@@ -2447,31 +2447,37 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
 		pCaster->DealDamage(caster, splitted, &cleanDamage, DOT, schoolMask, (*i)->GetSpellProto(), false);
 	}
 
-	if (spellProto) // Spell edits for Nostalgia WoW
-		switch (spellProto->Id)
-		{
-		case 19717: // Rain of Fire Gehennas
-			RemainingDamage = 400;
-			break;
-		case 19702: // Impending Doom
-			RemainingDamage = 500;
-			break;
-		case 19428: // Conflaguration
-			RemainingDamage = 113;
-			break;
-		case 19450: // Magma Spit
-			RemainingDamage = 50;
-			break;
-		case 20475: // Living Bomb
-			RemainingDamage = 1500;
-			break;
-		case 20564: // Elemental Fire
-			RemainingDamage = 125;
-			break;
-		case 20565: // Magma Blast
-			RemainingDamage = 150;
-			break;
-		}
+	// Spell edits for Nostalgia WoW
+
+	if (spellProto)
+		if (pCaster->GetTypeId() == TYPEID_UNIT && pCaster->GetMapId() == 409 || pCaster->GetMapId() == 249)
+			RemainingDamage = RemainingDamage * 0.35;
+			
+			
+		//switch (spellProto->Id)
+		//{
+		//case 19717: // Rain of Fire Gehennas
+		//	RemainingDamage = 400;
+		//	break;
+		//case 19702: // Impending Doom
+		//	RemainingDamage = 500;
+		//	break;
+		//case 19428: // Conflaguration
+		//	RemainingDamage = 113;
+		//	break;
+		//case 19450: // Magma Spit
+		//	RemainingDamage = 50;
+		//	break;
+		//case 20475: // Living Bomb
+		//	RemainingDamage = 1500;
+		//	break;
+		//case 20564: // Elemental Fire
+		//	RemainingDamage = 125;
+		//	break;
+		//case 20565: // Magma Blast
+		//	RemainingDamage = 150;
+		//	break;
+		//}
     *absorb = damage - RemainingDamage - *resist;
 
 }

@@ -1283,20 +1283,20 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             damageInfo.damage = m_damage;
         }
 
-		// Specifically for Nostalgia WoW to Override new 5 man raid dungeons
+		// Specifically for Nostalgia WoW to Override new 5 man raid dungeons - removed and processed in in Unit.cpp
 
-		// Onyxia
-		if (m_caster->GetMapId() == 249)
-			if (m_caster->GetTypeId() == TYPEID_UNIT)
-		{
-				damageInfo.damage = damage* 0.2f;
-		}
-		// MC		
-		if (m_caster->GetMapId() == 409 && !m_spellInfo->Id == 13880 && !m_spellInfo->Id == 20229)
-			if (m_caster->GetTypeId() == TYPEID_UNIT)
-		{
-			damageInfo.damage = damage * 0.075f;
-		}
+		//// Onyxia
+		//if (m_caster->GetMapId() == 249)
+		//	if (m_caster->GetTypeId() == TYPEID_UNIT)
+		//{
+		//		damageInfo.damage = damage* 0.2f;
+		//}
+		//// MC		
+		//if (m_caster->GetMapId() == 409 && !m_spellInfo->Id == 13880 && !m_spellInfo->Id == 20229)
+		//	if (m_caster->GetTypeId() == TYPEID_UNIT)
+		//{
+		//	damageInfo.damage = damage * 0.075f;
+		//}
 
         // Send log damage message to client
         caster->SendSpellNonMeleeDamageLog(&damageInfo);
