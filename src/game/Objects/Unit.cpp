@@ -1572,7 +1572,7 @@ void Unit::CalculateSpellDamage(SpellNonMeleeDamage *damageInfo, int32 damage, S
 }
 
 void Unit::DealSpellDamage(SpellNonMeleeDamage *damageInfo, bool durabilityLoss)
-{
+{ // Nostalgia WoW may be useful
     if (!damageInfo)
         return;
 
@@ -2450,34 +2450,21 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
 	// Spell edits for Nostalgia WoW
 
 	if (spellProto)
-		if (pCaster->GetTypeId() == TYPEID_UNIT && pCaster->GetMapId() == 409 || pCaster->GetMapId() == 249)
+	{	
+		bool cont = true;
+
+		switch (spellProto->Id)
+		{
+		case 19129:
+			RemainingDamage = urand(225, 325);
+			cont = false;
+			break;
+		}
+
+		if (cont && pCaster->GetTypeId() == TYPEID_UNIT && pCaster->GetMapId() == 409 || pCaster->GetMapId() == 249)
 			RemainingDamage = RemainingDamage * 0.098f;
-			
-			
-		//switch (spellProto->Id)
-		//{
-		//case 19717: // Rain of Fire Gehennas
-		//	RemainingDamage = 400;
-		//	break;
-		//case 19702: // Impending Doom
-		//	RemainingDamage = 500;
-		//	break;
-		//case 19428: // Conflaguration
-		//	RemainingDamage = 113;
-		//	break;
-		//case 19450: // Magma Spit
-		//	RemainingDamage = 50;
-		//	break;
-		//case 20475: // Living Bomb
-		//	RemainingDamage = 1500;
-		//	break;
-		//case 20564: // Elemental Fire
-		//	RemainingDamage = 125;
-		//	break;
-		//case 20565: // Magma Blast
-		//	RemainingDamage = 150;
-		//	break;
-		//}
+	}
+		
     *absorb = damage - RemainingDamage - *resist;
 
 }
@@ -7344,7 +7331,13 @@ void Unit::Mount(uint32 mount, uint32 spellId /*= 0*/, bool IsTaxi /*= false*/)
     if (!mount)
         return;
 
-    if (SpellAuraHolder *holder = GetSpellAuraHolder(29519))
+	if (GetDisplayId() == 4920 || GetDisplayId() == 652 || GetDisplayId() == 757 || GetDisplayId() == 1079)
+	{
+		
+		return;
+	}
+
+    if (SpellAuraHolder *holder = GetSpellAuraHolder(29519)) 
     {
         if (((Player*)this)->GetZoneId() == 1377)
         {

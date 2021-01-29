@@ -99,7 +99,7 @@ bool ItemUseSpell_morph_murloc(Player* pPlayer, Item* pItem, const SpellCastTarg
 	{
 		pPlayer->DeMorph(); 
 		pPlayer->SetSpeedRate(MOVE_SWIM, 1.0, true);
-		pPlayer->RemoveAurasDueToSpell(SPELL_AURA_WATER_BREATHING);
+		pPlayer->RemoveAurasDueToSpell(11789); // water breathing
 		ChatHandler(pPlayer).SendSysMessage("You slip out of your murloc suit.");
 		return false;
 	}
@@ -119,7 +119,7 @@ bool ItemUseSpell_morph_murloc(Player* pPlayer, Item* pItem, const SpellCastTarg
 			pPlayer->SetDisplayId(1079);
 			break;
 	}
-		pPlayer->AddAura(SPELL_AURA_WATER_BREATHING);
+		pPlayer->AddAura(11789); // water breathing
 		pPlayer->SetSpeedRate(MOVE_SWIM, 2.0, true);
 		ChatHandler(pPlayer).SendSysMessage("You hop into your water tight, breatheable murloc suit. Snazzy.");
 
