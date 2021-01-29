@@ -2461,7 +2461,7 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
 			break;
 		}
 
-		if (cont && pCaster->GetTypeId() == TYPEID_UNIT && pCaster->GetMapId() == 409 || pCaster->GetMapId() == 249)
+		if (cont && pCaster->GetTypeId() == TYPEID_UNIT && (pCaster->GetMapId() == 409 || pCaster->GetMapId() == 249))
 			RemainingDamage = RemainingDamage * 0.098f;
 	}
 		
