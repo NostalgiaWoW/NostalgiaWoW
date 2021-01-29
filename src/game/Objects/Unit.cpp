@@ -2455,7 +2455,7 @@ void Unit::CalculateDamageAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolM
 
 		switch (spellProto->Id)
 		{
-		case 19129:
+		case 18944:
 			RemainingDamage = urand(225, 325);
 			cont = false;
 			break;
