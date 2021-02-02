@@ -349,6 +349,9 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
 			IvoryWarRaptor = 6011203,
 			IvoryWarRaptorVisual = 1201304,
 
+			SpectralTiger = 6011205,
+			SpectralTigerVisual = 1201305,
+
         };
 
         switch (castItem->GetEntry())
@@ -498,6 +501,15 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
 				damage = 100;
 			else if (eff == EFFECT_INDEX_0)
 				miscValue = damage = IvoryWarRaptorVisual;
+			break;
+		}
+
+		case SpectralTiger:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = SpectralTigerVisual;
 			break;
 		}
         }
