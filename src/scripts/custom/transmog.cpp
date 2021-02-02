@@ -162,7 +162,7 @@ std::string transmog::GetTransmogCostStr(Player* player, uint32 copper)
     }
     else if (sWorld.getConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE) != 0.0)
     {
-        copper = (copper + 1) * sWorld.getConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE);
+        copper = (copper) * sWorld.getConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE);
         uint32 gold = copper / GOLD;
         uint32 silv = (copper % GOLD) / SILVER;
         uint32 copp = (copper % GOLD) % SILVER;
@@ -376,10 +376,38 @@ void transmog::GetTransmogItems(Player* player, Creature* creature, uint32 Inven
                     index = GOSSIP_INDEX_OFFHAND;
             }
 
+			uint32 price;
+
+			switch (itemTransmog->GetProto()->Quality)
+			{
+			case ITEM_QUALITY_POOR:
+				price = 750000;
+				break;
+			case ITEM_QUALITY_NORMAL:
+				price = 1500000;
+				break;
+			case ITEM_QUALITY_UNCOMMON:
+				price = 2250000;
+				break;
+			case ITEM_QUALITY_RARE:
+				price = 3000000;
+				break;
+			case ITEM_QUALITY_EPIC:
+				price = 3750000;
+				break;
+			case ITEM_QUALITY_LEGENDARY:
+				price = 10000000;
+				break;
+			case ITEM_QUALITY_ARTIFACT:
+				price = 50000000;
+				break;
+
+			}
+
             if (CanTransmogrifyItemWithItem(player, itemToTransmog, itemTransmog))
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, (GetTransmogItemColor(itemTransmog->GetProto()->Quality) +
                     "[" + sObjectMgr.GetItemLocaleName(itemTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "]|r \n" +
-                    GetTransmogCostStr(player, itemTransmog->GetProto()->BuyPrice)).c_str()
+                    GetTransmogCostStr(player, price)).c_str()
                     , GOSSIP_SENDER_TRANSMOGRIFY, index + itemTransmog->GetEntry());
         }
     }
