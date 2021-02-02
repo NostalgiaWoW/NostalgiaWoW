@@ -24,7 +24,6 @@ bool ItemUseSpell_shop_mailbox(Player* pPlayer, Item* pItem, const SpellCastTarg
 
     GameObject* other_mailbox = pPlayer->FindNearestGameObject(144112, 50.0F);
 
-
     if (other_mailbox)
         other_mailbox->SetRespawnTime(1);
 
@@ -82,11 +81,18 @@ bool ItemUseSpell_shop_brainwashing_device(Player* pPlayer, Item* pItem, const S
 
 bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->getLevel() >= 10 && pPlayer->HasItemCount(40005, 1))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Click here to reset your talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	uint32 ownerGuid = pGo->GetOwnerGuid();
 
-    pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
-    return true;
+	if (pPlayer->getLevel() >= 10 && pPlayer->HasItemCount(40005, 1))
+		if (ownerGuid == pPlayer->GetGUIDLow())
+		{
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Click here to reset your talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+			pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
+			return true;
+		}
+		else
+			pPlayer->SEND_GOSSIP_MENU(90352, pGo->GetGUID());
 }
 
 bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)

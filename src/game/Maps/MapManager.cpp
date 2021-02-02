@@ -382,13 +382,14 @@ void MapManager::Update(uint32 diff)
     uint32 now = WorldTimer::getMSTime();
     for (MapMapType::iterator iter = i_maps.begin(); iter != i_maps.end(); ++iter)
     {
+		// Transports should be updated even if map is empty so transports move.
+		iter->second->UpdateSync(mapsDiff);
         // If this map has been empty for too long, we no longer update it.
         if (!iter->second->HavePlayers() && sWorld.getConfig(CONFIG_UINT32_EMPTY_MAPS_UPDATE_TIME))
         {
             if (WorldTimer::getMSTimeDiff(iter->second->GetLastPlayerLeftTime(), now) > sWorld.getConfig(CONFIG_UINT32_EMPTY_MAPS_UPDATE_TIME))
                 continue;
         }
-        iter->second->UpdateSync(mapsDiff);
         iter->second->MarkNotUpdated();
         iter->second->SetMapUpdateIndex(-1);
         if (iter->second->Instanceable())
