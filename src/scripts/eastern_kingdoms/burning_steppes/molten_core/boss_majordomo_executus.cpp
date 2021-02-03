@@ -107,7 +107,7 @@ struct boss_majordomoAI : public ScriptedAI
         for (int i = 0; i < 2; i++)
             TPDomo_Timer[i] = 8000 + rand() % 18000;
         AddSpawn = false;
-        AddsAlive = 6;
+        AddsAlive = 4;
         Immune = 0;
 
         while (Creature* Add = m_creature->FindNearestCreature(11663, 250.0f, true))
@@ -336,19 +336,19 @@ struct boss_majordomoAI : public ScriptedAI
 
         if (m_creature->getFaction() != 35 && AddSpawn == false)
         {
-            Creature* DomoAdd[8];
-            for (int i = 0; i < 8; i++)
+            Creature* DomoAdd[4];
+            for (int i = 0; i < 4; i++)
                 DomoAdd[i] = NULL;
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 4; i++)
                 DomoAdd[i] = m_creature->SummonCreature(m_aBosspawnLocs[i].m_uiEntry, m_aBosspawnLocs[i].m_fX, m_aBosspawnLocs[i].m_fY, m_aBosspawnLocs[i].m_fZ, m_aBosspawnLocs[i].m_fO, TEMPSUMMON_DEAD_DESPAWN, 0);
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 2; i++)
             {
                 if (DomoAdd[i])
                     DomoAdd[i]->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_POLYMORPH, true);
             }
-            for (int i = 4; i < 8; i++)
+            for (int i = 2; i < 4; i++)
             {
                 if (DomoAdd[i])
                     DomoAdd[i]->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_STUN, true);
