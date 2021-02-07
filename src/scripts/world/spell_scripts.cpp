@@ -55,7 +55,8 @@ enum
 	MURLOC_STORMCALLER = 6011155,
 	MURLOC_NIGHTCRAWLER = 6011156,
 	MURLOC_COASTRUNNER = 6011157,
-	MURLOC_TIDEHUNTER = 6011158
+	MURLOC_TIDEHUNTER = 6011158,
+	MURLOC_COSTUME = 6011159
 };
 
 bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget)
@@ -106,6 +107,9 @@ bool ItemUseSpell_morph_murloc(Player* pPlayer, Item* pItem, const SpellCastTarg
 
 	switch (pItem->GetEntry())
 	{
+		case MURLOC_COSTUME:
+			pPlayer->SetDisplayId(19710);
+			break;
 		case MURLOC_STORMCALLER:
 			pPlayer->SetDisplayId(4920);
 			break;
