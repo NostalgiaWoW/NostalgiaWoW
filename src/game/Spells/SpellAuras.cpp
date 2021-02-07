@@ -352,6 +352,42 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
 			SpectralTiger = 6011205,
 			SpectralTigerVisual = 1201305,
 
+			Rooster = 6011206,
+			RoosterVisual = 1201306,
+
+			BigBattleBear = 6011207,
+			BigBattleBearVisual = 1201307,
+
+			BigBlizzardBear = 6011208,
+			BigBlizzardBearVisual = 1201308,
+
+			VenomhideRavasaur = 6011209,
+			VenomhideRavasaurVisual = 1201309,
+
+			DarnassianNightsaber = 6011210,
+			DarnassianNightsaberVisual = 1201310,
+
+			SwiftMoonsaber = 6011211,
+			SwiftMoonsaberVisual = 1201311,
+
+			WhiteSkeleWarhorse = 6011212,
+			WhiteSkeleWarhorseVisual = 1201312,
+
+			Zhevra = 6011213,
+			ZhevraVisual = 1201313,
+
+			Anzu = 6011214,
+			AnzuVisual = 1201314,
+
+			RedEyeWolf = 6011215,
+			RedEyeWolfVisual = 1201315,
+
+			BrewfestKodo = 6011216,
+			BrewfestKodoVisual = 1201316,
+
+			BrewfestRam = 6011217,
+			BrewfestRamVisual = 1201317,
+
         };
 
         switch (castItem->GetEntry())
@@ -510,6 +546,114 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
 				damage = 100;
 			else if (eff == EFFECT_INDEX_0)
 				miscValue = damage = SpectralTigerVisual;
+			break;
+		}
+
+		case Rooster:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = RoosterVisual;
+			break;
+		}
+
+		case BigBattleBear:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = BigBattleBearVisual;
+			break;
+		}
+
+		case BigBlizzardBear:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = BigBlizzardBearVisual;
+			break;
+		}
+
+		case VenomhideRavasaur:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = VenomhideRavasaurVisual;
+			break;
+		}
+
+		case DarnassianNightsaber:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = DarnassianNightsaberVisual;
+			break;
+		}
+
+		case SwiftMoonsaber:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = SwiftMoonsaberVisual;
+			break;
+		}
+
+		case WhiteSkeleWarhorse:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = WhiteSkeleWarhorseVisual;
+			break;
+		}
+
+		case Zhevra:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = ZhevraVisual;
+			break;
+		}
+
+		case Anzu:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = AnzuVisual;
+			break;
+		}
+
+		case RedEyeWolf:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = RedEyeWolfVisual;
+			break;
+		}
+
+		case BrewfestKodo:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = BrewfestKodoVisual;
+			break;
+		}
+
+		case BrewfestRam:
+		{
+			if (eff == EFFECT_INDEX_1)
+				damage = 100;
+			else if (eff == EFFECT_INDEX_0)
+				miscValue = damage = BrewfestRamVisual;
 			break;
 		}
         }
