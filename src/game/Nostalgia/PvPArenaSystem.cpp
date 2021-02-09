@@ -36,7 +36,6 @@ void ArenaGame::Start()
 		for (auto& arenaPlayer : arenaTeam.Group)
 		{
 			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
-
 			if (player)
 			{
 				auto result = CharacterDatabase.PQuery("SELECT * FROM `character_aura` WHERE `guid` = %u", player->GetGUIDLow());
@@ -69,24 +68,10 @@ void ArenaGame::Start()
 						//uint32 effIndexMask = fields[13].GetInt32();
 
 						CharacterDatabase.PExecute("INSERT INTO `character_aura_saved` (`guid`, `spell`, `remaintime`) VALUES (%u, %u, %u)", guid, spell, remaintime);
-
 						player->RemoveAurasDueToSpell(spell);
 					} while (result->NextRow());
 				}delete result;
-				
-			 }
-			}
-		}
 
-	for (uint32 i = 0; i < 2; ++i)
-	{
-		auto& arenaTeam = m_teams[i];
-
-		for (auto& arenaPlayer : arenaTeam.Group)
-		{
-			auto player = sObjectMgr.GetPlayer(arenaPlayer.Guid);
-			if (player)
-			{
 				player->SaveRecallPosition();
 				player->GetPosition(arenaPlayer.OldPosition);
 				player->TeleportTo(m_arena->MapId, m_arena->TeamPositions[i].x, m_arena->TeamPositions[i].y, m_arena->TeamPositions[i].z, 0.0f);
