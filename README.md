@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/elysium-project/server.svg?branch=development)](https://travis-ci.org/elysium-project/server)
 
-# Elysium Core
+# Nostalgia WoW Core
+Created for: Marc Bigley (Omgwtfpwnd)
+
 Based on:
 - Mangos 2005 - 2009
 - Mangos-Zero 2009 - 2011
